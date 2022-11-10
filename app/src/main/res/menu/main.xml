@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+        <item
+            android:id="@+id/menu_item_search"
+            android:icon="@drawable/ic_oui_search"
+            app:showAsAction="always"
+            android:title="@string/search"
+            tools:ignore="AlwaysShowAction,AppCompatResource" />
+
+        <item
+            android:id="@+id/menu_item_open_online"
+            android:icon="@drawable/ic_oui_website"
+            app:showAsAction="never"
+            android:title="@string/open_online"
+            tools:ignore="AppCompatResource" />
+
+        <item
+            android:id="@+id/menu_item_about"
+            android:icon="@drawable/ic_oui_info_outline"
+            app:showAsAction="never"
+            android:title="@string/about_app"
+            tools:ignore="AppCompatResource" />
+
+        <item
+            android:id="@+id/menu_item_about_me"
+            android:icon="@drawable/ic_oui_contact_outline"
+            app:showAsAction="never"
+            android:title="@string/about_me"
+            tools:ignore="AppCompatResource" />
+
+        <item
+            android:id="@+id/menu_item_settings"
+            android:icon="@drawable/ic_oui_settings_outline"
+            app:showAsAction="never"
+            android:title="@string/settings"
+            tools:ignore="AppCompatResource" />
+</menu>
