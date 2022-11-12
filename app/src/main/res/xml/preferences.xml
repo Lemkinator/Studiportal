@@ -29,11 +29,41 @@
             android:title="@string/delete_app_data_and_exit" />
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/login_data_title">
+    <PreferenceCategory android:title="@string/login_data">
 
         <PreferenceScreen
             android:key="logout_pref"
-            android:title="@string/logout_title" />
+            android:title="@string/logout" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/notification">
+
+        <SwitchPreferenceCompat
+            android:key="notify_about_change_pref"
+            android:title="@string/notify_about_change_title"
+            android:summary="@string/notify_about_change_summary"/>
+
+        <SwitchPreferenceCompat
+            android:key="show_grade_in_notification_pref"
+            android:title="@string/show_grade_title"
+            android:summary="@string/show_grade_summary"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/refresh">
+
+        <ListPreference
+            android:key="refresh_time_pref"
+            android:title="@string/refresh_interval"
+            android:entryValues="@array/array_refresh_interval_key"
+            android:entries="@array/array_refresh_interval"/>
+            />
+
+        <SwitchPreferenceCompat
+            android:key="use_mobile_data_pref"
+            android:title="@string/refresh_on_mobile"
+            android:summary="@string/refresh_on_mobile_summary"/>
 
     </PreferenceCategory>
 

@@ -76,7 +76,8 @@ class SplashActivity : AppCompatActivity() {
     }
 
     private suspend fun launchApp() {
-        if (!getUserSettings().tosAccepted) {
+        val userSettings = getUserSettings()
+        if (!userSettings.tosAccepted) {
             startActivity(Intent(applicationContext, OOBEActivity::class.java))
         } else {
             when (appStart) {
@@ -84,7 +85,8 @@ class SplashActivity : AppCompatActivity() {
                     startActivity(Intent(applicationContext, OOBEActivity::class.java))
                 }
                 AppStart.NORMAL, AppStart.FIRST_TIME_VERSION -> {
-                    startActivity(Intent(applicationContext, MainActivity::class.java))
+                    if (userSettings.username.isBlank()) startActivity(Intent(applicationContext, LoginActivity::class.java))
+                    else startActivity(Intent(applicationContext, MainActivity::class.java))
                 }
             }
         }

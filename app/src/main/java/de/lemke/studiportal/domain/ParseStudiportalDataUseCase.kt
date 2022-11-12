@@ -5,12 +5,13 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
 import javax.inject.Inject
 
-class ParseExamListUseCase @Inject constructor(
+class ParseStudiportalDataUseCase @Inject constructor(
 
 ) {
-    operator fun invoke(htmlTable: String?): List<Exam> {
+    operator fun invoke(response: String): List<Exam> {
         val examList = mutableListOf<Exam>()
-        val table = Jsoup.parse(htmlTable)
+        val examStart: Int = response.indexOf("<table cellspacing=\"0\" cellpadding=\"5\" border=\"0\" align=\"center\" width=\"100%\">")
+        val table = Jsoup.parse(response.substring(examStart, response.indexOf("</table>", examStart)))
         val rows = table.getElementsByTag("tr")
         var currentCategory = "Unmatched"
         //Iterate over rows

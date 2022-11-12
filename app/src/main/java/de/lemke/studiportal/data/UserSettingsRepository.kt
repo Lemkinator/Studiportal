@@ -2,8 +2,11 @@ package de.lemke.studiportal.data
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
+import de.lemke.studiportal.data.database.Converters.localDateTimeFromDb
+import de.lemke.studiportal.data.database.Converters.localDateTimeToDb
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import java.time.LocalDateTime
 import javax.inject.Inject
 
 /** Provides CRUD operations for user settings. */
@@ -32,6 +35,8 @@ class UserSettingsRepository @Inject constructor(
             it[KEY_USE_MOBILE_DATA] = newSettings.useMobileData
             it[KEY_IS_REFRESH_OVERDUE] = newSettings.isRefreshOverdue
             it[KEY_REFRESH_INTERVAL] = newSettings.refreshInterval
+            it[KEY_LAST_REFRESH] = localDateTimeToDb(newSettings.lastRefresh)
+            it[KEY_CATEGORY_FILTER] = newSettings.categoryFilter
         }
         return settingsFromPreferences(prefs)
     }
@@ -49,6 +54,8 @@ class UserSettingsRepository @Inject constructor(
         useMobileData = prefs[KEY_USE_MOBILE_DATA] ?: true,
         isRefreshOverdue = prefs[KEY_IS_REFRESH_OVERDUE] ?: true,
         refreshInterval = prefs[KEY_REFRESH_INTERVAL] ?: 60L,
+        lastRefresh = localDateTimeFromDb(prefs[KEY_LAST_REFRESH] ?: localDateTimeToDb(LocalDateTime.MIN)),
+        categoryFilter = prefs[KEY_CATEGORY_FILTER] ?: "",
     )
 
     private companion object {
@@ -63,7 +70,8 @@ class UserSettingsRepository @Inject constructor(
         private val KEY_USE_MOBILE_DATA = booleanPreferencesKey("useMobileData")
         private val KEY_IS_REFRESH_OVERDUE = booleanPreferencesKey("isRefreshOverdue")
         private val KEY_REFRESH_INTERVAL = longPreferencesKey("refreshInterval")
-
+        private val KEY_LAST_REFRESH = stringPreferencesKey("lastRefresh")
+        private val KEY_CATEGORY_FILTER = stringPreferencesKey("categoryFilter")
     }
 }
 
@@ -91,4 +99,8 @@ data class UserSettings(
     val isRefreshOverdue: Boolean,
     /** refresh interval */
     val refreshInterval: Long,
+    /** last updated */
+    val lastRefresh: LocalDateTime,
+    /** exam category filter */
+    val categoryFilter: String,
 )

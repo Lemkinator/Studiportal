@@ -26,10 +26,12 @@ import de.lemke.studiportal.databinding.ActivitySettingsBinding
 import de.lemke.studiportal.domain.*
 import dev.oneuiproject.oneui.preference.HorizontalRadioPreference
 import dev.oneuiproject.oneui.preference.internal.PreferenceRelatedCard
+import dev.oneuiproject.oneui.utils.DialogUtils
 import dev.oneuiproject.oneui.utils.PreferenceUtils.createRelatedCard
 import kotlinx.coroutines.launch
+import java.time.format.DateTimeFormatter
+import java.time.format.FormatStyle
 import javax.inject.Inject
-import kotlin.math.log
 
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
@@ -50,6 +52,7 @@ class SettingsActivity : AppCompatActivity() {
         private lateinit var autoDarkModePref: SwitchPreferenceCompat
         private lateinit var confirmExitPref: SwitchPreferenceCompat
         private lateinit var logoutPref: PreferenceScreen
+        private lateinit var refreshTimePref: ListPreference
         private var relatedCard: PreferenceRelatedCard? = null
         private var lastTimeVersionClicked: Long = 0
 
@@ -58,6 +61,9 @@ class SettingsActivity : AppCompatActivity() {
 
         @Inject
         lateinit var updateUserSettings: UpdateUserSettingsUseCase
+
+        @Inject
+        lateinit var deleteExams: DeleteExamsUseCase
 
         override fun onAttach(context: Context) {
             super.onAttach(context)
@@ -81,12 +87,32 @@ class SettingsActivity : AppCompatActivity() {
             autoDarkModePref = findPreference("dark_mode_auto_pref")!!
             confirmExitPref = findPreference("confirm_exit_pref")!!
             logoutPref = findPreference("logout_pref")!!
+            refreshTimePref = findPreference("refresh_time_pref")!!
             logoutPref.onPreferenceClickListener = OnPreferenceClickListener {
-                //TODO
+                val dialog = AlertDialog.Builder(settingsActivity)
+                    .setTitle(getString(R.string.logout))
+                    .setMessage(getString(R.string.logout_message))
+                    .setNegativeButton(getString(R.string.sesl_cancel), null)
+                    .setPositiveButton(R.string.ok, null)
+                    .create()
+                dialog.show()
+                DialogUtils.setDialogProgressForButton(dialog, DialogInterface.BUTTON_POSITIVE) {
+                    lifecycleScope.launch {
+                        updateUserSettings { it.copy(username = "", password = "") }
+                        deleteExams()
+                        startActivity(Intent(settingsActivity, LoginActivity::class.java))
+                        settingsActivity.finish()
+                    }
+                }
                 true
             }
             lifecycleScope.launch {
-                logoutPref.summary = getUserSettings().username
+                val userSettings = getUserSettings()
+                logoutPref.summary = userSettings.username
+                refreshTimePref.summary = getString(
+                    R.string.last_updated,
+                    userSettings.lastRefresh.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) //TODO
+                )
             }
             autoDarkModePref.onPreferenceChangeListener = this
             autoDarkModePref.isChecked = darkMode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM ||

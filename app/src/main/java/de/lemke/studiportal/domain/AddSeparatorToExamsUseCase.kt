@@ -3,7 +3,7 @@ package de.lemke.studiportal.domain
 import de.lemke.studiportal.domain.model.Exam
 import javax.inject.Inject
 
-class GetExamsWithSeparatorUseCase @Inject constructor() {
+class AddSeparatorToExamsUseCase @Inject constructor() {
     operator fun invoke(exams: List<Exam>): MutableList<Pair<Exam?, String>> {
         val examsWithOutSeparator = exams.map { Pair(it, it.category) }.toMutableList()
         val examsWithSeparator: MutableList<Pair<Exam?, String>> = examsWithOutSeparator.toMutableList()

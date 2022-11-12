@@ -4,33 +4,25 @@ import android.graphics.Typeface
 import android.text.SpannableStringBuilder
 import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
-import javax.inject.Inject
 
-class MakeSectionOfTextBoldUseCase @Inject constructor() {
-    operator fun invoke(text: String, textToBold: String?, color: Int, alternativeSearchModeEnabled: Boolean): SpannableStringBuilder =
-        invoke(text, textToBold?.trim(), color, -1, alternativeSearchModeEnabled)
+class MakeSectionOfTextBoldUseCase {
+    operator fun invoke(text: String, textToBold: String?, color: Int): SpannableStringBuilder =
+        invoke(text, textToBold?.trim(), color, -1)
 
     operator fun invoke(
         text: String,
         textToBold: String?,
         color: Int,
         lengthBefore: Int,
-        alternativeSearchModeEnabled: Boolean
     ): SpannableStringBuilder {
         if (textToBold != null && textToBold.isNotEmpty()) {
             if (textToBold.trim().startsWith("\"") && textToBold.trim().endsWith("\"")) {
                 if (textToBold.length > 2) {
                     val s = textToBold.substring(1, textToBold.length - 1)
-                    return if (alternativeSearchModeEnabled)
-                        makeSectionOfTextBold(SpannableStringBuilder(text), hashSetOf(s.trim()), color, lengthBefore)
-                    else
-                        makeSectionOfTextBold(SpannableStringBuilder(text), HashSet(s.trim().split(" ")), color, lengthBefore)
+                    return makeSectionOfTextBold(SpannableStringBuilder(text), hashSetOf(s.trim()), color, lengthBefore)
                 }
             } else {
-                return if (alternativeSearchModeEnabled)
-                    makeSectionOfTextBold(SpannableStringBuilder(text), HashSet(textToBold.trim().split(" ")), color, lengthBefore)
-                else
-                    makeSectionOfTextBold(SpannableStringBuilder(text), hashSetOf(textToBold.trim()), color, lengthBefore)
+                return makeSectionOfTextBold(SpannableStringBuilder(text), HashSet(textToBold.trim().split(" ")), color, lengthBefore)
             }
         }
         return SpannableStringBuilder(text)

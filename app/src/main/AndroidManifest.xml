@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -11,7 +12,8 @@
     <!--
     TODO / Ideas
 
-        login information: name,...
+        listitem add all information
+        login information?: name,...
 
         (new Android 12 Splashscreen)
     -->
@@ -47,11 +49,12 @@
             android:name="theming-meta-xml"
             android:value="@xml/meta_998_sesl_app" />
 
-        <activity android:name=".ui.SettingsActivity" />
+        <activity android:name=".ui.SettingsActivity" android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.AboutMeActivity" />
         <activity android:name=".ui.AboutActivity" />
         <activity android:name=".ui.OOBEActivity" />
         <activity android:name=".ui.LoginActivity" />
+        <activity android:name=".ui.ExamActivity" android:parentActivityName=".ui.MainActivity" />
 
         <activity
             android:name=".ui.MainActivity"

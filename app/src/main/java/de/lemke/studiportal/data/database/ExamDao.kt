@@ -13,7 +13,7 @@ interface ExamDao {
     suspend fun getAll(category: String): List<ExamDb>
 
     @Query("SELECT * FROM exam WHERE examNumber = :examNumber")
-    suspend fun getByExamNumber(examNumber: String): ExamDb?
+    suspend fun getByExamNumber(examNumber: String?): ExamDb?
 
     @Query("SELECT * FROM exam;")
     suspend fun getAll(): List<ExamDb>

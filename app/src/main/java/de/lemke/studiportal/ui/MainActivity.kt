@@ -6,7 +6,6 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
@@ -33,7 +32,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var binding: ActivityMainBinding
     private val examFragment: MainActivityExamFragment = MainActivityExamFragment()
     private val searchFragment: MainActivitySearchFragment = MainActivitySearchFragment()
-    private var isSearchFragmentVisible = false
     private var isSearchUserInputEnabled = false
     private var time: Long = 0
 
@@ -49,30 +47,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setContentView(binding.root)
         time = System.currentTimeMillis()
         initFragments()
-        binding.toolbarLayoutMain.setSearchModeListener(SearchModeListener())
-        binding.toolbarLayoutMain.searchView.setSearchableInfo(
+        binding.drawerLayoutMain.setSearchModeListener(SearchModeListener())
+        binding.drawerLayoutMain.searchView.setSearchableInfo(
             (getSystemService(SEARCH_SERVICE) as SearchManager).getSearchableInfo(
                 componentName
             )
         )
-        binding.toolbarLayoutMain.searchView.seslSetOverflowMenuButtonIcon(getDrawable(dev.oneuiproject.oneui.R.drawable.ic_oui_list_filter))
-        binding.toolbarLayoutMain.searchView.seslSetOverflowMenuButtonVisibility(View.VISIBLE)
-        //binding.toolbarLayoutMain.searchView.seslSetOnOverflowMenuButtonClickListener { SearchFilterDialog { setSearchFragment() }.show(supportFragmentManager, "") }
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
                 lifecycleScope.launch {
                     when {
-                        binding.toolbarLayoutMain.isSearchMode -> binding.toolbarLayoutMain.dismissSearchMode()
+                        binding.drawerLayoutMain.isSearchMode -> binding.drawerLayoutMain.dismissSearchMode()
+                        !getUserSettings().confirmExit || System.currentTimeMillis() - time < 3000 -> finishAffinity()
                         else -> {
-                            if (!getUserSettings().confirmExit) finishAffinity()
-                            else {
-                                if (System.currentTimeMillis() - time < 3000) finishAffinity()
-                                else {
-                                    Toast.makeText(this@MainActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT)
-                                        .show()
-                                    time = System.currentTimeMillis()
-                                }
-                            }
+                            Toast.makeText(this@MainActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
+                            time = System.currentTimeMillis()
                         }
                     }
                 }
@@ -83,7 +72,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
         setIntent(intent)
-        if (intent?.action == Intent.ACTION_SEARCH) binding.toolbarLayoutMain.searchView.setQuery(
+        if (intent?.action == Intent.ACTION_SEARCH) binding.drawerLayoutMain.searchView.setQuery(
             intent.getStringExtra(SearchManager.QUERY),
             true
         )
@@ -105,7 +94,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_item_search -> {
-                binding.toolbarLayoutMain.showSearchMode()
+                binding.drawerLayoutMain.showSearchMode()
                 setSearchFragment()
                 return true
             }
@@ -140,32 +129,26 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     fun setExamFragment() {
-        //if (isSearchFragmentVisible) {
         val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
         for (fragment in supportFragmentManager.fragments) transaction.hide(fragment)
         transaction.show(examFragment).commit()
         supportFragmentManager.executePendingTransactions()
-        //}
-        isSearchFragmentVisible = false
     }
 
     fun setSearchFragment() {
-        if (!isSearchFragmentVisible) {
-            val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-            for (fragment in supportFragmentManager.fragments) transaction.hide(fragment)
-            transaction.show(searchFragment).commit()
-            supportFragmentManager.executePendingTransactions()
-        }
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        for (fragment in supportFragmentManager.fragments) transaction.hide(fragment)
+        transaction.show(searchFragment).commit()
+        supportFragmentManager.executePendingTransactions()
         searchFragment.onRefresh()
-        isSearchFragmentVisible = true
     }
 
     inner class SearchModeListener : ToolbarLayout.SearchModeListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             if (!isSearchUserInputEnabled) return false
             lifecycleScope.launch {
-                //updateUserSettings { it.copy(search = query ?: "") }
-                setSearchFragment()
+                updateUserSettings { it.copy(search = query ?: "") }
+                searchFragment.onRefresh()
             }
             return true
         }
@@ -173,8 +156,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         override fun onQueryTextChange(query: String?): Boolean {
             if (!isSearchUserInputEnabled) return false
             lifecycleScope.launch {
-                //updateUserSettings { it.copy(search = query ?: "") }
-                setSearchFragment()
+                updateUserSettings { it.copy(search = query ?: "") }
+                searchFragment.onRefresh()
             }
             return true
         }
@@ -183,7 +166,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             if (visible) {
                 isSearchUserInputEnabled = true
                 lifecycleScope.launch {
-                    val search = "" //getUserSettings().search
+                    val search = getUserSettings().search
                     searchView.setQuery(search, false)
                     val autoCompleteTextView = searchView.seslGetAutoCompleteView()
                     autoCompleteTextView.setText(search)

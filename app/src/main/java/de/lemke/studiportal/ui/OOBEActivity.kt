@@ -109,11 +109,11 @@ class OOBEActivity : AppCompatActivity() {
     }
 
     private fun initToSDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle(getString(R.string.tos))
-        builder.setMessage(getString(R.string.tos_content))
-        builder.setPositiveButton(R.string.ok) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
-        toSDialog = builder.create()
+        toSDialog = AlertDialog.Builder(this)
+            .setTitle(getString(R.string.tos))
+            .setMessage(getString(R.string.tos_content))
+            .setPositiveButton(R.string.ok) { dialog: DialogInterface, _: Int -> dialog.dismiss() }
+            .create()
     }
 
     private fun initFooterButton() {
@@ -131,8 +131,9 @@ class OOBEActivity : AppCompatActivity() {
         }
     }
 
-    private fun openNextActivity() {
-        startActivity(Intent(this, MainActivity::class.java))
+    private suspend fun openNextActivity() {
+        if (getUserSettings().username.isBlank()) startActivity(Intent(this, LoginActivity::class.java))
+        else startActivity(Intent(this, MainActivity::class.java))
         finish()
     }
 }

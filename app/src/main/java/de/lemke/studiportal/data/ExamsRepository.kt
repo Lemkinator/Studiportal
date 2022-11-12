@@ -15,7 +15,7 @@ class ExamsRepository @Inject constructor(
 
     suspend fun getExamsWithCategory(category: String): List<Exam> = examDao.getAll(category).map { examFromDb(it) }
 
-    suspend fun getExam(examNumber: String): Exam? = examDao.getByExamNumber(examNumber)?.let { examFromDb(it) }
+    suspend fun getExam(examNumber: String?): Exam? = examDao.getByExamNumber(examNumber)?.let { examFromDb(it) }
 
     private suspend fun insertExams(exams: List<Exam>) = examDao.insert(exams.map { examToDb(it) })
 

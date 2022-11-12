@@ -17,141 +17,34 @@
     <string name="oneui_github_link" translatable="false">https://github.com/OneUIProject</string>
     <string name="rick_roll_troll_link" translatable="false">https://www.leonard-lemke.com/rr</string>
 
-    <string name="action_check_for_updates" translatable="false">de.lemke.studiportal.CHECK_FOR_UPDATES</string>
-    <string name="studiportal_url" translatable="false">https://studi-portal.hs-furtwangen.de/</string>
-
     <string name="url_login" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=user&amp;type=1&amp;category=auth.login&amp;startpage=portal.vm&amp;breadCrumbSource=portal&amp;asdf=%1$s&amp;fdsa=%2$s&amp;submit=Anmelden</string>
     <string name="url_logout" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=user&amp;type=4&amp;re=last&amp;category=auth.logout&amp;breadCrumbSource=portal</string>
     <string name="url_fetch_asi" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=change&amp;type=1&amp;moduleParameter=studyPOSMenu&amp;nextdir=change&amp;next=menu.vm&amp;subdir=applications&amp;xml=menu&amp;purge=y&amp;navigationPosition=functions%2CstudyPOSMenu&amp;breadcrumb=studyPOSMenu&amp;topitem=functions&amp;subitem=studyPOSMenu</string>
     <string name="url_observe" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=htmlbesch&amp;moduleParameter=Student&amp;menuid=notenspiegel&amp;breadcrumb=notenspiegel&amp;breadCrumbSource=menu&amp;asi=%1$s</string>
+    <string name="studiportal_url" translatable="false">https://studi-portal.hs-furtwangen.de/</string>
+
+    <string name="action_check_for_updates" translatable="false">de.lemke.studiportal.CHECK_FOR_UPDATES</string>
+
+    <!--Notifications-->
+    <string name="exam_notification_channel_id" translatable="false">Exam_Notification_Channel</string>
+    <string name="exam_notification_channel_name">Änderungen</string>
+    <string name="exam_notification_channel_description">Bei Änderungen eine Benachrichtiung erhalten.</string>
+    <string name="touch_to_show_grade">Berühren, um Note zu sehen</string>
 
     <!--About-->
-    <string name="about_page_optional_text">about_page_optional_text</string>
+    <string name="about_page_optional_text">TODO</string>
     <string name="about_app">Über Studiportal</string>
     <string name="help">Hilfe</string>
-
-    <!--Settings-->
-    <string name="confirm_exit">Verlassen bestätigen</string>
-    <string name="press_again_to_exit">Zurück-Taste erneut drücken um zu Beenden.</string>
     <string name="open_in_playstore">In Play Store öffnen</string>
+
+    <!--AboutMe-->
+    <string name="about_me">Über mich</string>
     <string name="to_play_store">Zum Play Store</string>
-    <string name="website">Webseite</string>
-    <string name="system_default">Systemeinstellung</string>
-    <string name="ok" translatable="false" tools:ignore="ButtonCase,Typos">Ok</string>
     <string name="support_me">Unterstütz mich</string>
     <string name="contact_me">Kontaktier mich (E-Mail)</string>
-    <string name="about_me">Über mich</string>
-    <string name="tiktok" translatable="false">TikTok</string>
     <string name="write_email">E-Mail schreiben</string>
-    <string name="task_failed">Hoppla, da ist etwas schiefgelaufen…</string>
-    <string name="dev_options">Developer options</string>
-    <string name="design">Design</string>
-    <string name="more_information">Mehr Informationen</string>
-
-    <!--OOBE-->
-    <string name="oobe_onboard_msg1_title">oobe_onboard_msg1_title</string>
-    <string name="oobe_onboard_msg2_title">oobe_onboard_msg2_title</string>
-    <string name="oobe_onboard_msg3_title">oobe_onboard_msg3_title</string>
-    <string name="oobe_onboard_msg1_summary">oobe_onboard_msg1_summary</string>
-    <string name="oobe_onboard_msg2_summary">oobe_onboard_msg2_summary</string>
-    <string name="oobe_onboard_msg3_summary">oobe_onboard_msg3_summary</string>
-    <string name="tos">Nutzungsbedingungen</string>
-    <string name="tos_content">Es ist nicht gestattet, diese App entgegen den guten Sitten oder den geltenden Gesetzen zu verwenden. \n\nSie verpflichten sich außerdem, diese App nicht für Zwecke zu verwenden, die nach dem Recht der Vereinigten Staaten verboten sind, insbesondere nicht für die Entwicklung, Konstruktion, Herstellung oder Produktion von Raketen, chemischen oder biologischen Waffen. \nDiese Einschränkung gilt jedoch nicht für den Fall, dass eine weit verbreitete Virusinfektion auftritt (die von den United States Centers for Disease Control oder einer Nachfolgeorganisation bestätigt wurde), die durch Bisse oder Kontakt mit Körperflüssigkeiten übertragen wird und dazu führt, dass menschliche Leichen wiederbelebt werden und versuchen, lebendes menschliches Fleisch, Blut, Gehirn oder Nervengewebe zu verzehren, und die wahrscheinlich zum Untergang der organisierten Zivilisation führen wird. \n\nEine besondere Gegenleistung, die eine finanzielle Entschädigung beinhalten kann, wird einer begrenzten Anzahl von Nutzern angeboten, die diesen Abschnitt der Nutzungsbedingungen lesen und mich unter eine-email-an-diese-adresse-zu-schreiben-wird-sie-10-euro-kosten@leonard-lemke.com kontaktieren. Dieses Angebot kann jederzeit und ohne Vorankündigung zurückgezogen werden. \n\nWeitere Fragen werden unter diese-email-ist-viel-zu-lang-und-hoffentlich-koennen-sie-nicht-kopieren-und-einfuegen@leonard-lemke.com beantwortet.</string>
-    <string name="oobe_tos_text">Durch die Nutzung der App stimmen Sie den %1$s zu.</string>
-    <string name="accept_tos">Weiter</string>
-
-    <!--sesl???-->
-    <string name="search">Suche</string>
-    <string name="settings">Einstellungen</string>
-    <string name="sesl_cancel">Abbrechen</string>
-    <string name="sesl_navigate_up">Zurück</string>
-
-    <!--HFU-->
-    <string name="check_now">Jetzt überprüfen</string>
-    <string name="open_online">Studiportal online öffnen</string>
-    <string name="search_exam">Prüfung suchen</string>
-    <string name="exception_no_user_password">Benutzer oder Passwort nicht eingetragen</string>
-    <string name="exception_wrong_user_password">Benutzer oder Passwort falsch</string>
-    <string name="exception_wrong_user_password_long">Der Benutzer oder das Passwort scheint ungültig zu sein.\n\nWenn du sicher bist das alles stimmt probiere es in ein paar Minuten nochmals, leider spinnt das Studiportal gelegentlich&#8230;</string>
-    <string name="exception_general">Fehler beim Verbinden mit Studiportal</string>
-    <string name="new_data_title">Neue Noten eingetragen</string>
-    <string name="new_data_detail">Berühren, um Studiportal zu öffnen</string>
-    <string name="touch_to_show_grade">Berühren, um Note zu sehen</string>
-    <string name="close">Schließen</string>
-    <string name="bonus">Bonus: %1$s ECTS</string>
-    <string name="no_ects">Keine ECTS</string>
-    <string name="malus">Malus: %1$s ECTS</string>
-    <string name="ects">&#x00A0;(%1$s ECTS)</string>
-    <string name="show_password">Passwort anzeigen</string>
-    <string name="state_resignated">Zurückgetreten</string>
-    <string name="state">Status: %1$s</string>
-    <string name="semester">Semester: %1$s</string>
-    <string name="note">Vermerk: %1$s</string>
-    <string name="grade">Note: %1$s</string>
-    <string name="attempt">Versuch: %1$s</string>
-    <string name="practical_work">Praktikum / Vorleistung</string>
-    <string name="be">Bestanden</string>
-    <string name="an">Angemeldet</string>
-    <string name="nb">Nicht bestanden</string>
-    <string name="en">Endgültig nicht bestanden</string>
-    <string name="gr">Genehmigter Rücktritt</string>
-    <string name="u">Unentschuldigter Rücktritt</string>
-    <string name="vf">Prüfungsvorleistung fehlt</string>
-    <string name="k">Krankheit</string>
-    <string name="sa">Studium abgebrochen</string>
-    <string name="last_updated">Letzte Aktualisierung: </string>
-    <string name="enter_user_password">Du musst deinen Login-Daten eingeben, bevor du dich anmelden kannst.</string>
-    <string name="user_name">HFU Benutzername</string>
-    <string name="password">Passwort</string>
-    <string name="login">Einloggen</string>
-    <string name="logout_dialog">Willst du dich wirklich ausloggen?</string>
-    <string name="placeholder">Lorem ipsum</string>
-    <string name="cancel">Abbrechen</string>
-    <string name="check_login">Überprüfe Login-Daten</string>
-    <string name="refresh">Überprüfe Studiportal</string>
-    <string name="logging_in">Einloggen…</string>
-    <string name="connecting">Verbinden…</string>
-    <string name="logging_out">Ausloggen…</string>
-    <string name="checking_update">Nach Änderungen suchen…</string>
-    <string name="no_change">Keine neuen Daten</string>
-    <string name="search_result">Suchergebnisse</string>
-    <string name="activity_login_title">Studiportal Login</string>
-    <string name="activity_preferences_title">Einstellungen</string>
-    <string name="search_hint">Prüfungsname</string>
-
-    <!--HFU Settings-->
-    <string name="logout_title">Ausloggen</string>
-    <string name="login_data_summary">Trage hier deine HFU-Login Daten ein</string>
-    <string name="login_data_title">Login Daten</string>
-    <string name="refresh_time">Aktualisierungsintervall</string>
-    <string name="refresh_on_mobile">Über Mobilfunknetz aktualisieren</string>
-    <string name="refresh_on_mobile_summary">Für die Aktualisierung über Mobilfunk können Gebühren anfallen</string>
-    <string name="refresh_title">Aktualisierung</string>
-    <string name="other_title">Sonstiges</string>
-    <string name="notification">Benachrichtigung</string>
-    <string name="show_grade_title">Note in Benachrichtigung</string>
-    <string name="show_grade_summary">Neue Noten werden direkt in der Benachrichtigung angezeigt</string>
-    <string name="notify_about_change_summary">Bei Änderungen im Studiportal wird eine Benachrichtigung angezeigt</string>
-    <string name="notify_about_change_title">Über Noten benachrichtigen</string>
-
-    <string-array name="array_refresh_time">
-        <item>2 Stunden</item>
-        <item>3 Stunden</item>
-        <item>6 Stunden</item>
-        <item>12 Stunden</item>
-        <item>24 Stunden</item>
-        <item>Keine Aktualisierung</item>
-    </string-array>
-    <string-array name="array_refresh_time_key">
-        <item>120</item>
-        <item>180</item>
-        <item>360</item>
-        <item>720</item>
-        <item>1480</item>
-        <item>525948766</item>
-    </string-array>
-
-    <!--Others-->
+    <string name="tiktok" translatable="false">TikTok</string>
+    <string name="website">Webseite</string>
     <string name="support_me_text">Falls du mich in irgendeiner Weise unterstützen möchtest, dann sende mir gerne eine E-Mail</string>
     <string name="rate_app">App im Play-Store Bewerten</string>
     <string name="write_review">Bewertung schreiben</string>
@@ -159,20 +52,159 @@
     <string name="share">Teilen</string>
     <string name="share_app">Studiportal teilen</string>
     <string name="share_app_text">Schau mal hier, TODO: https://play.google.com/store/apps/details?id=</string>
+    <string name="useful_links">Nützliche Links</string>
 
-    <string name="no_email_app_installed">Keine E-Mail-App installiert…</string>
-    <string name="error">Fehler</string>
+    <!--Settings-->
+    <string name="design">Design</string>
+    <string name="system_default">Systemeinstellung</string>
+    <string name="phone_settings">Telefon-Einstellungen</string><string name="confirm_exit">Verlassen bestätigen</string>
+    <string name="press_again_to_exit">Zurück-Taste erneut drücken um zu Beenden.</string>
+    <string name="logout">Ausloggen</string>
+    <string name="logout_message">Willst du dich wirklich ausloggen?</string>
+    <string name="login_data">Login Daten</string>
+    <string name="refresh">Aktualisierung</string>
+    <string name="refresh_interval">Aktualisierungsintervall</string>
+    <string name="refresh_on_mobile">Über Mobilfunknetz aktualisieren</string>
+    <string name="refresh_on_mobile_summary">Für die Aktualisierung über Mobilfunk können Gebühren anfallen</string>
+    <string-array name="array_refresh_interval">
+        <item>2 Stunden</item>
+        <item>3 Stunden</item>
+        <item>6 Stunden</item>
+        <item>12 Stunden</item>
+        <item>24 Stunden</item>
+        <item>Keine Aktualisierung</item>
+    </string-array>
+    <string-array name="array_refresh_interval_key">
+        <item>120</item>
+        <item>180</item>
+        <item>360</item>
+        <item>720</item>
+        <item>1480</item>
+        <item>525948766</item>
+    </string-array>
+    <string name="notification">Benachrichtigung</string>
+    <string name="show_grade_title">Note in Benachrichtigung</string>
+    <string name="show_grade_summary">Neue Noten werden direkt in der Benachrichtigung angezeigt</string>
+    <string name="notify_about_change_title">Über Noten benachrichtigen</string>
+    <string name="notify_about_change_summary">Bei Änderungen im Studiportal wird eine Benachrichtigung angezeigt</string>
+    <string name="dev_options">Developer options</string>
+    <string name="more_information">Mehr Informationen</string>
     <string name="privacy_information">Informationen zum Datenschutz</string>
     <string name="report_bug">Bug oder Verbesserung melden</string>
-
     <string name="delete_app_data_and_exit">App-Daten löschen und Beenden</string>
     <string name="delete_app_data_and_exit_warning">Achtung: Dadurch werden alle persönlichen Daten gelöscht. Fortfahren? </string>
-    <string name="phone_settings">Telefon-Einstellungen</string>
 
-    <string name="contact">Kontakt</string>
+    <!--OOBE-->
+    <string name="oobe_onboard_msg1_title">TODO</string>
+    <string name="oobe_onboard_msg2_title">TODO</string>
+    <string name="oobe_onboard_msg3_title">TODO</string>
+    <string name="oobe_onboard_msg1_summary">TODO</string>
+    <string name="oobe_onboard_msg2_summary">TODO</string>
+    <string name="oobe_onboard_msg3_summary">TODO</string>
+    <string name="tos">Nutzungsbedingungen</string>
+    <string name="tos_content">Es ist nicht gestattet, diese App entgegen den guten Sitten oder den geltenden Gesetzen zu verwenden. \n\nSie verpflichten sich außerdem, diese App nicht für Zwecke zu verwenden, die nach dem Recht der Vereinigten Staaten verboten sind, insbesondere nicht für die Entwicklung, Konstruktion, Herstellung oder Produktion von Raketen, chemischen oder biologischen Waffen. \nDiese Einschränkung gilt jedoch nicht für den Fall, dass eine weit verbreitete Virusinfektion auftritt (die von den United States Centers for Disease Control oder einer Nachfolgeorganisation bestätigt wurde), die durch Bisse oder Kontakt mit Körperflüssigkeiten übertragen wird und dazu führt, dass menschliche Leichen wiederbelebt werden und versuchen, lebendes menschliches Fleisch, Blut, Gehirn oder Nervengewebe zu verzehren, und die wahrscheinlich zum Untergang der organisierten Zivilisation führen wird. \n\nEine besondere Gegenleistung, die eine finanzielle Entschädigung beinhalten kann, wird einer begrenzten Anzahl von Nutzern angeboten, die diesen Abschnitt der Nutzungsbedingungen lesen und mich unter eine-email-an-diese-adresse-zu-schreiben-wird-sie-10-euro-kosten@leonard-lemke.com kontaktieren. Dieses Angebot kann jederzeit und ohne Vorankündigung zurückgezogen werden. \n\nWeitere Fragen werden unter diese-email-ist-viel-zu-lang-und-hoffentlich-koennen-sie-nicht-kopieren-und-einfuegen@leonard-lemke.com beantwortet.</string>
+    <string name="oobe_tos_text">Durch die Nutzung der App stimmen Sie den %1$s zu.</string>
+    <string name="accept_tos">Weiter</string>
+
+    <!--General-->
+    <string name="ok" translatable="false" tools:ignore="ButtonCase,Typos">Ok</string>
+    <string name="task_failed">Hoppla, da ist etwas schiefgelaufen…</string>
+    <string name="no_email_app_installed">Keine E-Mail-App installiert…</string>
+    <string name="error">Fehler</string>
     <string name="no_entry">Kein Eintrag</string>
-    <string name="useful_links">Nützliche Links</string>
-    <string name="credits">Credits</string>
-    <string name="undefined">undefined</string>
+
+    <!--sesl???-->
+    <string name="search">Suche</string>
+    <string name="settings">Einstellungen</string>
+    <string name="sesl_cancel">Abbrechen</string>
+    <string name="sesl_navigate_up">Zurück</string>
+
+    <!--Studiportal-->
+    <string name="exam_number">Prüfungs-Nr.</string>
+    <string name="exam_number_value">Prüfungs-Nr.: %1$s</string>
+    <string name="name">Bezeichnung</string>
+    <string name="name_value">Bezeichnung: %1$s</string>
+    <string name="bonus">Bonus</string>
+    <string name="bonus_value">Bonus: %1$s ECTS</string>
+    <string name="malus">Malus</string>
+    <string name="malus_value">Malus: %1$s ECTS</string>
+    <string name="ects">ECTS</string>
+    <string name="ects_value">&#x00A0;(%1$s ECTS)</string>
+    <string name="no_ects">Keine ECTS</string>
+    <string name="sws">SWS</string>
+    <string name="sws_value">&#x00A0;(%1$s SWS)</string>
+    <string name="no_sws">Keine SWS</string>
+    <string name="semester">Semester</string>
+    <string name="semester_value">Semester: %1$s</string>
+    <string name="kind">Art</string>
+    <string name="kind_value">Art: %1$s</string>
+    <string name="attempt">Versuch</string>
+    <string name="attempt_value">Versuch: %1$s</string>
+    <string name="grade">Note</string>
+    <string name="grade_value">Note: %1$s</string>
+    <string name="state">Status</string>
+    <string name="state_value">Status: %1$s</string>
+    <string name="comment">Anerkennung</string>
+    <string name="comment_value">Anerkennung: %1$s</string>
+    <string name="resignation">Rücktritt</string>
+    <string name="resignation_value">Rücktritt: %1$s</string>
+    <string name="resignated">Zurückgetreten</string>
+    <string name="note">Vermerk</string>
+    <string name="note_value">Vermerk: %1$s</string>
+    <string name="category">Kategorie</string>
+    <string name="category_value">Kategorie: %1$s</string>
+
+    <!--Art-->
+    <string name="pl">Prüfungsleistung</string>
+    <string name="sl">Studienleistung</string>
+    <string name="vl">Prüfungsvorleistung</string>
+    <string name="p">Prüfung</string>
+    <string name="g">Generierte Prüfung</string>
+    <string name="ko">Konto</string>
+    <!--Status-->
+    <string name="an">Angemeldet</string>
+    <string name="be">Bestanden</string>
+    <string name="nb">Nicht bestanden</string>
+    <string name="en">Endgültig nicht bestanden</string>
+    <!--Anerkennung-->
+    <string name="a">Anerk. ausl. HS</string>
+    <string name="h">HS-interne Anerk.</string>
+    <string name="j">Anerkannte Prüf.</string>
+    <string name="nz">nicht zutreffend</string>
+    <!--Rücktritt-->
+    <string name="rt">Rücktritt</string>
+    <!--Vermerk-->
+    <string name="gr">Genehmigter Rücktritt</string>
+    <string name="k">Krankheit</string>
+    <string name="sa">Studium abgebrochen</string>
+    <string name="u">Unentschuldigter Rücktritt</string>
+    <string name="v">Verlängerung</string>
+    <string name="vf">Prüfungsvorleistung fehlt</string>
+
+    <!--Exam List-->
+    <string name="check_now">Jetzt überprüfen</string>
+    <string name="open_online">Studiportal online öffnen</string>
+    <string name="last_updated">Letzte Aktualisierung: %1$s</string>
+    <string name="no_change">Keine neuen Daten</string>
+    <string name="category_filter">Kategorie | %1$s</string>
+    <string name="filter">Filter</string>
+    <string name="all">Alle</string>
+
+    <!--Login-->
+    <string name="user_name">HFU Benutzername</string>
+    <string name="password">Passwort</string>
+    <string name="login">Einloggen</string>
+    <string name="username_or_password_empty">Benutzername oder Passwort leer.</string>
+    <string name="wrong_username_or_password">Benutzer oder Passwort falsch</string>
+    <string name="wrong_username_or_password_message">Der Benutzer oder das Passwort scheint ungültig zu sein.\n\nWenn du sicher bist das alles stimmt probiere es in ein paar Minuten nochmal, leider spinnt das Studiportal gelegentlich…</string>
+    <string name="error_login">Fehler beim Login: %1$s</string>
+    <string name="studi_portal_login_failed_message">Anmeldung fehlgeschlagen</string>
+    <string name="error_asi">Fehler beim Abrufen des ASI: %1$s</string>
+    <string name="error_could_not_get_asi">ASI konnte nicht ermittelt werden.</string>
+    <string name="error_observe">Fehler beim Abrufen der Prüfungen: %1$s</string>
+    <string name="login_success_observe_error">Leider ist jedoch beim Einlesen der Daten ein Fehler aufgetreten: %1$s</string>
+    <string name="demo_username_label">Nutzername für die Demo-Ansicht: \"DEMO\"</string>
+
+    <!--Others-->
 
 </resources>

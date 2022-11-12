@@ -18,9 +18,14 @@ import javax.inject.Inject
 class GetStudiportalDataUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getUserSettings: GetUserSettingsUseCase,
-    private val parseExamList: ParseExamListUseCase,
+    private val parseExamList: ParseStudiportalDataUseCase,
 ) {
-    suspend operator fun invoke(studiportalListener: StudiportalListener?): Unit = withContext(Dispatchers.Default) {
+    suspend operator fun invoke(
+        successCallback: (exams: List<Exam>) -> Unit = { },
+        errorCallback: (message: String) -> Unit = { },
+        loginSuccessCallback: () -> Unit = { },
+        loginErrorCallback: (message: String) -> Unit = { },
+    ): Unit = withContext(Dispatchers.Default) {
         val userSettings = getUserSettings()
         val username = userSettings.username
         val password = userSettings.password
@@ -43,50 +48,51 @@ class GetStudiportalDataUseCase @Inject constructor(
                 val error = "error"
                 val asi = asiResponse.substringAfter(";asi=", error).substringBefore("\"", error)
                 if (asi == error) {
-                    onError("ASI konnte nicht ermittelt werden.", studiportalListener, requestQueue)
+                    onError(context.getString(R.string.error_could_not_get_asi), requestQueue, errorCallback)
                     return@StringRequest
                 }
-                val observeRequest = StringRequest(
-                    Request.Method.POST, context.getString(R.string.url_observe, asi),
-                    { observeResponse ->
-                        val examStart: Int = observeResponse
-                            .indexOf("<table cellspacing=\"0\" cellpadding=\"5\" border=\"0\" align=\"center\" width=\"100%\">")
-                        val table: String = observeResponse.substring(examStart, observeResponse.indexOf("</table>", examStart))
-                        onSuccess(parseExamList(table), studiportalListener, requestQueue)
-                    },
-                    { observeError ->
-                        onError("Fehler beim Abrufen der Prüfungen: ${observeError.message}", studiportalListener, requestQueue)
-                    })
-                requestQueue.add(observeRequest)
+                requestQueue.add(getObserveRequest(asi, requestQueue, successCallback, errorCallback))
             },
-            { error ->
-                onError("Fehler beim Abrufen des ASI: ${error.message}", studiportalListener, requestQueue)
-            })
+            { error -> onError(context.getString(R.string.error_asi, error.message), requestQueue, errorCallback) })
 
         val loginRequest = StringRequest(
             Request.Method.POST, context.getString(R.string.url_login, username, password),
             { loginResponse ->
-                if (loginResponse.contains("Anmeldung fehlgeschlagen")) {
-                    onError("Anmeldung fehlgeschlagen.", studiportalListener, requestQueue)
+                if (loginResponse.contains(context.getString(R.string.studi_portal_login_failed_message))) {
+                    loginErrorCallback(context.getString(R.string.wrong_username_or_password_message))
                 } else {
-                    Log.d("login success", "Anmeldung erfolgreich")
+                    loginSuccessCallback()
                     requestQueue.add(asiRequest)
                 }
             },
-            { onError("Fehler beim Login: ${it.message}", studiportalListener, requestQueue) })
+            {
+                loginErrorCallback(context.getString(R.string.error_login, it.message))
+                onError(context.getString(R.string.error_login, it.message), requestQueue, errorCallback)
+            })
         requestQueue.add(loginRequest)
 
     }
 
-    private fun onError(msg: String, studiportalListener: StudiportalListener?, requestQueue: RequestQueue) {
+    private fun getObserveRequest(
+        asi: String,
+        requestQueue: RequestQueue,
+        onSuccessCallback: (exams: List<Exam>) -> Unit,
+        onErrorCallback: (message: String) -> Unit
+    ) = StringRequest(
+        Request.Method.POST, context.getString(R.string.url_observe, asi),
+        { observeResponse -> onSuccess(observeResponse, requestQueue, onSuccessCallback) },
+        { observeError -> onError(context.getString(R.string.error_observe, observeError.message), requestQueue, onErrorCallback) })
+
+    private fun onError(msg: String, requestQueue: RequestQueue, errorCallback: (message:String) -> Unit) {
         Log.d("Error in GetStudiportalDataUseCase", msg)
-        studiportalListener?.onError(msg)
+        errorCallback(msg)
         logout(requestQueue)
     }
 
-    private fun onSuccess(exams: List<Exam>, studiportalListener: StudiportalListener?, requestQueue: RequestQueue) {
+    private fun onSuccess(response: String, requestQueue: RequestQueue, successCallback: (exams: List<Exam>) -> Unit) {
+        val exams = parseExamList(response)
         Log.d("Success in GetStudiportalDataUseCase", exams.toString())
-        studiportalListener?.onSuccess(exams)
+        successCallback(exams)
         logout(requestQueue)
     }
 
@@ -97,18 +103,4 @@ class GetStudiportalDataUseCase @Inject constructor(
             { Log.d("GetStudiportalDataUseCase", "Fehler beim Logout: ${it.message}") })
         requestQueue.add(logoutRequest)
     }
-
-    private fun examContainsKeywords(exam: Exam, keywords: Set<String>): Boolean {
-        for (search in keywords) {
-            if (exam.name.contains(search, ignoreCase = true) || //TODO
-                exam.comment.contains(search, ignoreCase = true)
-            ) return true
-        }
-        return false
-    }
-}
-
-interface StudiportalListener {
-    fun onSuccess(newExams: List<Exam>)
-    fun onError(message: String)
 }
