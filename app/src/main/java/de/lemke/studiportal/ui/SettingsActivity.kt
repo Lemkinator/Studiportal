@@ -184,8 +184,8 @@ class SettingsActivity : AppCompatActivity() {
             }
             findPreference<PreferenceScreen>("delete_app_data_pref")?.setOnPreferenceClickListener {
                 AlertDialog.Builder(settingsActivity)
-                    .setTitle(R.string.delete_app_data_and_exit)
-                    .setMessage(R.string.delete_app_data_and_exit_warning)
+                    .setTitle(R.string.delete_appdata_and_exit)
+                    .setMessage(R.string.delete_appdata_and_exit_warning)
                     .setNegativeButton(R.string.sesl_cancel, null)
                     .setPositiveButton(R.string.ok) { _: DialogInterface, _: Int ->
                         (settingsActivity.getSystemService(ACTIVITY_SERVICE) as ActivityManager).clearApplicationUserData()

@@ -26,6 +26,9 @@ android {
                 arg("room.schemaLocation", "$projectDir/schemas")
             }
         }
+
+        resConfigs "en", "de"
+
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 

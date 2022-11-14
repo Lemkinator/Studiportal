@@ -71,8 +71,8 @@ class OOBEActivity : AppCompatActivity() {
         val titles = arrayOf(R.string.oobe_onboard_msg1_title, R.string.oobe_onboard_msg2_title, R.string.oobe_onboard_msg3_title)
         val summaries = arrayOf(R.string.oobe_onboard_msg1_summary, R.string.oobe_onboard_msg2_summary, R.string.oobe_onboard_msg3_summary)
         val icons = arrayOf(
-            dev.oneuiproject.oneui.R.drawable.ic_oui_info_outline,
             dev.oneuiproject.oneui.R.drawable.ic_oui_palette,
+            dev.oneuiproject.oneui.R.drawable.ic_oui_credit_card_outline,
             dev.oneuiproject.oneui.R.drawable.ic_oui_decline
         )
         for (i in titles.indices) {
@@ -99,7 +99,7 @@ class OOBEActivity : AppCompatActivity() {
                     ds.typeface = Typeface.create("sans-serif-medium", Typeface.NORMAL)
                 }
             },
-            tosText.indexOf(tos), tosText.length - 4,
+            tosText.indexOf(tos), tosText.length - if (Locale.getDefault().language == "de") 4 else 1,
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         binding.oobeIntroFooterTosText.text = tosLink

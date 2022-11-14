@@ -25,8 +25,7 @@ class DemoUseCase @Inject constructor(
         return newExams
     }
 
-    //TODO random.nextBoolean()
-    suspend fun updateExams(notifyAboutChanges: Boolean, addNewExam: Boolean = true): Boolean = withContext(Dispatchers.Default) {
+    suspend fun updateExams(notifyAboutChanges: Boolean, addNewExam: Boolean = random.nextBoolean()): Boolean = withContext(Dispatchers.Default) {
         updateUserSettings { it.copy(lastRefresh = ZonedDateTime.now()) }
         val exams = if (addNewExam) examsRepository.getExams().withRandomExamAdded()
         else examsRepository.getExams()
