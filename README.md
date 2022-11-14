@@ -16,7 +16,7 @@
 
 # Studiportal
 
-  TODO
+The new Studiportal app with OneUI-Design
 
 
   <img loading="lazy" src="img/mobile1.png" height="350"/>
