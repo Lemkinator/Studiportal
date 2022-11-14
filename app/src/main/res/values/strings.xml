@@ -32,7 +32,7 @@
     <string name="notification">Benachrichtigung</string>
     <string name="notify_about_change_title">Bei Änderungen eine Benachrichtiung erhalten</string>
     <string name="notify_about_change_summary">Bei Änderungen im Studiportal wird eine Benachrichtigung angezeigt.</string>
-    <string name="show_grade_title">Note in Benachrichtigung</string>
+    <string name="show_grade_title">Note in Benachrichtigung anzeigen</string>
     <string name="show_grade_summary">Neue Noten werden direkt in der Benachrichtigung angezeigt.</string>
     <string name="touch_to_show_grade">Berühren, um Note zu sehen</string>
 
@@ -208,6 +208,7 @@
     <string name="error_observe">Fehler beim Abrufen der Prüfungen: %1$s</string>
     <string name="login_success_observe_error">Leider ist jedoch beim Einlesen der Daten ein Fehler aufgetreten: %1$s</string>
     <string name="demo_username_label">Nutzername für die Demo-Ansicht: \"DEMO\"</string>
+    <string name="exam_not_found">Exam not found</string>
 
     <!--Others-->
 

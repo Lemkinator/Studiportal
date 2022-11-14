@@ -144,7 +144,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         return super.onOptionsItemSelected(item)
     }
 
-
     inner class SearchModeListener : ToolbarLayout.SearchModeListener {
         override fun onQueryTextSubmit(query: String?): Boolean {
             if (!isSearchUserInputEnabled) return false

@@ -52,14 +52,12 @@ class SendNotificationUseCase @Inject constructor(
             getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
         notificationBuilder = NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.ic_launcher_foreground)
+            .setSmallIcon(R.drawable.ic_notification)
             .setContentTitle(exam.name)
-            .setContentText(
-                if (showGrade) {
-                    if (exam.grade != Exam.UNDEFINED) exam.grade + " - " + exam.state.getLocalString(context)
-                    else exam.state.getLocalString(context)
-                } else context.getString(R.string.touch_to_show_grade)
-            )
+            .setContentText(exam.getSubtitle1(context, showGrade))
+            .setSubText(exam.getSubtitle2(context))
+            .setContentInfo("ContentInfo")
+            .setSettingsText(context.getString(R.string.show_grade_title))
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             // Set the intent that will fire when the user taps the notification
             .setContentIntent(resultPendingIntent)

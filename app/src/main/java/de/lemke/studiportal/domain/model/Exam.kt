@@ -119,7 +119,7 @@ data class Exam(
     val isSeparator: Boolean
         get() = examNumber == "separator"
 
-    fun getSubtitle1(context: Context): String = when (val kind = kind.uppercase()) {
+    fun getSubtitle1(context: Context, showGrade: Boolean = true): String = when (val kind = kind.uppercase()) {
         "KO" -> {
             when {
                 malus == "-" && bonus == "-" -> context.getString(R.string.no_ects)
@@ -134,7 +134,11 @@ data class Exam(
                     R.string.state_value,
                     state.getLocalString(context) + context.getString(R.string.ects_value, ects)
                 )
-                else ->  context.getString(R.string.grade_value, grade + context.getString(R.string.ects_value, ects))
+                showGrade -> context.getString(R.string.grade_value, grade + context.getString(R.string.ects_value, ects))
+                else -> context.getString(
+                    R.string.state_value,
+                    state.getLocalString(context) + context.getString(R.string.ects_value, ects)
+                )
             }
         }
         else -> context.getString(R.string.state_value, state.getLocalString(context) + context.getString(R.string.ects_value, ects))

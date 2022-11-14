@@ -166,6 +166,12 @@ class DemoUseCase @Inject constructor(
                 examNumber = getDemoExamName("P"),
                 name = "Demo P",
                 kind = "P",
+                grade = "1.3",
+                state = "BE",
+                ects = "6.0",
+                sws = "4.0",
+                tryCount = "1",
+                semester = "SoSe 22",
                 category = "Category 2"
             )
             12 -> Exam.create(
@@ -278,7 +284,19 @@ class DemoUseCase @Inject constructor(
                 tryCount = listOf("1", "2", "3").random(),
                 semester = listOf("SoSe 21", "WiSe 21/22", "SoSe 22").random(),
             )
-            "P" -> getDemoExam("P").copy(examNumber = getDemoExamName("P"))
+            "P" -> getDemoExam("P").copy(
+                examNumber = getDemoExamName("P"),
+                malus = if (isBonus) Exam.UNDEFINED
+                else listOf("2.0", "3.0", "6.0").random(),
+                grade = if (isBonus) listOf("1.0", "1.3", "1.7", "2.0", "2.3", "2.7", "3.0", "3.3", "3.7", "4.0").random()
+                else "5.0",
+                state = if (isBonus) Exam.State.BE
+                else Exam.State.NB,
+                ects = listOf("2.0", "3.0", "6.0").random(),
+                sws = listOf("1.0", "2.0", "3.0").random(),
+                tryCount = listOf("1", "2", "3").random(),
+                semester = listOf("SoSe 21", "WiSe 21/22", "SoSe 22").random(),
+            )
             "G" -> getDemoExam("G").copy(
                 examNumber = getDemoExamName("G"),
                 bonus = if (isBonus) listOf(Exam.UNDEFINED, "2.0", "3.0", "6.0", "12.0").random()

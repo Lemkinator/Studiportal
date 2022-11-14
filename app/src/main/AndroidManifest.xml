@@ -55,7 +55,12 @@
             tools:node="remove">
         </provider>
 
-        <activity android:name=".ui.SettingsActivity" android:parentActivityName=".ui.MainActivity" />
+        <activity android:name=".ui.SettingsActivity" android:parentActivityName=".ui.MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.NOTIFICATION_PREFERENCES" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.AboutMeActivity" />
         <activity android:name=".ui.AboutActivity" />
         <activity android:name=".ui.NotificationIntroActivity" />

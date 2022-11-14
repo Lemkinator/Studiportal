@@ -1,12 +1,15 @@
 package de.lemke.studiportal.ui
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.*
-import android.widget.*
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,12 +18,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityExamBinding
 import de.lemke.studiportal.domain.GetExamUseCase
+import de.lemke.studiportal.domain.model.Exam
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class ExamActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var binding: ActivityExamBinding
+    private lateinit var exam: Exam
     private lateinit var examInfoList: List<Pair<String, String>>
 
     @Inject
@@ -30,18 +35,40 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
         super.onCreate(savedInstanceState)
         binding = ActivityExamBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        binding.toolbarLayout.setNavigationButtonTooltip(getString(R.string.sesl_navigate_up))
+        binding.toolbarLayout.setNavigationButtonOnClickListener { finish() }
         val examNumber = intent.getStringExtra("examNumber")
         lifecycleScope.launch {
-            val exam = getExam(examNumber)
-            if (exam == null) {
-                Toast.makeText(this@ExamActivity, "Exam not found", Toast.LENGTH_SHORT).show()
+            val nullableExam = getExam(examNumber)
+            if (nullableExam == null) {
+                Toast.makeText(this@ExamActivity, getString(R.string.exam_not_found), Toast.LENGTH_SHORT).show()
                 finish()
                 return@launch
             }
+            exam = nullableExam
             binding.toolbarLayout.setTitle(exam.name)
             examInfoList = exam.getInfoPairList(this@ExamActivity, false)
             initList()
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_share, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_item_share -> {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_TEXT, exam.name + "\n" +
+                        exam.getSubtitle1(this) + "\n" + exam.getSubtitle2(this))
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun initList() {
