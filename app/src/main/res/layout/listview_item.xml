@@ -34,7 +34,7 @@
                 android:id="@+id/list_item_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
+                android:ellipsize="marquee"
                 android:maxLines="1"
                 android:textAppearance="?textAppearanceListItem" />
 
@@ -42,7 +42,7 @@
                 android:id="@+id/list_item_subtitle1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
+                android:ellipsize="marquee"
                 android:maxLines="1"
                 android:textAppearance="?textAppearanceListItemSecondary"
                 tools:ignore="RtlSymmetry" />
@@ -51,7 +51,7 @@
                 android:id="@+id/list_item_subtitle2"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
+                android:ellipsize="marquee"
                 android:maxLines="1"
                 android:textAppearance="?textAppearanceListItemSecondary"
                 tools:ignore="RtlSymmetry" />

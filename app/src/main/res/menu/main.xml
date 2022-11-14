@@ -17,23 +17,10 @@
             tools:ignore="AppCompatResource" />
 
         <item
-            android:id="@+id/menu_item_about"
-            android:icon="@drawable/ic_oui_info_outline"
+            android:id="@+id/menu_item_refresh_now"
+            android:icon="@drawable/ic_oui_refresh"
             app:showAsAction="never"
-            android:title="@string/about_app"
+            android:title="@string/refresh_now"
             tools:ignore="AppCompatResource" />
 
-        <item
-            android:id="@+id/menu_item_about_me"
-            android:icon="@drawable/ic_oui_contact_outline"
-            app:showAsAction="never"
-            android:title="@string/about_me"
-            tools:ignore="AppCompatResource" />
-
-        <item
-            android:id="@+id/menu_item_settings"
-            android:icon="@drawable/ic_oui_settings_outline"
-            app:showAsAction="never"
-            android:title="@string/settings"
-            tools:ignore="AppCompatResource" />
 </menu>

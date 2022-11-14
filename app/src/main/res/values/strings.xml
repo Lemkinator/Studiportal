@@ -27,8 +27,13 @@
 
     <!--Notifications-->
     <string name="exam_notification_channel_id" translatable="false">Exam_Notification_Channel</string>
-    <string name="exam_notification_channel_name">Änderungen</string>
-    <string name="exam_notification_channel_description">Bei Änderungen eine Benachrichtiung erhalten.</string>
+    <string name="exam_notification_channel_name">Änderungen im Studiportal</string>
+    <string name="exam_notification_channel_description">Bei Änderungen im Studiportal eine Benachrichtiung erhalten.</string>
+    <string name="notification">Benachrichtigung</string>
+    <string name="notify_about_change_title">Bei Änderungen eine Benachrichtiung erhalten</string>
+    <string name="notify_about_change_summary">Bei Änderungen im Studiportal wird eine Benachrichtigung angezeigt.</string>
+    <string name="show_grade_title">Note in Benachrichtigung</string>
+    <string name="show_grade_summary">Neue Noten werden direkt in der Benachrichtigung angezeigt.</string>
     <string name="touch_to_show_grade">Berühren, um Note zu sehen</string>
 
     <!--About-->
@@ -59,34 +64,31 @@
     <string name="system_default">Systemeinstellung</string>
     <string name="phone_settings">Telefon-Einstellungen</string><string name="confirm_exit">Verlassen bestätigen</string>
     <string name="press_again_to_exit">Zurück-Taste erneut drücken um zu Beenden.</string>
+    <string name="delete_appdata_and_exit">App-Daten löschen und Beenden</string>
+    <string name="delete_appdata_and_exit_warning">Achtung: Dadurch werden alle persönlichen Daten gelöscht. Fortfahren? </string>
     <string name="logout">Ausloggen</string>
     <string name="logout_message">Willst du dich wirklich ausloggen?</string>
     <string name="login_data">Login Daten</string>
     <string name="refresh">Aktualisierung</string>
     <string name="refresh_interval">Aktualisierungsintervall</string>
-    <string name="refresh_on_mobile">Über Mobilfunknetz aktualisieren</string>
-    <string name="refresh_on_mobile_summary">Für die Aktualisierung über Mobilfunk können Gebühren anfallen</string>
+    <string name="refresh_on_metered_network">Über gebührenpflichtige Netzwerke aktualisieren</string>
+    <string name="refresh_on_metered_network_summary">Für die Aktualisierung über Mobilfunk können Gebühren anfallen</string>
     <string-array name="array_refresh_interval">
-        <item>2 Stunden</item>
-        <item>3 Stunden</item>
-        <item>6 Stunden</item>
-        <item>12 Stunden</item>
-        <item>24 Stunden</item>
         <item>Keine Aktualisierung</item>
+        <item>15 Minuten</item>
+        <item>30 Minuten</item>
+        <item>1 Stunde</item>
+        <item>12 Stunden</item>
+        <item>1 Tag</item>
     </string-array>
     <string-array name="array_refresh_interval_key">
-        <item>120</item>
-        <item>180</item>
-        <item>360</item>
+        <item>0</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
         <item>720</item>
-        <item>1480</item>
-        <item>525948766</item>
+        <item>1440</item>
     </string-array>
-    <string name="notification">Benachrichtigung</string>
-    <string name="show_grade_title">Note in Benachrichtigung</string>
-    <string name="show_grade_summary">Neue Noten werden direkt in der Benachrichtigung angezeigt</string>
-    <string name="notify_about_change_title">Über Noten benachrichtigen</string>
-    <string name="notify_about_change_summary">Bei Änderungen im Studiportal wird eine Benachrichtigung angezeigt</string>
     <string name="dev_options">Developer options</string>
     <string name="more_information">Mehr Informationen</string>
     <string name="privacy_information">Informationen zum Datenschutz</string>
@@ -104,7 +106,7 @@
     <string name="tos">Nutzungsbedingungen</string>
     <string name="tos_content">Es ist nicht gestattet, diese App entgegen den guten Sitten oder den geltenden Gesetzen zu verwenden. \n\nSie verpflichten sich außerdem, diese App nicht für Zwecke zu verwenden, die nach dem Recht der Vereinigten Staaten verboten sind, insbesondere nicht für die Entwicklung, Konstruktion, Herstellung oder Produktion von Raketen, chemischen oder biologischen Waffen. \nDiese Einschränkung gilt jedoch nicht für den Fall, dass eine weit verbreitete Virusinfektion auftritt (die von den United States Centers for Disease Control oder einer Nachfolgeorganisation bestätigt wurde), die durch Bisse oder Kontakt mit Körperflüssigkeiten übertragen wird und dazu führt, dass menschliche Leichen wiederbelebt werden und versuchen, lebendes menschliches Fleisch, Blut, Gehirn oder Nervengewebe zu verzehren, und die wahrscheinlich zum Untergang der organisierten Zivilisation führen wird. \n\nEine besondere Gegenleistung, die eine finanzielle Entschädigung beinhalten kann, wird einer begrenzten Anzahl von Nutzern angeboten, die diesen Abschnitt der Nutzungsbedingungen lesen und mich unter eine-email-an-diese-adresse-zu-schreiben-wird-sie-10-euro-kosten@leonard-lemke.com kontaktieren. Dieses Angebot kann jederzeit und ohne Vorankündigung zurückgezogen werden. \n\nWeitere Fragen werden unter diese-email-ist-viel-zu-lang-und-hoffentlich-koennen-sie-nicht-kopieren-und-einfuegen@leonard-lemke.com beantwortet.</string>
     <string name="oobe_tos_text">Durch die Nutzung der App stimmen Sie den %1$s zu.</string>
-    <string name="accept_tos">Weiter</string>
+    <string name="continue_button_text">Weiter</string>
 
     <!--General-->
     <string name="ok" translatable="false" tools:ignore="ButtonCase,Typos">Ok</string>
@@ -204,6 +206,7 @@
     <string name="error_observe">Fehler beim Abrufen der Prüfungen: %1$s</string>
     <string name="login_success_observe_error">Leider ist jedoch beim Einlesen der Daten ein Fehler aufgetreten: %1$s</string>
     <string name="demo_username_label">Nutzername für die Demo-Ansicht: \"DEMO\"</string>
+    <string name="refresh_now">Jetzt aktualisieren</string>
 
     <!--Others-->
 

@@ -7,7 +7,7 @@
     android:background="@color/oui_round_and_bgcolor"
     android:orientation="vertical"
     android:paddingTop="?attr/actionBarSize"
-    tools:context=".ui.LoginActivity">
+    tools:context=".ui.NotificationIntroActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -15,7 +15,7 @@
         android:layout_weight="1">
 
         <FrameLayout
-            android:id="@+id/login_intro_header"
+            android:id="@+id/notification_intro_header"
             android:layout_width="match_parent"
             android:layout_height="0.0dp"
             app:layout_constraintHeight_percent="0.2"
@@ -32,13 +32,13 @@
         </FrameLayout>
 
         <ScrollView
-            android:id="@+id/login_scroll_view"
+            android:id="@+id/notification_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="0.0dp"
             android:paddingTop="24.0dp"
             app:layout_constraintHeight_percent="0.8"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_intro_header">
+            app:layout_constraintTop_toBottomOf="@+id/notification_intro_header">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -46,34 +46,40 @@
                 android:layout_margin="30dp"
                 android:orientation="vertical">
 
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/notification_switch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="6dp"
+                    android:checked="true"
+                    android:text="@string/notify_about_change_title"
+                    android:textSize="17sp" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/demo_username_label"
-                    android:textColor="@color/oui_secondary_text_color"
-                    android:layout_margin="7dp"
-                    android:textSize="11sp"
-                    />
-
-                <EditText
-                    android:id="@+id/edit_text_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:layout_marginBottom="30dp"
-                    android:autofillHints="username"
-                    android:focusable="true"
-                    android:hint="@string/user_name"
-                    android:inputType="text"
-                    android:maxLines="1" />
+                    android:text="@string/notify_about_change_summary"
+                    android:textColor="@color/oui_secondary_text_color"
+                    android:textSize="14sp" />
 
-                <EditText
-                    android:id="@+id/edit_text_password"
+                <androidx.appcompat.widget.SwitchCompat
+                    android:id="@+id/notification_show_grade_switch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:autofillHints="password"
-                    android:hint="@string/password"
-                    android:inputType="textPassword"
-                    android:maxLines="1" />
+                    android:layout_marginVertical="6dp"
+                    android:checked="true"
+                    android:text="@string/show_grade_title"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/notification_show_grade_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/show_grade_summary"
+                    android:textColor="@color/oui_secondary_text_color"
+                    android:textSize="14sp" />
+
 
             </LinearLayout>
 
@@ -82,22 +88,22 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:id="@+id/login_footer_container"
+        android:id="@+id/notification_footer_container"
         android:layout_width="match_parent"
         android:layout_height="44.0dp"
         android:layout_margin="24.0dp"
         android:orientation="vertical">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/login_footer_button"
+            android:id="@+id/notification_footer_button"
             style="@style/OOBE.Button"
             android:layout_width="296.0dp"
             android:layout_height="44.0dp"
             android:layout_gravity="center"
-            android:text="@string/login" />
+            android:text="@string/continue_button_text" />
 
         <androidx.appcompat.widget.SeslProgressBar
-            android:id="@+id/login_footer_button_progress"
+            android:id="@+id/notification_footer_button_progress"
             style="@style/Widget.AppCompat.ProgressBar"
             android:layout_width="32.0dp"
             android:layout_height="32.0dp"

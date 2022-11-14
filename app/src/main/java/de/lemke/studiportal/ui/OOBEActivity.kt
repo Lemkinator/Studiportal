@@ -124,16 +124,13 @@ class OOBEActivity : AppCompatActivity() {
             binding.oobeIntroFooterTosText.isEnabled = false
             binding.oobeIntroFooterButton.visibility = View.GONE
             binding.oobeIntroFooterButtonProgress.visibility = View.VISIBLE
-            lifecycleScope.launch {
-                updateUserSettings { it.copy(tosAccepted = true) }
-                openNextActivity()
-            }
+            lifecycleScope.launch { openNextActivity() }
         }
     }
 
     private suspend fun openNextActivity() {
-        if (getUserSettings().username.isBlank()) startActivity(Intent(this, LoginActivity::class.java))
-        else startActivity(Intent(this, MainActivity::class.java))
+        updateUserSettings { it.copy(tosAccepted = true) }
+        startActivity(Intent(this, NotificationIntroActivity::class.java))
         finish()
     }
 }

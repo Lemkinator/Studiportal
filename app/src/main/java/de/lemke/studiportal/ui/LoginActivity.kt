@@ -50,6 +50,9 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var demo: DemoUseCase
 
+    @Inject
+    lateinit var setWorkManager: SetWorkManagerUseCase
+
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,7 +86,7 @@ class LoginActivity : AppCompatActivity() {
                 AlertDialog.Builder(this)
                     .setTitle(R.string.error)
                     .setMessage(getString(R.string.login_success_observe_error, message))
-                    .setPositiveButton(R.string.ok) { _, _ -> openNextActivity() }
+                    .setPositiveButton(R.string.ok) { _, _ -> lifecycleScope.launch { openNextActivity() } }
                     .create()
                     .show()
             }
@@ -165,7 +168,8 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun openNextActivity() {
+    private suspend fun openNextActivity() {
+        setWorkManager()
         startActivity(Intent(this, MainActivity::class.java))
         finish()
     }

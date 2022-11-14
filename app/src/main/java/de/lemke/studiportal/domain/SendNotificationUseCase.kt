@@ -1,6 +1,5 @@
 package de.lemke.studiportal.domain
 
-import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -12,9 +11,7 @@ import androidx.core.app.TaskStackBuilder
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.lemke.studiportal.R
 import de.lemke.studiportal.domain.model.Exam
-import de.lemke.studiportal.domain.utils.AlarmReceiver
 import de.lemke.studiportal.ui.ExamActivity
-import java.util.*
 import javax.inject.Inject
 
 class SendNotificationUseCase @Inject constructor(
@@ -22,7 +19,6 @@ class SendNotificationUseCase @Inject constructor(
 ) {
     private lateinit var notificationBuilder: NotificationCompat.Builder
     private val channelId = context.getString(R.string.exam_notification_channel_id)
-    private val notificationRequestCode = 55
 
     operator fun invoke(exam: Exam, showGrade: Boolean) {
         createNotificationChannel()
@@ -39,8 +35,7 @@ class SendNotificationUseCase @Inject constructor(
             description = descriptionText
         }
         // Register the channel with the system
-        val notificationManager: NotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.createNotificationChannel(channel)
+        (context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager).createNotificationChannel(channel)
     }
 
 
@@ -70,39 +65,5 @@ class SendNotificationUseCase @Inject constructor(
             .setContentIntent(resultPendingIntent)
             // Automatically removes the notification when the user taps it.
             .setAutoCancel(true)
-    }
-
-    fun setExamNotification(enable: Boolean) =
-        if (enable) enableExamNotification() else disableExamNotification()
-
-    private fun enableExamNotification() {
-        createNotificationChannel()
-        val alarmIntent = Intent(context.applicationContext, AlarmReceiver::class.java).let { intent ->
-            PendingIntent.getBroadcast(
-                context,
-                notificationRequestCode,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-            )
-        }
-        val calendar: Calendar = Calendar.getInstance().apply {
-            //set(Calendar.HOUR_OF_DAY, hour)
-            //set(Calendar.MINUTE, minute)
-        }
-        // If the trigger time you specify is in the past, the alarm triggers immediately. if soo just add one day to required calendar
-        // Note: also adding 1 min cuz if user clicks on notification as soon as received it it will reschedule the alarm to
-        // fire another notification immediately
-        if (Calendar.getInstance().apply { add(Calendar.MINUTE, 1) }.timeInMillis - calendar.timeInMillis > 0) {
-            calendar.add(Calendar.DATE, 1)
-        }
-        (context.getSystemService(Context.ALARM_SERVICE) as AlarmManager).set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, alarmIntent)
-    }
-
-    private fun disableExamNotification() {
-        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, AlarmReceiver::class.java).let { intent ->
-            PendingIntent.getBroadcast(context, notificationRequestCode, intent, 0 or PendingIntent.FLAG_IMMUTABLE)
-        }
-        alarmManager.cancel(intent)
     }
 }

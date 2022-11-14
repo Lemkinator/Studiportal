@@ -32,9 +32,10 @@ class UserSettingsRepository @Inject constructor(
             it[KEY_SEARCH] = newSettings.search
             it[KEY_USERNAME] = newSettings.username
             it[KEY_PASSWORD] = newSettings.password
-            it[KEY_USE_MOBILE_DATA] = newSettings.useMobileData
-            it[KEY_IS_REFRESH_OVERDUE] = newSettings.isRefreshOverdue
-            it[KEY_REFRESH_INTERVAL] = newSettings.refreshInterval
+            it[KEY_NOTIFICATIONS_ENABLED] = newSettings.notificationsEnabled
+            it[KEY_SHOW_GRADE_IN_NOTIFICATION] = newSettings.showGradeInNotification
+            it[KEY_USE_METERED_NETWORK] = newSettings.useMeteredNetwork
+            it[KEY_REFRESH_INTERVAL] = newSettings.refreshInterval.minutes
             it[KEY_LAST_REFRESH] = localDateTimeToDb(newSettings.lastRefresh)
             it[KEY_CATEGORY_FILTER] = newSettings.categoryFilter
         }
@@ -51,9 +52,10 @@ class UserSettingsRepository @Inject constructor(
         search = prefs[KEY_SEARCH] ?: "",
         username = prefs[KEY_USERNAME] ?: "",
         password = prefs[KEY_PASSWORD] ?: "",
-        useMobileData = prefs[KEY_USE_MOBILE_DATA] ?: true,
-        isRefreshOverdue = prefs[KEY_IS_REFRESH_OVERDUE] ?: true,
-        refreshInterval = prefs[KEY_REFRESH_INTERVAL] ?: 60L,
+        notificationsEnabled = prefs[KEY_NOTIFICATIONS_ENABLED] ?: false,
+        showGradeInNotification = prefs[KEY_SHOW_GRADE_IN_NOTIFICATION] ?: false,
+        useMeteredNetwork = prefs[KEY_USE_METERED_NETWORK] ?: true,
+        refreshInterval = RefreshInterval.fromMinutes(prefs[KEY_REFRESH_INTERVAL]),
         lastRefresh = localDateTimeFromDb(prefs[KEY_LAST_REFRESH] ?: localDateTimeToDb(LocalDateTime.MIN)),
         categoryFilter = prefs[KEY_CATEGORY_FILTER] ?: "",
     )
@@ -67,9 +69,10 @@ class UserSettingsRepository @Inject constructor(
         private val KEY_SEARCH = stringPreferencesKey("search")
         private val KEY_USERNAME = stringPreferencesKey("username")
         private val KEY_PASSWORD = stringPreferencesKey("password")
-        private val KEY_USE_MOBILE_DATA = booleanPreferencesKey("useMobileData")
-        private val KEY_IS_REFRESH_OVERDUE = booleanPreferencesKey("isRefreshOverdue")
-        private val KEY_REFRESH_INTERVAL = longPreferencesKey("refreshInterval")
+        private val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notificationsEnabled")
+        private val KEY_SHOW_GRADE_IN_NOTIFICATION = booleanPreferencesKey("showGradeInNotification")
+        private val KEY_USE_METERED_NETWORK = booleanPreferencesKey("useMeteredNetwork")
+        private val KEY_REFRESH_INTERVAL = intPreferencesKey("refreshInterval")
         private val KEY_LAST_REFRESH = stringPreferencesKey("lastRefresh")
         private val KEY_CATEGORY_FILTER = stringPreferencesKey("categoryFilter")
     }
@@ -93,14 +96,39 @@ data class UserSettings(
     val username: String,
     /** password */
     val password: String,
-    /** use mobile data */
-    val useMobileData: Boolean,
-    /** is refresh overdue */
-    val isRefreshOverdue: Boolean,
+    /** Notifications enabled */
+    val notificationsEnabled: Boolean,
+    /** Notifications enabled */
+    val showGradeInNotification: Boolean,
+    /** use metered Networks */
+    val useMeteredNetwork: Boolean,
     /** refresh interval */
-    val refreshInterval: Long,
+    val refreshInterval: RefreshInterval,
     /** last updated */
     val lastRefresh: LocalDateTime,
     /** exam category filter */
     val categoryFilter: String,
 )
+
+enum class RefreshInterval(val minutes: Int) {
+    NEVER(0),
+    INTERVAL_FIFTEEN_MINUTES(15),
+    INTERVAL_HALF_HOUR(30),
+    INTERVAL_HOUR(60),
+    INTERVAL_HALF_DAY(720),
+    INTERVAL_DAY(1440);
+
+    companion object {
+        fun fromMinutes(minutes: Int?): RefreshInterval {
+            return when (minutes) {
+                0 -> NEVER
+                15 -> INTERVAL_FIFTEEN_MINUTES
+                30 -> INTERVAL_HALF_HOUR
+                60 -> INTERVAL_HOUR
+                720 -> INTERVAL_HALF_DAY
+                1440 -> INTERVAL_DAY
+                else -> INTERVAL_HOUR
+            }
+        }
+    }
+}

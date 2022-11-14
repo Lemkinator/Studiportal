@@ -21,14 +21,6 @@
             android:title="@string/confirm_exit" />
     </PreferenceCategory>
 
-    <PreferenceCategory
-        android:key="dev_options"
-        android:title="@string/dev_options">
-        <PreferenceScreen
-            android:key="delete_app_data_pref"
-            android:title="@string/delete_app_data_and_exit" />
-    </PreferenceCategory>
-
     <PreferenceCategory android:title="@string/login_data">
 
         <PreferenceScreen
@@ -53,18 +45,26 @@
 
     <PreferenceCategory android:title="@string/refresh">
 
-        <ListPreference
-            android:key="refresh_time_pref"
+        <DropDownPreference
+            android:key="refresh_interval_pref"
             android:title="@string/refresh_interval"
+            android:defaultValue="60"
             android:entryValues="@array/array_refresh_interval_key"
             android:entries="@array/array_refresh_interval"/>
-            />
 
         <SwitchPreferenceCompat
-            android:key="use_mobile_data_pref"
-            android:title="@string/refresh_on_mobile"
-            android:summary="@string/refresh_on_mobile_summary"/>
+            android:key="use_metered_network_pref"
+            android:title="@string/refresh_on_metered_network"
+            android:summary="@string/refresh_on_metered_network_summary"/>
 
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="dev_options"
+        android:title="@string/dev_options">
+        <PreferenceScreen
+            android:key="delete_app_data_pref"
+            android:title="@string/delete_appdata_and_exit" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/more_information">

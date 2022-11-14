@@ -5,29 +5,17 @@ import de.lemke.studiportal.domain.model.Exam
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDateTime
-import java.util.Random
-import java.util.UUID
+import java.util.*
 import javax.inject.Inject
 
 class DemoUseCase @Inject constructor(
     private val examsRepository: ExamsRepository,
     private val sendNotification: SendNotificationUseCase,
+    private val getUserSettings: GetUserSettingsUseCase,
     private val updateUserSettings: UpdateUserSettingsUseCase,
 ) {
     private val random = Random()
     val username = "DEMO"
-    suspend operator fun invoke(exams: List<Exam>, notifyAboutChanges: Boolean): Boolean = withContext(Dispatchers.Default) {
-        updateUserSettings { it.copy(lastRefresh = LocalDateTime.now()) }
-        val oldExams = examsRepository.getExams()
-        examsRepository.updateExams(exams)
-        val changedExams = exams.filter { exam ->
-            oldExams.find { it == exam } == null
-        }
-        if (notifyAboutChanges) {
-            changedExams.forEach { sendNotification(it, notifyAboutChanges) }
-        }
-        return@withContext changedExams.isNotEmpty()
-    }
 
     private fun List<Exam>.withRandomExamAdded(exam: Exam = getRandomExam()): MutableList<Exam> {
         val newExams = this.toMutableList()
@@ -37,18 +25,15 @@ class DemoUseCase @Inject constructor(
         return newExams
     }
 
-    suspend fun updateExams(notifyAboutChanges: Boolean, addNewExam: Boolean = random.nextBoolean()): Boolean = withContext(Dispatchers.Default) {
+    //TODO random.nextBoolean()
+    suspend fun updateExams(notifyAboutChanges: Boolean, addNewExam: Boolean = true): Boolean = withContext(Dispatchers.Default) {
         updateUserSettings { it.copy(lastRefresh = LocalDateTime.now()) }
         val exams = if (addNewExam) examsRepository.getExams().withRandomExamAdded()
         else examsRepository.getExams()
         val oldExams = examsRepository.getExams()
         examsRepository.updateExams(exams)
-        val changedExams = exams.filter { exam ->
-            oldExams.find { it == exam } == null
-        }
-        if (notifyAboutChanges) {
-            changedExams.forEach { sendNotification(it, notifyAboutChanges) }
-        }
+        val changedExams = exams.filter { exam -> oldExams.find { it == exam } == null }
+        if (notifyAboutChanges) changedExams.forEach { sendNotification(it, getUserSettings().showGradeInNotification) }
         return@withContext changedExams.isNotEmpty()
     }
 
@@ -58,7 +43,7 @@ class DemoUseCase @Inject constructor(
     }
 
     private fun getDemoExamName(name: String) = "Demo $name ${UUID.randomUUID()}"
-    private val demoExams = List(14) {
+    private val demoExams = List(15) {
         when (it) {
             0 -> Exam.create(
                 examNumber = getDemoExamName("Account"),
@@ -205,6 +190,23 @@ class DemoUseCase @Inject constructor(
                 state = "NB",
                 category = "Category 2"
             )
+            14 -> Exam.create(
+                examNumber = getDemoExamName("UNDEFINED_TEST"),
+                name = "Demo UNDEFINED_TEST",
+                kind = "UNDEFINED_TEST",
+                bonus = "99999999.0",
+                malus = "99999999.0",
+                ects = "99999999.0",
+                semester = "SoSe 9999",
+                grade = "99999999.0",
+                state = "EN",
+                sws = "99999999.0",
+                category = "Very long Category Name. And the very long Name of this Category is Category 3.",
+                tryCount = "99999999",
+                resignation = "99999999",
+                note = "note note note note note note note note note note",
+                comment = "comment comment comment comment comment comment",
+            )
             else -> getRandomExam()
         }
     }
@@ -240,7 +242,7 @@ class DemoUseCase @Inject constructor(
             kind = "G",
             category = "Category 2"
         )
-        else -> getDemoExam("PL")
+        else -> getDemoExam(listOf("KO", "PL", "SL", "P", "G").random())
     }
 
     private fun getRandomExam(kind: String = listOf("KO", "PL", "SL", "P", "G").random(), isBonus: Boolean = random.nextBoolean()): Exam =

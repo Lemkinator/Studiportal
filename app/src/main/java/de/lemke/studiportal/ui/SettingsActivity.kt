@@ -1,19 +1,26 @@
 package de.lemke.studiportal.ui
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.ActivityManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.provider.Settings
 import android.view.View
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.util.SeslMisc
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.*
 import androidx.preference.Preference.OnPreferenceClickListener
@@ -22,6 +29,7 @@ import com.google.android.play.core.appupdate.AppUpdateManagerFactory
 import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
+import de.lemke.studiportal.data.RefreshInterval
 import de.lemke.studiportal.databinding.ActivitySettingsBinding
 import de.lemke.studiportal.domain.*
 import dev.oneuiproject.oneui.preference.HorizontalRadioPreference
@@ -51,8 +59,11 @@ class SettingsActivity : AppCompatActivity() {
         private lateinit var darkModePref: HorizontalRadioPreference
         private lateinit var autoDarkModePref: SwitchPreferenceCompat
         private lateinit var confirmExitPref: SwitchPreferenceCompat
+        private lateinit var notifyAboutChangePref: SwitchPreferenceCompat
+        private lateinit var showGradeInNotificationPref: SwitchPreferenceCompat
+        private lateinit var useMeteredNetworkPref: SwitchPreferenceCompat
         private lateinit var logoutPref: PreferenceScreen
-        private lateinit var refreshTimePref: ListPreference
+        private lateinit var refreshIntervalPref: DropDownPreference
         private var relatedCard: PreferenceRelatedCard? = null
         private var lastTimeVersionClicked: Long = 0
 
@@ -64,6 +75,9 @@ class SettingsActivity : AppCompatActivity() {
 
         @Inject
         lateinit var deleteExams: DeleteExamsUseCase
+
+        @Inject
+        lateinit var setWorkManager: SetWorkManagerUseCase
 
         override fun onAttach(context: Context) {
             super.onAttach(context)
@@ -86,8 +100,11 @@ class SettingsActivity : AppCompatActivity() {
             darkModePref = findPreference("dark_mode_pref")!!
             autoDarkModePref = findPreference("dark_mode_auto_pref")!!
             confirmExitPref = findPreference("confirm_exit_pref")!!
+            notifyAboutChangePref = findPreference("notify_about_change_pref")!!
+            showGradeInNotificationPref = findPreference("show_grade_in_notification_pref")!!
+            useMeteredNetworkPref = findPreference("use_metered_network_pref")!!
             logoutPref = findPreference("logout_pref")!!
-            refreshTimePref = findPreference("refresh_time_pref")!!
+            refreshIntervalPref = findPreference("refresh_interval_pref")!!
             logoutPref.onPreferenceClickListener = OnPreferenceClickListener {
                 val dialog = AlertDialog.Builder(settingsActivity)
                     .setTitle(getString(R.string.logout))
@@ -100,6 +117,7 @@ class SettingsActivity : AppCompatActivity() {
                     lifecycleScope.launch {
                         updateUserSettings { it.copy(username = "", password = "") }
                         deleteExams()
+                        setWorkManager.cancelStudiportalWork()
                         startActivity(Intent(settingsActivity, LoginActivity::class.java))
                         settingsActivity.finish()
                     }
@@ -109,9 +127,10 @@ class SettingsActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val userSettings = getUserSettings()
                 logoutPref.summary = userSettings.username
-                refreshTimePref.summary = getString(
+                //TODO
+                refreshIntervalPref.summary = getString(
                     R.string.last_updated,
-                    userSettings.lastRefresh.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) //TODO
+                    userSettings.lastRefresh.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
                 )
             }
             autoDarkModePref.onPreferenceChangeListener = this
@@ -125,6 +144,10 @@ class SettingsActivity : AppCompatActivity() {
             darkModePref.value = if (SeslMisc.isLightTheme(settingsActivity)) "0" else "1"
 
             confirmExitPref.onPreferenceChangeListener = this
+            notifyAboutChangePref.onPreferenceChangeListener = this
+            showGradeInNotificationPref.onPreferenceChangeListener = this
+            useMeteredNetworkPref.onPreferenceChangeListener = this
+            refreshIntervalPref.onPreferenceChangeListener = this
 
             findPreference<PreferenceScreen>("privacy_pref")!!.onPreferenceClickListener = OnPreferenceClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.privacy_website))))
@@ -188,6 +211,11 @@ class SettingsActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val userSettings = getUserSettings()
                 confirmExitPref.isChecked = userSettings.confirmExit
+                notifyAboutChangePref.isChecked =
+                    userSettings.notificationsEnabled && areNotificationsEnabled(getString(R.string.exam_notification_channel_id))
+                showGradeInNotificationPref.isChecked = userSettings.showGradeInNotification
+                showGradeInNotificationPref.isEnabled = notifyAboutChangePref.isChecked
+                useMeteredNetworkPref.isChecked = userSettings.useMeteredNetwork
             }
             setRelatedCardView()
         }
@@ -217,6 +245,49 @@ class SettingsActivity : AppCompatActivity() {
                     lifecycleScope.launch { updateUserSettings { it.copy(confirmExit = newValue as Boolean) } }
                     return true
                 }
+                "notify_about_change_pref" -> {
+                    if (newValue as Boolean) {
+                        when {
+                            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && ContextCompat.checkSelfPermission(
+                                requireContext(),
+                                Manifest.permission.POST_NOTIFICATIONS
+                            ) != PackageManager.PERMISSION_GRANTED -> {
+                                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                notifyAboutChangePref.isChecked = false
+                            }
+                            !areNotificationsEnabled(getString(R.string.exam_notification_channel_id)) -> {
+                                val settingsIntent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
+                                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                    .putExtra(Settings.EXTRA_APP_PACKAGE, settingsActivity.packageName)
+                                //.putExtra(Settings.EXTRA_CHANNEL_ID, getString(R.string.daily_sudoku_notification_channel_id))
+                                startActivity(settingsIntent)
+                                notifyAboutChangePref.isChecked = false
+                            }
+                            else -> {
+                                setNotificationEnabled(true)
+                            }
+                        }
+                    } else {
+                        setNotificationEnabled(false)
+                    }
+                    return true
+                }
+                "show_grade_in_notification_pref" -> {
+                    lifecycleScope.launch { updateUserSettings { it.copy(showGradeInNotification = newValue as Boolean) } }
+                    return true
+                }
+                "use_metered_network_pref" -> {
+                    lifecycleScope.launch { updateUserSettings { it.copy(useMeteredNetwork = newValue as Boolean) } }
+                    setWorkManager
+                    return true
+                }
+                "refresh_interval_pref" -> {
+                    lifecycleScope.launch {
+                        updateUserSettings { it.copy(refreshInterval = RefreshInterval.fromMinutes(Integer.parseInt(newValue as String))) }
+                        setWorkManager()
+                    }
+                    return true
+                }
             }
             return false
         }
@@ -236,5 +307,36 @@ class SettingsActivity : AppCompatActivity() {
                     ?.show(this)
             }
         }
+
+        private val requestPermissionLauncher =
+            registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+                if (isGranted) {
+                    // Permission is granted. Continue the action or workflow in your app.
+                    setNotificationEnabled(true)
+                } else {
+                    // Explain to the user that the feature is unavailable because the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to system settings in an effort to convince the user
+                    // to change their decision.
+                    setNotificationEnabled(false)
+                }
+            }
+
+        private fun setNotificationEnabled(enabled: Boolean) {
+            showGradeInNotificationPref.isEnabled = enabled
+            lifecycleScope.launch { updateUserSettings { it.copy(notificationsEnabled = enabled) } }
+        }
+
+        private fun areNotificationsEnabled(
+            channelId: String? = null,
+            notificationManager: NotificationManagerCompat = NotificationManagerCompat.from(requireContext())
+        ): Boolean = notificationManager.areNotificationsEnabled() &&
+                if (channelId != null) {
+                    notificationManager.getNotificationChannel(channelId)?.importance != NotificationManagerCompat.IMPORTANCE_NONE &&
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                                ContextCompat.checkSelfPermission(requireContext(), Manifest.permission.POST_NOTIFICATIONS) ==
+                                        PackageManager.PERMISSION_GRANTED
+                            } else true
+                } else true
+
     }
 }

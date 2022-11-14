@@ -4,16 +4,15 @@
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <!--
     TODO / Ideas
 
-        listitem add all information
         login information?: name,...
+        filter?
+
+        Workmanager: https://dontkillmyapp.com/
+        https://stackoverflow.com/questions/50682061/android-is-workmanager-running-when-app-is-closed
 
         (new Android 12 Splashscreen)
     -->
@@ -49,9 +48,17 @@
             android:name="theming-meta-xml"
             android:value="@xml/meta_998_sesl_app" />
 
+        <!-- If you want to disable android.startup completely. (Needed to Use HiltWorkManager...) -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            tools:node="remove">
+        </provider>
+
         <activity android:name=".ui.SettingsActivity" android:parentActivityName=".ui.MainActivity" />
         <activity android:name=".ui.AboutMeActivity" />
         <activity android:name=".ui.AboutActivity" />
+        <activity android:name=".ui.NotificationIntroActivity" />
         <activity android:name=".ui.OOBEActivity" />
         <activity android:name=".ui.LoginActivity" />
         <activity android:name=".ui.ExamActivity" android:parentActivityName=".ui.MainActivity" />
@@ -80,20 +87,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <receiver
-            android:name=".domain.utils.RefreshTaskStarter"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="de.lemke.studiportal.CHECK_FOR_UPDATES" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.net.wifi.STATE_CHANGE" />
-            </intent-filter>
-        </receiver>
 
     </application>
 </manifest>

@@ -69,7 +69,7 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
         }
 
         inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            var parentView: LinearLayout
+            private var parentView: LinearLayout
             var textViewStart: TextView
             var textViewEnd: TextView
 
