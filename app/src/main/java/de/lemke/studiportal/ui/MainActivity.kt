@@ -29,7 +29,7 @@ import dev.oneuiproject.oneui.layout.ToolbarLayout
 import dev.oneuiproject.oneui.utils.internal.ReflectUtils
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import javax.inject.Inject
@@ -254,10 +254,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         )
     }
 
-    private fun setSubtitle(localDateTime: LocalDateTime) {
+    private fun setSubtitle(zonedDateTime: ZonedDateTime?) {
         val lastRefresh = getString(
             R.string.last_updated,
-            localDateTime.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL)) //TODO
+            if (zonedDateTime == null) getString(R.string.never)
+            else zonedDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))
         )
         binding.drawerLayoutMain.setExpandedSubtitle(lastRefresh)
         binding.drawerLayoutMain.setCollapsedSubtitle(lastRefresh)

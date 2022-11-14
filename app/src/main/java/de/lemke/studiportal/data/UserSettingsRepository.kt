@@ -1,12 +1,14 @@
 package de.lemke.studiportal.data
 
+import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.*
-import de.lemke.studiportal.data.database.Converters.localDateTimeFromDb
-import de.lemke.studiportal.data.database.Converters.localDateTimeToDb
+import de.lemke.studiportal.R
+import de.lemke.studiportal.data.database.Converters.zonedDateTimeFromDb
+import de.lemke.studiportal.data.database.Converters.zonedDateTimeToDb
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 /** Provides CRUD operations for user settings. */
@@ -36,7 +38,7 @@ class UserSettingsRepository @Inject constructor(
             it[KEY_SHOW_GRADE_IN_NOTIFICATION] = newSettings.showGradeInNotification
             it[KEY_USE_METERED_NETWORK] = newSettings.useMeteredNetwork
             it[KEY_REFRESH_INTERVAL] = newSettings.refreshInterval.minutes
-            it[KEY_LAST_REFRESH] = localDateTimeToDb(newSettings.lastRefresh)
+            it[KEY_LAST_REFRESH] = zonedDateTimeToDb(newSettings.lastRefresh)
             it[KEY_CATEGORY_FILTER] = newSettings.categoryFilter
         }
         return settingsFromPreferences(prefs)
@@ -56,7 +58,7 @@ class UserSettingsRepository @Inject constructor(
         showGradeInNotification = prefs[KEY_SHOW_GRADE_IN_NOTIFICATION] ?: false,
         useMeteredNetwork = prefs[KEY_USE_METERED_NETWORK] ?: true,
         refreshInterval = RefreshInterval.fromMinutes(prefs[KEY_REFRESH_INTERVAL]),
-        lastRefresh = localDateTimeFromDb(prefs[KEY_LAST_REFRESH] ?: localDateTimeToDb(LocalDateTime.MIN)),
+        lastRefresh = zonedDateTimeFromDb(prefs[KEY_LAST_REFRESH]),
         categoryFilter = prefs[KEY_CATEGORY_FILTER] ?: "",
     )
 
@@ -105,7 +107,7 @@ data class UserSettings(
     /** refresh interval */
     val refreshInterval: RefreshInterval,
     /** last updated */
-    val lastRefresh: LocalDateTime,
+    val lastRefresh: ZonedDateTime?,
     /** exam category filter */
     val categoryFilter: String,
 )
@@ -117,6 +119,8 @@ enum class RefreshInterval(val minutes: Int) {
     INTERVAL_HOUR(60),
     INTERVAL_HALF_DAY(720),
     INTERVAL_DAY(1440);
+
+    fun getLocalString(context: Context) = context.resources.getStringArray(R.array.array_refresh_interval)[ordinal]
 
     companion object {
         fun fromMinutes(minutes: Int?): RefreshInterval {

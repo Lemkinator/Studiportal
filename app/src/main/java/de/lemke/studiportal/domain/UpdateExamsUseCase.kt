@@ -4,7 +4,7 @@ import de.lemke.studiportal.data.ExamsRepository
 import de.lemke.studiportal.domain.model.Exam
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import javax.inject.Inject
 
 class UpdateExamsUseCase @Inject constructor(
@@ -14,7 +14,7 @@ class UpdateExamsUseCase @Inject constructor(
     private val updateUserSettings: UpdateUserSettingsUseCase,
 ) {
     suspend operator fun invoke(exams: List<Exam>, notifyAboutChanges: Boolean): Boolean = withContext(Dispatchers.Default) {
-        updateUserSettings { it.copy(lastRefresh = LocalDateTime.now()) }
+        updateUserSettings { it.copy(lastRefresh = ZonedDateTime.now()) }
         val oldExams = examsRepository.getExams()
         examsRepository.updateExams(exams)
         val changedExams = exams.filter { exam -> oldExams.find { it == exam } == null }

@@ -73,6 +73,8 @@
     <string name="refresh_interval">Aktualisierungsintervall</string>
     <string name="refresh_on_metered_network">Über gebührenpflichtige Netzwerke aktualisieren</string>
     <string name="refresh_on_metered_network_summary">Für die Aktualisierung über Mobilfunk können Gebühren anfallen</string>
+    <string name="refresh_now">Jetzt aktualisieren</string>
+    <string name="never">Nie</string>
     <string-array name="array_refresh_interval">
         <item>Keine Aktualisierung</item>
         <item>15 Minuten</item>
@@ -206,7 +208,6 @@
     <string name="error_observe">Fehler beim Abrufen der Prüfungen: %1$s</string>
     <string name="login_success_observe_error">Leider ist jedoch beim Einlesen der Daten ein Fehler aufgetreten: %1$s</string>
     <string name="demo_username_label">Nutzername für die Demo-Ansicht: \"DEMO\"</string>
-    <string name="refresh_now">Jetzt aktualisieren</string>
 
     <!--Others-->
 

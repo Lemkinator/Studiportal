@@ -37,6 +37,7 @@ import dev.oneuiproject.oneui.preference.internal.PreferenceRelatedCard
 import dev.oneuiproject.oneui.utils.DialogUtils
 import dev.oneuiproject.oneui.utils.PreferenceUtils.createRelatedCard
 import kotlinx.coroutines.launch
+import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import javax.inject.Inject
@@ -127,11 +128,7 @@ class SettingsActivity : AppCompatActivity() {
             lifecycleScope.launch {
                 val userSettings = getUserSettings()
                 logoutPref.summary = userSettings.username
-                //TODO
-                refreshIntervalPref.summary = getString(
-                    R.string.last_updated,
-                    userSettings.lastRefresh.format(DateTimeFormatter.ofLocalizedDate(FormatStyle.FULL))
-                )
+                setRefreshIntervalPrefSummary(userSettings.refreshInterval, userSettings.lastRefresh)
             }
             autoDarkModePref.onPreferenceChangeListener = this
             autoDarkModePref.isChecked = darkMode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM ||
@@ -197,6 +194,14 @@ class SettingsActivity : AppCompatActivity() {
                     .show()
                 true
             }
+        }
+
+        private fun setRefreshIntervalPrefSummary(refreshInterval: RefreshInterval, zonedDateTime: ZonedDateTime?) {
+            refreshIntervalPref.summary = refreshInterval.getLocalString(requireContext()) + " | " + getString(
+                R.string.last_updated,
+                if (zonedDateTime == null) getString(R.string.never)
+                else zonedDateTime.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.SHORT))
+            )
         }
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -283,8 +288,10 @@ class SettingsActivity : AppCompatActivity() {
                 }
                 "refresh_interval_pref" -> {
                     lifecycleScope.launch {
-                        updateUserSettings { it.copy(refreshInterval = RefreshInterval.fromMinutes(Integer.parseInt(newValue as String))) }
+                        val refreshInterval = RefreshInterval.fromMinutes(Integer.parseInt(newValue as String))
+                        updateUserSettings { it.copy(refreshInterval = refreshInterval) }
                         setWorkManager()
+                        setRefreshIntervalPrefSummary(refreshInterval, getUserSettings().lastRefresh)
                     }
                     return true
                 }

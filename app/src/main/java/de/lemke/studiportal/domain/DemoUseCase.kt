@@ -4,7 +4,7 @@ import de.lemke.studiportal.data.ExamsRepository
 import de.lemke.studiportal.domain.model.Exam
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import java.time.LocalDateTime
+import java.time.ZonedDateTime
 import java.util.*
 import javax.inject.Inject
 
@@ -27,7 +27,7 @@ class DemoUseCase @Inject constructor(
 
     //TODO random.nextBoolean()
     suspend fun updateExams(notifyAboutChanges: Boolean, addNewExam: Boolean = true): Boolean = withContext(Dispatchers.Default) {
-        updateUserSettings { it.copy(lastRefresh = LocalDateTime.now()) }
+        updateUserSettings { it.copy(lastRefresh = ZonedDateTime.now()) }
         val exams = if (addNewExam) examsRepository.getExams().withRandomExamAdded()
         else examsRepository.getExams()
         val oldExams = examsRepository.getExams()
@@ -38,7 +38,7 @@ class DemoUseCase @Inject constructor(
     }
 
     suspend fun initDemoExams() = withContext(Dispatchers.Default) {
-        updateUserSettings { it.copy(lastRefresh = LocalDateTime.now()) }
+        updateUserSettings { it.copy(lastRefresh = ZonedDateTime.now()) }
         examsRepository.updateExams(demoExams)
     }
 
