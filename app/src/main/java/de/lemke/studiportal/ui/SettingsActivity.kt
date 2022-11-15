@@ -264,7 +264,7 @@ class SettingsActivity : AppCompatActivity() {
                                 val settingsIntent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                                     .putExtra(Settings.EXTRA_APP_PACKAGE, settingsActivity.packageName)
-                                //.putExtra(Settings.EXTRA_CHANNEL_ID, getString(R.string.daily_sudoku_notification_channel_id))
+                                //.putExtra(Settings.EXTRA_CHANNEL_ID, getString(R.string.exam_notification_channel_id))
                                 startActivity(settingsIntent)
                                 notifyAboutChangePref.isChecked = false
                             }
