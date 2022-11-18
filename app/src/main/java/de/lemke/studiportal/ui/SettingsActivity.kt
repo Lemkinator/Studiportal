@@ -303,14 +303,8 @@ class SettingsActivity : AppCompatActivity() {
             if (relatedCard == null) {
                 relatedCard = createRelatedCard(settingsActivity)
                 relatedCard?.setTitleText(getString(dev.oneuiproject.oneui.design.R.string.oui_relative_description))
-                relatedCard?.addButton(getString(R.string.about_me)) {
-                    startActivity(
-                        Intent(
-                            settingsActivity,
-                            AboutMeActivity::class.java
-                        )
-                    )
-                }
+                relatedCard?.addButton(getString(R.string.help)) { startActivity(Intent(settingsActivity, HelpActivity::class.java)) }
+                    ?.addButton(getString(R.string.about_me)) { startActivity(Intent(settingsActivity, AboutMeActivity::class.java)) }
                     ?.show(this)
             }
         }

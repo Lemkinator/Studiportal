@@ -8,16 +8,20 @@
     <string name="show_grade_title">Note in Benachrichtigung anzeigen</string>
     <string name="show_grade_summary">Neue Noten werden direkt in der Benachrichtigung angezeigt.</string>
 
+    <!--Help-->
+    <string name="help">Hilfe</string>
+    <string name="contact">Kontakt</string>
+    <string name="contact_me">Kontaktier mich (E-Mail)</string>
+    <string name="help_text">Diese App steht in keiner Verbindung zur Hochschule Furtwangen und dient lediglich dazu, die Daten aus dem Studiportal anzuzeigen. \nDie Nutzung des Logos erfolgt mit freundlicher Genehmigung der Strategie und Kommunikationsabteilung der Hochschule Furtwangen.</string>
+
     <!--About-->
     <string name="about_page_optional_text">Die neue Studiportal-App mit OneUI-Design</string>
     <string name="about_app">Über Studiportal</string>
-    <string name="help">Hilfe</string>
     <string name="open_in_playstore">In Play Store öffnen</string>
 
     <!--AboutMe-->
     <string name="about_me">Über mich</string>
     <string name="to_play_store">Zum Play Store</string>
-    <string name="contact_me">Kontaktier mich (E-Mail)</string>
     <string name="write_email">E-Mail schreiben</string>
     <string name="website">Webseite</string>
     <string name="support_me_text">Falls du mich in irgendeiner Weise unterstützen möchtest, dann sende mir gerne eine E-Mail</string>
@@ -69,12 +73,12 @@
     <string name="report_bug">Bug oder Verbesserung melden</string>
 
     <!--OOBE-->
-    <string name="oobe_onboard_msg1_title">Schönes Design</string>
-    <string name="oobe_onboard_msg2_title">Kostenlos</string>
-    <string name="oobe_onboard_msg3_title">Keine Werbung</string>
-    <string name="oobe_onboard_msg1_summary">Die neue Studiportal-App mit OneUI-Design.</string>
-    <string name="oobe_onboard_msg2_summary">Keine Abos, keine In-App-Käufe, keinerlei Kosten.</string>
-    <string name="oobe_onboard_msg3_summary">Keine nervige Werbung.</string>
+    <string name="oobe_onboard_msg1_title">Disclaimer</string>
+    <string name="oobe_onboard_msg2_title">Design</string>
+    <string name="oobe_onboard_msg3_title">Kostenlos, keine Werbung</string>
+    <string name="oobe_onboard_msg1_summary">Diese App steht in keiner Verbindung zur Hochschule Furtwangen. Mehr Informationen dazu gibt es unter dem Menu-Punkt \"Hilfe\".</string>
+    <string name="oobe_onboard_msg2_summary">Die neue Studiportal-App mit OneUI-Design.</string>
+    <string name="oobe_onboard_msg3_summary">Keine nervige Werbung, keine Abos, keinerlei Kosten.</string>
     <string name="tos">Nutzungsbedingungen</string>
     <string name="tos_content">Es ist nicht gestattet, diese App entgegen den guten Sitten oder den geltenden Gesetzen zu verwenden. \n\nSie verpflichten sich außerdem, diese App nicht für Zwecke zu verwenden, die nach dem Recht der Vereinigten Staaten verboten sind, insbesondere nicht für die Entwicklung, Konstruktion, Herstellung oder Produktion von Raketen, chemischen oder biologischen Waffen. \nDiese Einschränkung gilt jedoch nicht für den Fall, dass eine weit verbreitete Virusinfektion auftritt (die von den United States Centers for Disease Control oder einer Nachfolgeorganisation bestätigt wurde), die durch Bisse oder Kontakt mit Körperflüssigkeiten übertragen wird und dazu führt, dass menschliche Leichen wiederbelebt werden und versuchen, lebendes menschliches Fleisch, Blut, Gehirn oder Nervengewebe zu verzehren, und die wahrscheinlich zum Untergang der organisierten Zivilisation führen wird. \n\nEine besondere Gegenleistung, die eine finanzielle Entschädigung beinhalten kann, wird einer begrenzten Anzahl von Nutzern angeboten, die diesen Abschnitt der Nutzungsbedingungen lesen und mich unter eine-email-an-diese-adresse-zu-schreiben-wird-sie-10-euro-kosten@leonard-lemke.com kontaktieren. Dieses Angebot kann jederzeit und ohne Vorankündigung zurückgezogen werden. \n\nWeitere Fragen werden unter diese-email-ist-viel-zu-lang-und-hoffentlich-koennen-sie-nicht-kopieren-und-einfuegen@leonard-lemke.com beantwortet.</string>
     <string name="oobe_tos_text">Durch die Nutzung der App stimmen Sie den %1$s zu.</string>
@@ -162,7 +166,7 @@
     <string name="all">Alle</string>
 
     <!--Login-->
-    <string name="user_name">HFU Benutzername</string>
+    <string name="user_name">Benutzername</string>
     <string name="password">Passwort</string>
     <string name="login">Einloggen</string>
     <string name="username_or_password_empty">Benutzername oder Passwort leer.</string>

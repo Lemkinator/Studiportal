@@ -188,9 +188,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setSubtitle(userSettings.lastRefresh)
         if (userSettings.username == demo.username) binding.drawerLayoutMain.setTitle(getString(R.string.app_name) + " (Demo)")
         else binding.drawerLayoutMain.setTitle(getString(R.string.app_name))
+        val helpOption = findViewById<LinearLayout>(R.id.draweritem_help)
         val aboutAppOption = findViewById<LinearLayout>(R.id.draweritem_about_app)
         val aboutMeOption = findViewById<LinearLayout>(R.id.draweritem_about_me)
         val settingsOption = findViewById<LinearLayout>(R.id.draweritem_settings)
+
+        helpOption.setOnClickListener {
+            startActivity(Intent(this@MainActivity, HelpActivity::class.java))
+            binding.drawerLayoutMain.setDrawerOpen(false, true)
+        }
         aboutAppOption.setOnClickListener {
             startActivity(Intent(this@MainActivity, AboutActivity::class.java))
             binding.drawerLayoutMain.setDrawerOpen(false, true)
