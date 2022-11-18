@@ -17,7 +17,7 @@
     <string name="oneui_github_link" translatable="false">https://github.com/OneUIProject</string>
     <string name="rick_roll_troll_link" translatable="false">https://www.leonard-lemke.com/rr</string>
 
-    <string name="url_login" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=user&amp;type=1&amp;category=auth.login&amp;startpage=portal.vm&amp;breadCrumbSource=portal&amp;asdf=%1$s&amp;fdsa=%2$s&amp;submit=Anmelden</string>
+    <string name="url_login" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=user&amp;type=1&amp;category=auth.login&amp;startpage=portal.vm&amp;breadCrumbSource=portal</string>
     <string name="url_logout" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=user&amp;type=4&amp;re=last&amp;category=auth.logout&amp;breadCrumbSource=portal</string>
     <string name="url_fetch_asi" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=change&amp;type=1&amp;moduleParameter=studyPOSMenu&amp;nextdir=change&amp;next=menu.vm&amp;subdir=applications&amp;xml=menu&amp;purge=y&amp;navigationPosition=functions%2CstudyPOSMenu&amp;breadcrumb=studyPOSMenu&amp;topitem=functions&amp;subitem=studyPOSMenu</string>
     <string name="url_observe" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=htmlbesch&amp;moduleParameter=Student&amp;menuid=notenspiegel&amp;breadcrumb=notenspiegel&amp;breadCrumbSource=menu&amp;asi=%1$s</string>

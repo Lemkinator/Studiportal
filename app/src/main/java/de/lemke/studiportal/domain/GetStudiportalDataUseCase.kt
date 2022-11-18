@@ -15,6 +15,7 @@ import java.net.CookieManager
 import java.net.CookiePolicy
 import javax.inject.Inject
 
+
 class GetStudiportalDataUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getUserSettings: GetUserSettingsUseCase,
@@ -55,8 +56,8 @@ class GetStudiportalDataUseCase @Inject constructor(
             },
             { error -> onError(context.getString(R.string.error_asi, error.message), requestQueue, errorCallback) })
 
-        val loginRequest = StringRequest(
-            Request.Method.POST, context.getString(R.string.url_login, username, password),
+        val loginRequest = object : StringRequest(
+            Method.POST, context.getString(R.string.url_login),
             { loginResponse ->
                 if (loginResponse.contains(context.getString(R.string.studi_portal_login_failed_message))) {
                     loginErrorCallback(context.getString(R.string.wrong_username_or_password_message))
@@ -68,7 +69,17 @@ class GetStudiportalDataUseCase @Inject constructor(
             {
                 loginErrorCallback(context.getString(R.string.error_login, it.message))
                 onError(context.getString(R.string.error_login, it.message), requestQueue, errorCallback)
-            })
+            }) {
+            override fun getBodyContentType(): String = "application/x-www-form-urlencoded; charset=UTF-8"
+
+            override fun getParams(): Map<String, String> {
+                val params: MutableMap<String, String> = HashMap()
+                params["asdf"] = username
+                params["fdsa"] = password
+                params["submit"] = "Anmelden"
+                return params
+            }
+        }
         requestQueue.add(loginRequest)
 
     }
