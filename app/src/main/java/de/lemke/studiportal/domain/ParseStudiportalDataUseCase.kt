@@ -62,7 +62,7 @@ class ParseStudiportalDataUseCase @Inject constructor(
 
             //If the col contains colspan attribute, skip this and all spanned columns
             val colspan = col.attr("colspan")
-            if (colspan != null && colspan.isNotEmpty()) {
+            if (colspan.isNotEmpty()) {
                 val colspanInt = col.attr("colspan").toInt()
                 //Add the colspan to i (substract -1 because i++ on next iteration)
                 offset += colspanInt - 1
