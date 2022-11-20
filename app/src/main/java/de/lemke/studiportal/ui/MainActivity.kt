@@ -12,6 +12,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.lifecycleScope
@@ -253,8 +254,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 }
             },
             errorCallback = { message ->
-                binding.swipeRefreshLayout.isRefreshing = false
-                Toast.makeText(this@MainActivity, message, Toast.LENGTH_LONG).show()
+                lifecycleScope.launch {
+                    binding.swipeRefreshLayout.isRefreshing = false
+                    if (message == getString(R.string.no_internet))
+                        Toast.makeText(this@MainActivity, message, Toast.LENGTH_SHORT).show()
+                    else AlertDialog.Builder(this@MainActivity)
+                        .setTitle(getString(R.string.error))
+                        .setMessage(message)
+                        .setPositiveButton(R.string.ok, null)
+                        .create()
+                        .show()
+                }
             }
         )
     }

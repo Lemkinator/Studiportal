@@ -27,7 +27,7 @@ class SetWorkManagerUseCase @Inject constructor(
                 .setConstraints(
                     with(Constraints.Builder()) {
                         setRequiredNetworkType(NetworkType.CONNECTED)
-                        if (userSettings.useMeteredNetwork) setRequiredNetworkType(NetworkType.UNMETERED)
+                        if (!userSettings.allowMeteredConnection) setRequiredNetworkType(NetworkType.UNMETERED)
                         build()
                     }
                 )

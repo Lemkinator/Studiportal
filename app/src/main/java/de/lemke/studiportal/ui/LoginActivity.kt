@@ -31,8 +31,6 @@ class LoginActivity : AppCompatActivity() {
     private var username: String = ""
     private var password: String = ""
     private var time: Long = 0
-    private var loginTryCount = 0
-    private val loginTryCountMax = 3
     private var loginSuccess = false
 
     @Inject
@@ -96,25 +94,14 @@ class LoginActivity : AppCompatActivity() {
         }
         loginErrorCallback = { message ->
             loginSuccess = false
-            if (loginTryCount < loginTryCountMax) {
-                loginTryCount++
-                lifecycleScope.launch {
-                    getStudiportalData(
-                        successCallback = successCallback,
-                        errorCallback = errorCallback,
-                        loginSuccessCallback = loginSuccessCallback,
-                        loginErrorCallback = loginErrorCallback,
-                    )
-                }
-            } else {
-                lifecycleScope.launch { updateUserSettings { it.copy(username = "", password = "") } }
+            lifecycleScope.launch {
+                updateUserSettings { it.copy(username = "", password = "") }
                 AlertDialog.Builder(this@LoginActivity)
                     .setTitle(getString(R.string.error))
                     .setMessage(message)
                     .setPositiveButton(R.string.ok, null)
                     .create()
                     .show()
-                loginTryCount = 0
                 binding.loginFooterButtonProgress.visibility = View.GONE
                 binding.loginFooterButton.visibility = View.VISIBLE
             }

@@ -116,7 +116,7 @@ class SettingsActivity : AppCompatActivity() {
                 dialog.show()
                 DialogUtils.setDialogProgressForButton(dialog, DialogInterface.BUTTON_POSITIVE) {
                     lifecycleScope.launch {
-                        updateUserSettings { it.copy(username = "", password = "") }
+                        updateUserSettings { it.copy(username = "", password = "", allowMeteredConnection = true) }
                         deleteExams()
                         setWorkManager.cancelStudiportalWork()
                         startActivity(Intent(settingsActivity, LoginActivity::class.java))
@@ -220,7 +220,7 @@ class SettingsActivity : AppCompatActivity() {
                     userSettings.notificationsEnabled && areNotificationsEnabled(getString(R.string.exam_notification_channel_id))
                 showGradeInNotificationPref.isChecked = userSettings.showGradeInNotification
                 showGradeInNotificationPref.isEnabled = notifyAboutChangePref.isChecked
-                useMeteredNetworkPref.isChecked = userSettings.useMeteredNetwork
+                useMeteredNetworkPref.isChecked = userSettings.allowMeteredConnection
             }
             setRelatedCardView()
         }
@@ -282,8 +282,10 @@ class SettingsActivity : AppCompatActivity() {
                     return true
                 }
                 "use_metered_network_pref" -> {
-                    lifecycleScope.launch { updateUserSettings { it.copy(useMeteredNetwork = newValue as Boolean) } }
-                    setWorkManager
+                    lifecycleScope.launch {
+                        updateUserSettings { it.copy(allowMeteredConnection = newValue as Boolean) }
+                        setWorkManager()
+                    }
                     return true
                 }
                 "refresh_interval_pref" -> {

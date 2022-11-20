@@ -1,6 +1,8 @@
 package de.lemke.studiportal.domain
 
 import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
@@ -30,6 +32,19 @@ class GetStudiportalDataUseCase @Inject constructor(
         val userSettings = getUserSettings()
         val username = userSettings.username
         val password = userSettings.password
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (capabilities == null || !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ||
+            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+            loginErrorCallback(context.getString(R.string.no_internet))
+            errorCallback(context.getString(R.string.no_internet))
+            return@withContext
+        }
+        if (connectivityManager.isActiveNetworkMetered && !userSettings.allowMeteredConnection) {
+            loginErrorCallback(context.getString(R.string.metered_connection))
+            errorCallback(context.getString(R.string.metered_connection))
+            return@withContext
+        }
 
         val cookieManager = CookieManager()
         cookieManager.setCookiePolicy(CookiePolicy.ACCEPT_ALL)

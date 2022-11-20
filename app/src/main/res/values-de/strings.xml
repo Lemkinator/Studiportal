@@ -48,8 +48,7 @@
     <string name="refresh">Aktualisierung</string>
     <string name="refresh_interval">Aktualisierungsintervall</string>
     <string name="refresh_on_metered_network">Über gebührenpflichtige Netzwerke aktualisieren</string>
-    <string name="refresh_on_metered_network_summary">Für die Aktualisierung über Mobilfunk können Gebühren anfallen</string>
-    <string name="refresh_now">Jetzt aktualisieren</string>
+    <string name="refresh_on_metered_network_summary">In den Netzwerk-Einstellungen des Geräts, können auch WLAN-Netzwerke als gebührenpflichtig markiert werden.</string>
     <string name="never">Nie</string>
     <string-array name="array_refresh_interval">
         <item>Keine Aktualisierung</item>
@@ -159,7 +158,7 @@
     <string name="vf">Prüfungsvorleistung fehlt</string>
 
     <!--Exam List-->
-    <string name="check_now">Jetzt überprüfen</string>
+    <string name="refresh_now">Jetzt aktualisieren</string>
     <string name="open_online">Studiportal online öffnen</string>
     <string name="last_updated">Letzte Aktualisierung: %1$s</string>
     <string name="no_change">Keine neuen Daten</string>
@@ -170,7 +169,6 @@
     <string name="password">Passwort</string>
     <string name="login">Einloggen</string>
     <string name="username_or_password_empty">Benutzername oder Passwort leer.</string>
-    <string name="wrong_username_or_password">Benutzer oder Passwort falsch</string>
     <string name="wrong_username_or_password_message">Der Benutzer oder das Passwort scheint ungültig zu sein.\n\nWenn du sicher bist das alles stimmt probiere es in ein paar Minuten nochmal, leider spinnt das Studiportal gelegentlich…</string>
     <string name="error_login">Fehler beim Login: %1$s</string>
     <string name="studi_portal_login_failed_message">Anmeldung fehlgeschlagen</string>
@@ -180,6 +178,9 @@
     <string name="login_success_observe_error">Jedoch istadd beim Einlesen der Daten ein Fehler aufgetreten: %1$s</string>
     <string name="demo_username_label">Nutzername für die Demo-Ansicht: \"DEMO\"</string>
     <string name="exam_not_found">Prüfung nicht gefunden…</string>
+
+    <string name="no_internet">Keine Internetverbindung verfügbar…</string>
+    <string name="metered_connection">Aktuell ist ein als gebührenpflichtiges markiertes Netzwerk aktiv und aktualisieren über ein solches Netzwerk ist in den Einstellungen deaktiviert…</string>
 
     <!--Others-->
 

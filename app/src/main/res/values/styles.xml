@@ -43,13 +43,6 @@
         <item name="tint">@color/oui_primary_text_color</item>
     </style>
 
-    <style name="NumberButton" parent="ButtonStyle.Colored">
-        <item name="android:textSize">@dimen/number_button_textSize</item>
-        <item name="android:layout_width">@dimen/number_button_width</item>
-        <item name="android:layout_height">@dimen/number_button_height</item>
-        <item name="android:layout_margin">@dimen/number_button_margin</item>
-    </style>
-
     <style name="DrawerDividerStyle">
         <item name="android:layout_marginTop">6dp</item>
         <item name="android:layout_marginBottom">6dp</item>

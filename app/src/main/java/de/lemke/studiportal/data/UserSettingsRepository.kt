@@ -36,7 +36,7 @@ class UserSettingsRepository @Inject constructor(
             it[KEY_PASSWORD] = newSettings.password
             it[KEY_NOTIFICATIONS_ENABLED] = newSettings.notificationsEnabled
             it[KEY_SHOW_GRADE_IN_NOTIFICATION] = newSettings.showGradeInNotification
-            it[KEY_USE_METERED_NETWORK] = newSettings.useMeteredNetwork
+            it[KEY_ALLOW_METERED_CONNECTION] = newSettings.allowMeteredConnection
             it[KEY_REFRESH_INTERVAL] = newSettings.refreshInterval.minutes
             it[KEY_LAST_REFRESH] = zonedDateTimeToDb(newSettings.lastRefresh)
             it[KEY_CATEGORY_FILTER] = newSettings.categoryFilter
@@ -56,7 +56,7 @@ class UserSettingsRepository @Inject constructor(
         password = prefs[KEY_PASSWORD] ?: "",
         notificationsEnabled = prefs[KEY_NOTIFICATIONS_ENABLED] ?: false,
         showGradeInNotification = prefs[KEY_SHOW_GRADE_IN_NOTIFICATION] ?: false,
-        useMeteredNetwork = prefs[KEY_USE_METERED_NETWORK] ?: true,
+        allowMeteredConnection = prefs[KEY_ALLOW_METERED_CONNECTION] ?: true,
         refreshInterval = RefreshInterval.fromMinutes(prefs[KEY_REFRESH_INTERVAL]),
         lastRefresh = zonedDateTimeFromDb(prefs[KEY_LAST_REFRESH]),
         categoryFilter = prefs[KEY_CATEGORY_FILTER] ?: "",
@@ -73,7 +73,7 @@ class UserSettingsRepository @Inject constructor(
         private val KEY_PASSWORD = stringPreferencesKey("password")
         private val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notificationsEnabled")
         private val KEY_SHOW_GRADE_IN_NOTIFICATION = booleanPreferencesKey("showGradeInNotification")
-        private val KEY_USE_METERED_NETWORK = booleanPreferencesKey("useMeteredNetwork")
+        private val KEY_ALLOW_METERED_CONNECTION = booleanPreferencesKey("allowMeteredConnection")
         private val KEY_REFRESH_INTERVAL = intPreferencesKey("refreshInterval")
         private val KEY_LAST_REFRESH = stringPreferencesKey("lastRefresh")
         private val KEY_CATEGORY_FILTER = stringPreferencesKey("categoryFilter")
@@ -103,7 +103,7 @@ data class UserSettings(
     /** Notifications enabled */
     val showGradeInNotification: Boolean,
     /** use metered Networks */
-    val useMeteredNetwork: Boolean,
+    val allowMeteredConnection: Boolean,
     /** refresh interval */
     val refreshInterval: RefreshInterval,
     /** last updated */
@@ -120,7 +120,7 @@ enum class RefreshInterval(val minutes: Int) {
     INTERVAL_HALF_DAY(720),
     INTERVAL_DAY(1440);
 
-    fun getLocalString(context: Context) = context.resources.getStringArray(R.array.array_refresh_interval)[ordinal]
+    fun getLocalString(context: Context): String = context.resources.getStringArray(R.array.array_refresh_interval)[ordinal]
 
     companion object {
         fun fromMinutes(minutes: Int?): RefreshInterval {
