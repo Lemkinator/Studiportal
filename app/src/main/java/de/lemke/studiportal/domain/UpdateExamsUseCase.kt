@@ -18,7 +18,8 @@ class UpdateExamsUseCase @Inject constructor(
         val oldExams = examsRepository.getExams()
         examsRepository.updateExams(exams)
         val changedExams = exams.filter { exam -> oldExams.find { it == exam } == null }
-        if (notifyAboutChanges) changedExams.forEach { sendNotification(it, getUserSettings().showGradeInNotification) }
+        if (notifyAboutChanges && oldExams.isNotEmpty())
+            changedExams.forEach { sendNotification(it, getUserSettings().showGradeInNotification) }
         return@withContext changedExams.isNotEmpty()
     }
 }
