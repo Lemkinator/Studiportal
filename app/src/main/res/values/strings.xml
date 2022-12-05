@@ -78,7 +78,7 @@
     <string name="refresh_on_metered_network_summary">In the network settings of the device, Wifi networks can also be marked as metered.</string>
     <string name="never">Never</string>
     <string-array name="array_refresh_interval">
-        <item>Keine Aktualisierung</item>
+        <item>No refresh</item>
         <item>15 Minutes</item>
         <item>30 Minutes</item>
         <item>1 Hour</item>
@@ -190,7 +190,7 @@
     <string name="open_online">Open Studiportal online</string>
     <string name="last_updated">Last updated: %1$s</string>
     <string name="no_change">No new data</string>
-    <string name="all">Alle</string>
+    <string name="all">All</string>
 
     <!--Login-->
     <string name="user_name">Username</string>
@@ -199,7 +199,7 @@
     <string name="username_or_password_empty">Username or password blank.</string>
     <string name="wrong_username_or_password_message">The username or password seems to be invalid.\n\nIf you are sure that everything is correct try again in a few minutes…</string>
     <string name="error_login">Login error: %1$s</string>
-    <string name="studi_portal_login_failed_message">Anmeldung fehlgeschlagen</string>
+    <string name="studi_portal_login_failed_message">Login failed</string>
     <string name="error_asi">Error when retrieving the ASI: %1$s</string>
     <string name="error_could_not_get_asi">ASI could not be determined.</string>
     <string name="error_observe">Error when retrieving the exams: %1$s</string>
