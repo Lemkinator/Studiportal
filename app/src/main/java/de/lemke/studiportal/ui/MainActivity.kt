@@ -1,26 +1,35 @@
 package de.lemke.studiportal.ui
 
+import android.animation.ObjectAnimator
+import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
+import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.window.OnBackInvokedCallback
+import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.animation.doOnEnd
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
+import de.lemke.studiportal.data.UserSettings
 import de.lemke.studiportal.databinding.ActivityMainBinding
 import de.lemke.studiportal.domain.*
 import de.lemke.studiportal.domain.model.Exam
@@ -43,10 +52,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var onBackInvokedCallback: OnBackInvokedCallback
+    private lateinit var exams: MutableList<Pair<Exam?, String>>
     private var isSearchUserInputEnabled = false
     private var time: Long = 0
-    private lateinit var exams: MutableList<Pair<Exam?, String>>
     private var initListJob: Job? = null
+    private var isUIReady = false
 
     @Inject
     lateinit var getUserSettings: GetUserSettingsUseCase
@@ -75,33 +86,106 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     @Inject
     lateinit var addSeparatorToExams: AddSeparatorToExamsUseCase
 
+    @Inject
+    lateinit var checkAppStart: CheckAppStartUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        /*  Note: https://stackoverflow.com/a/69831106/18332741
+        On Android 12 just running the app via android studio doesn't show the full splash screen.
+        You have to kill it and open the app from the launcher.
+        */
+        val splashScreen = installSplashScreen()
+        splashScreen.setKeepOnScreenCondition { !isUIReady }
+        splashScreen.setOnExitAnimationListener { splash ->
+            val splashAnimator: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+                splash.view,
+                PropertyValuesHolder.ofFloat(View.ALPHA, 0f),
+                PropertyValuesHolder.ofFloat(View.SCALE_X, 1.2f),
+                PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.2f)
+            )
+            splashAnimator.interpolator = AccelerateDecelerateInterpolator()
+            splashAnimator.duration = 400L
+            splashAnimator.doOnEnd { splash.remove() }
+            val contentAnimator: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(
+                binding.root,
+                PropertyValuesHolder.ofFloat(View.ALPHA, 0f, 1f),
+                PropertyValuesHolder.ofFloat(View.SCALE_X, 1.2f, 1f),
+                PropertyValuesHolder.ofFloat(View.SCALE_Y, 1.2f, 1f)
+            )
+            contentAnimator.interpolator = AccelerateDecelerateInterpolator()
+            contentAnimator.duration = 400L
+            contentAnimator.doOnEnd { splash.remove() }
+            splashAnimator.start()
+            contentAnimator.start()
+
+
+            /*
+            // Get the duration of the animated vector drawable.
+            val animationDuration = splash.iconAnimationDurationMillis
+            // Get the start time of the animation.
+            val animationStart = splash.iconAnimationStartMillis
+            // Calculate the remaining duration of the animation.
+            val remainingDuration = animationDuration - (System.currentTimeMillis() - animationStart).coerceAtLeast(0L)
+            */
+        }
+
         super.onCreate(savedInstanceState)
+        lifecycleScope.launch {
+            when (checkAppStart()) {
+                AppStart.FIRST_TIME -> openOOBE()
+                AppStart.NORMAL -> checkTOS(getUserSettings())
+                AppStart.FIRST_TIME_VERSION -> checkTOS(getUserSettings())
+            }
+        }
+    }
+
+    private fun openOOBE() {
+        startActivity(Intent(applicationContext, OOBEActivity::class.java))
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        openMain()
+    }
+
+    private fun checkTOS(userSettings: UserSettings) {
+        if (!userSettings.tosAccepted) openOOBE()
+        else checkLogin(userSettings)
+    }
+
+    private fun checkLogin(userSettings: UserSettings) {
+        if (userSettings.username.isBlank()) startActivity(Intent(applicationContext, LoginActivity::class.java))
+        openMain()
+    }
+
+    private fun openMain() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        isUIReady = true
         time = System.currentTimeMillis()
         lifecycleScope.launch {
+            initOnBackPressed()
             initDrawer()
             initList()
         }
         binding.swipeRefreshLayout.setOnRefreshListener { lifecycleScope.launch { refresh() } }
+    }
+
+    private fun initOnBackPressed() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                lifecycleScope.launch {
-                    when {
-                        binding.drawerLayoutMain.isSearchMode -> {
-                            isSearchUserInputEnabled = false
-                            binding.drawerLayoutMain.dismissSearchMode()
-                        }
-                        !getUserSettings().confirmExit || System.currentTimeMillis() - time < 3000 -> finishAffinity()
-                        else -> {
-                            Toast.makeText(this@MainActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
-                            time = System.currentTimeMillis()
-                        }
-                    }
-                }
+                checkBackPressed()
             }
         })
+        //set custom onBackInvoked callback to prevent app from exiting on back press when in search mode
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            onBackInvokedCallback = OnBackInvokedCallback { checkBackPressed() }
+        }
+    }
+
+    private fun checkBackPressed() {
+        if (binding.drawerLayoutMain.isSearchMode) {
+            isSearchUserInputEnabled = false
+            binding.drawerLayoutMain.dismissSearchMode()
+        }
+        else finishAffinity()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -167,6 +251,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         override fun onSearchModeToggle(searchView: SearchView, visible: Boolean) {
             lifecycleScope.launch {
                 if (visible) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                            OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                            onBackInvokedCallback
+                        )
+                    }
                     isSearchUserInputEnabled = true
                     val search = getUserSettings().search
                     searchView.setQuery(search, false)
@@ -175,6 +265,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
                     setSearchList(search)
                 } else {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        onBackInvokedDispatcher.unregisterOnBackInvokedCallback(onBackInvokedCallback)
+                    }
                     isSearchUserInputEnabled = false
                     exams = getExamsWithSeparator(getExams())
                     initList()
@@ -213,10 +306,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         binding.drawerLayoutMain.setDrawerButtonIcon(getDrawable(dev.oneuiproject.oneui.R.drawable.ic_oui_info_outline))
         binding.drawerLayoutMain.setDrawerButtonOnClickListener {
             startActivity(
-                Intent().setClass(
-                    this@MainActivity,
-                    AboutActivity::class.java
-                )
+                Intent().setClass(this@MainActivity, AboutActivity::class.java)
             )
         }
         binding.drawerLayoutMain.setDrawerButtonTooltip(getText(R.string.about_app))

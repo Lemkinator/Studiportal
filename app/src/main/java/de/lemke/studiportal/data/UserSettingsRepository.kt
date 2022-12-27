@@ -28,9 +28,10 @@ class UserSettingsRepository @Inject constructor(
             val newSettings = f(settingsFromPreferences(it))
             it[KEY_LAST_VERSION_CODE] = newSettings.lastVersionCode
             it[KEY_LAST_VERSION_NAME] = newSettings.lastVersionName
+            it[KEY_DARK_MODE] = newSettings.darkMode
+            it[KEY_AUTO_DARK_MODE] = newSettings.autoDarkMode
             it[KEY_TOS_ACCEPTED] = newSettings.tosAccepted
             it[KEY_DEV_MODE_ENABLED] = newSettings.devModeEnabled
-            it[KEY_CONFIRM_EXIT] = newSettings.confirmExit
             it[KEY_SEARCH] = newSettings.search
             it[KEY_USERNAME] = newSettings.username
             it[KEY_PASSWORD] = newSettings.password
@@ -48,14 +49,15 @@ class UserSettingsRepository @Inject constructor(
     private fun settingsFromPreferences(prefs: Preferences) = UserSettings(
         lastVersionCode = prefs[KEY_LAST_VERSION_CODE] ?: -1,
         lastVersionName = prefs[KEY_LAST_VERSION_NAME] ?: "0.0",
+        darkMode = prefs[KEY_DARK_MODE] ?: false,
+        autoDarkMode = prefs[KEY_AUTO_DARK_MODE] ?: true,
         tosAccepted = prefs[KEY_TOS_ACCEPTED] ?: false,
         devModeEnabled = prefs[KEY_DEV_MODE_ENABLED] ?: false,
-        confirmExit = prefs[KEY_CONFIRM_EXIT] ?: true,
         search = prefs[KEY_SEARCH] ?: "",
         username = prefs[KEY_USERNAME] ?: "",
         password = prefs[KEY_PASSWORD] ?: "",
         notificationsEnabled = prefs[KEY_NOTIFICATIONS_ENABLED] ?: false,
-        showGradeInNotification = prefs[KEY_SHOW_GRADE_IN_NOTIFICATION] ?: false,
+        showGradeInNotification = prefs[KEY_SHOW_GRADE_IN_NOTIFICATION] ?: true,
         allowMeteredConnection = prefs[KEY_ALLOW_METERED_CONNECTION] ?: true,
         refreshInterval = RefreshInterval.fromMinutes(prefs[KEY_REFRESH_INTERVAL]),
         lastRefresh = zonedDateTimeFromDb(prefs[KEY_LAST_REFRESH]),
@@ -65,9 +67,10 @@ class UserSettingsRepository @Inject constructor(
     private companion object {
         private val KEY_LAST_VERSION_CODE = intPreferencesKey("lastVersionCode")
         private val KEY_LAST_VERSION_NAME = stringPreferencesKey("lastVersionName")
+        private val KEY_DARK_MODE = booleanPreferencesKey("darkMode")
+        private val KEY_AUTO_DARK_MODE = booleanPreferencesKey("autoDarkMode")
         private val KEY_TOS_ACCEPTED = booleanPreferencesKey("tosAccepted")
         private val KEY_DEV_MODE_ENABLED = booleanPreferencesKey("devModeEnabled")
-        private val KEY_CONFIRM_EXIT = booleanPreferencesKey("confirmExit")
         private val KEY_SEARCH = stringPreferencesKey("search")
         private val KEY_USERNAME = stringPreferencesKey("username")
         private val KEY_PASSWORD = stringPreferencesKey("password")
@@ -84,8 +87,10 @@ class UserSettingsRepository @Inject constructor(
 data class UserSettings(
     /** devMode enabled */
     val devModeEnabled: Boolean,
-    /** confirm Exit*/
-    val confirmExit: Boolean,
+    /** Dark Mode enabled */
+    val darkMode: Boolean,
+    /** Auto Dark Mode enabled */
+    val autoDarkMode: Boolean,
     /** Last App-Version-Code */
     val lastVersionCode: Int,
     /** Last App-Version-Name */

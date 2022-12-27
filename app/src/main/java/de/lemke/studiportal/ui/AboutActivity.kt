@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -16,6 +17,7 @@ import com.google.android.play.core.install.model.AppUpdateType
 import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.android.play.core.tasks.Task
 import dagger.hilt.android.AndroidEntryPoint
+import de.lemke.studiportal.BuildConfig
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityAboutBinding
 import de.lemke.studiportal.domain.GetUserSettingsUseCase
@@ -53,7 +55,8 @@ class AboutActivity : AppCompatActivity(), OnClickListener {
         binding.appInfoLayout.status = LOADING
         //status: LOADING NO_UPDATE UPDATE_AVAILABLE NOT_UPDATEABLE NO_CONNECTION
         binding.appInfoLayout.setMainButtonClickListener(this)
-        val version: View = binding.appInfoLayout.findViewById(dev.oneuiproject.oneui.design.R.id.app_info_version)
+        val version: TextView = binding.appInfoLayout.findViewById(dev.oneuiproject.oneui.design.R.id.app_info_version)
+        lifecycleScope. launch { setVersionTextView(version, getUserSettings().devModeEnabled) }
         version.setOnClickListener {
             clicks++
             if (clicks > 5) {
@@ -61,8 +64,8 @@ class AboutActivity : AppCompatActivity(), OnClickListener {
                 lifecycleScope.launch {
                     val newDevModeEnabled = !getUserSettings().devModeEnabled
                     updateUserSettings { it.copy(devModeEnabled = newDevModeEnabled) }
+                    setVersionTextView(version, newDevModeEnabled)
                 }
-                startActivity(Intent().setClass(applicationContext, SplashActivity::class.java))
             }
         }
         binding.aboutBtnOpenInStore.setOnClickListener { openApp(packageName, false) }
@@ -78,6 +81,14 @@ class AboutActivity : AppCompatActivity(), OnClickListener {
             )
         }
         checkUpdate()
+    }
+
+    private fun setVersionTextView(textView: TextView, devModeEnabled: Boolean) {
+        lifecycleScope.launch {
+            textView.text = getString(
+                dev.oneuiproject.oneui.design.R.string.version_info, BuildConfig.VERSION_NAME + if (devModeEnabled) " (dev)" else ""
+            )
+        }
     }
 
     // Checks that the update is not stalled during 'onResume()'.

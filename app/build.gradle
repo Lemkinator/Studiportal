@@ -101,6 +101,8 @@ dependencies {
     implementation 'org.jsoup:jsoup:1.15.3'
     implementation 'com.airbnb.android:lottie:5.2.0'
 
+    implementation 'androidx.core:core-splashscreen:1.0.0'
+    implementation 'androidx.core:core-animation:1.0.0-beta01'
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'com.google.android.play:core-ktx:1.8.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.5.1'

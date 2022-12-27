@@ -37,8 +37,8 @@ class DemoUseCase @Inject constructor(
     }
 
     suspend fun initDemoExams() = withContext(Dispatchers.Default) {
-        updateUserSettings { it.copy(lastRefresh = ZonedDateTime.now()) }
         examsRepository.updateExams(demoExams)
+        updateUserSettings { it.copy(lastRefresh = ZonedDateTime.now()) }
     }
 
     private fun getDemoExamName(name: String) = "Demo $name ${UUID.randomUUID()}"

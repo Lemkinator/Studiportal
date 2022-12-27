@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
@@ -6,16 +6,28 @@
     android:viewportHeight="108">
 
     <group
-        android:name="main"
+        android:name="squircle"
+        android:pivotX="58"
+        android:pivotY="58"
+        android:scaleX="0.54"
+        android:scaleY="0.54">
+
+        <path
+            android:fillColor="@color/primary_color"
+            android:pathData="M99,50C99,6.935,77.063,1,50,1 C22.935,1,1,6.935,1,50c0,43.063,21.935,49,49,49C77.063,99,99,93.063,99,50z" />
+
+    </group>
+
+    <group
+        android:name="foreground"
         android:pivotX="0"
         android:pivotY="0"
         android:rotation="0"
-        android:scaleX="0.054"
-        android:scaleY="-0.054"
-        android:translateX="-38"
-        android:translateY="76">
+        android:scaleX="0.039"
+        android:scaleY="-0.039"
+        android:translateX="-13"
+        android:translateY="73">
         <group
-            android:name="main1"
             android:pivotX="1703.5"
             android:pivotY="533.5"
             android:rotation="0"
@@ -28,7 +40,6 @@
                 android:pathData="m 1602.8,533.469 c 0,-55.746 45.18,-100.918 100.9,-100.918 55.76,0 100.94,45.172 100.94,100.918 0,55.73 -45.18,100.894 -100.94,100.894 -55.72,0 -100.9,-45.164 -100.9,-100.894 z" />
         </group>
         <group
-            android:name="main2"
             android:pivotX="1703.5"
             android:pivotY="533.5"
             android:rotation="0"
@@ -41,7 +52,6 @@
                 android:pathData="M 2165.93,266.941 C 2073.7,107.383 1901.24,0 1703.7,0 1506.63,0 1334.54,106.863 1242.16,265.809 l 87.34,50.664 c 74.88,-128.883 214.44,-215.516 374.2,-215.516 160.2,0 300,87.031 374.77,216.434 l 87.46,-50.45 z" />
         </group>
         <group
-            android:name="main3"
             android:pivotX="1703.5"
             android:pivotY="533.5"
             android:rotation="0"
@@ -54,7 +64,6 @@
                 android:pathData="m 2079.85,633.965 c 8.56,-32.051 13.11,-65.762 13.11,-100.496 0,-214.985 -174.26,-389.25 -389.26,-389.25 -107.52,0 -204.88,43.594 -275.33,114.09 l 71.39,71.339 c 52.16,-52.187 124.29,-84.503 203.94,-84.503 159.28,0 288.32,129.074 288.32,288.324 0,25.73 -3.36,50.711 -9.71,74.461 l 97.54,26.035 z" />
         </group>
         <group
-            android:name="main4"
             android:pivotX="1703.5"
             android:pivotY="533.5"
             android:rotation="0"

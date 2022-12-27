@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="108dp"
+            android:height="108dp"
+            android:viewportWidth="108"
+            android:viewportHeight="108">
+
+            <group
+                android:name="squircle"
+                android:pivotX="58"
+                android:pivotY="58"
+                android:scaleX="0.54"
+                android:scaleY="0.54">
+
+                <path
+                    android:fillColor="@color/primary_color"
+                    android:pathData="M99,50C99,6.935,77.063,1,50,1 C22.935,1,1,6.935,1,50c0,43.063,21.935,49,49,49C77.063,99,99,93.063,99,50z" />
+
+            </group>
+
+            <group
+                android:name="foreground"
+                android:pivotX="0"
+                android:pivotY="0"
+                android:rotation="0"
+                android:scaleX="0.039"
+                android:scaleY="-0.039"
+                android:translateX="-13"
+                android:translateY="73">
+                <group
+                    android:name="main1"
+                    android:pivotX="1703.5"
+                    android:pivotY="533.5"
+                    android:rotation="0"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:translateX="0"
+                    android:translateY="0">
+                    <path
+                        android:fillColor="#ffffff"
+                        android:pathData="m 1602.8,533.469 c 0,-55.746 45.18,-100.918 100.9,-100.918 55.76,0 100.94,45.172 100.94,100.918 0,55.73 -45.18,100.894 -100.94,100.894 -55.72,0 -100.9,-45.164 -100.9,-100.894 z" />
+                </group>
+                <group
+                    android:name="main4"
+                    android:pivotX="1703.5"
+                    android:pivotY="533.5"
+                    android:rotation="0"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:translateX="0"
+                    android:translateY="0">
+                    <path
+                        android:fillColor="#ffffff"
+                        android:pathData="M 2165.93,266.941 C 2073.7,107.383 1901.24,0 1703.7,0 1506.63,0 1334.54,106.863 1242.16,265.809 l 87.34,50.664 c 74.88,-128.883 214.44,-215.516 374.2,-215.516 160.2,0 300,87.031 374.77,216.434 l 87.46,-50.45 z" />
+                </group>
+                <group
+                    android:name="main3"
+                    android:pivotX="1703.5"
+                    android:pivotY="533.5"
+                    android:rotation="0"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:translateX="0"
+                    android:translateY="0">
+                    <path
+                        android:fillColor="#ffffff"
+                        android:pathData="m 2079.85,633.965 c 8.56,-32.051 13.11,-65.762 13.11,-100.496 0,-214.985 -174.26,-389.25 -389.26,-389.25 -107.52,0 -204.88,43.594 -275.33,114.09 l 71.39,71.339 c 52.16,-52.187 124.29,-84.503 203.94,-84.503 159.28,0 288.32,129.074 288.32,288.324 0,25.73 -3.36,50.711 -9.71,74.461 l 97.54,26.035 z" />
+                </group>
+                <group
+                    android:name="main2"
+                    android:pivotX="1703.5"
+                    android:pivotY="533.5"
+                    android:rotation="0"
+                    android:scaleX="1"
+                    android:scaleY="1"
+                    android:translateX="0"
+                    android:translateY="0">
+                    <path
+                        android:fillColor="#ffffff"
+                        android:pathData="m 1767.72,770.078 c 104.3,-28.164 181.08,-123.406 181.08,-236.609 0,-135.332 -109.73,-245.078 -245.1,-245.078 -21.89,0 -43.1,2.886 -63.32,8.269 l 26.08,97.528 c 11.87,-3.153 24.35,-4.852 37.24,-4.852 79.63,0 144.14,64.531 144.14,144.133 0,66.59 -45.13,122.594 -106.48,139.168 l 26.36,97.441 z" />
+                </group>
+            </group>
+        </vector>
+    </aapt:attr>
+
+    <target android:name="main2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="600"
+                android:startOffset="200"
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="360" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main3">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="600"
+                android:startOffset="200"
+                android:propertyName="rotation"
+                android:valueFrom="360"
+                android:valueTo="0" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main4">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="600"
+                android:startOffset="200"
+                android:propertyName="rotation"
+                android:valueFrom="0"
+                android:valueTo="360" />
+        </aapt:attr>
+    </target>
+
+
+
+    <target android:name="main2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:startOffset="0"
+                android:propertyName="scaleX"
+                android:valueFrom="2"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main3">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:startOffset="0"
+                android:propertyName="scaleX"
+                android:valueFrom="2"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main4">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:startOffset="0"
+                android:propertyName="scaleX"
+                android:valueFrom="2"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:startOffset="0"
+                android:propertyName="scaleY"
+                android:valueFrom="2"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main3">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:startOffset="0"
+                android:propertyName="scaleY"
+                android:valueFrom="2"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main4">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:startOffset="0"
+                android:propertyName="scaleY"
+                android:valueFrom="2"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+</animated-vector>

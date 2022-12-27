@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -48,18 +49,20 @@ class NotificationIntroActivity : AppCompatActivity() {
     }
 
     private fun initOnBackPressed() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            onBackInvokedDispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT) {
+                if (System.currentTimeMillis() - time < 3000) finishAffinity()
+                else {
+                    Toast.makeText(this@NotificationIntroActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
+                    time = System.currentTimeMillis()
+                }
+            }
+        else onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                lifecycleScope.launch {
-                    if (System.currentTimeMillis() - time < 3000) finishAffinity()
-                    else {
-                        Toast.makeText(
-                            this@NotificationIntroActivity,
-                            resources.getString(R.string.press_again_to_exit),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        time = System.currentTimeMillis()
-                    }
+                if (System.currentTimeMillis() - time < 3000) finishAffinity()
+                else {
+                    Toast.makeText(this@NotificationIntroActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
+                    time = System.currentTimeMillis()
                 }
             }
         })

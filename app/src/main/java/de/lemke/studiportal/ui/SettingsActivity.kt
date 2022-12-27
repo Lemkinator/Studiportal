@@ -18,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.appcompat.util.SeslMisc
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
@@ -59,7 +58,6 @@ class SettingsActivity : AppCompatActivity() {
         private lateinit var settingsActivity: SettingsActivity
         private lateinit var darkModePref: HorizontalRadioPreference
         private lateinit var autoDarkModePref: SwitchPreferenceCompat
-        private lateinit var confirmExitPref: SwitchPreferenceCompat
         private lateinit var notifyAboutChangePref: SwitchPreferenceCompat
         private lateinit var showGradeInNotificationPref: SwitchPreferenceCompat
         private lateinit var useMeteredNetworkPref: SwitchPreferenceCompat
@@ -95,17 +93,25 @@ class SettingsActivity : AppCompatActivity() {
             initPreferences()
         }
 
-        @SuppressLint("RestrictedApi", "UnspecifiedImmutableFlag")
         private fun initPreferences() {
-            val darkMode = AppCompatDelegate.getDefaultNightMode()
+            AppCompatDelegate.getDefaultNightMode()
             darkModePref = findPreference("dark_mode_pref")!!
             autoDarkModePref = findPreference("dark_mode_auto_pref")!!
-            confirmExitPref = findPreference("confirm_exit_pref")!!
             notifyAboutChangePref = findPreference("notify_about_change_pref")!!
             showGradeInNotificationPref = findPreference("show_grade_in_notification_pref")!!
             useMeteredNetworkPref = findPreference("use_metered_network_pref")!!
             logoutPref = findPreference("logout_pref")!!
             refreshIntervalPref = findPreference("refresh_interval_pref")!!
+
+            autoDarkModePref.onPreferenceChangeListener = this
+            darkModePref.onPreferenceChangeListener = this
+            darkModePref.setDividerEnabled(false)
+            darkModePref.setTouchEffectEnabled(false)
+            notifyAboutChangePref.onPreferenceChangeListener = this
+            showGradeInNotificationPref.onPreferenceChangeListener = this
+            useMeteredNetworkPref.onPreferenceChangeListener = this
+            refreshIntervalPref.onPreferenceChangeListener = this
+
             logoutPref.onPreferenceClickListener = OnPreferenceClickListener {
                 val dialog = AlertDialog.Builder(settingsActivity)
                     .setTitle(getString(R.string.logout))
@@ -119,6 +125,7 @@ class SettingsActivity : AppCompatActivity() {
                         updateUserSettings { it.copy(username = "", password = "", allowMeteredConnection = true) }
                         deleteExams()
                         setWorkManager.cancelStudiportalWork()
+                        MainActivity.refreshView = true
                         startActivity(Intent(settingsActivity, LoginActivity::class.java))
                         settingsActivity.finish()
                     }
@@ -127,24 +134,12 @@ class SettingsActivity : AppCompatActivity() {
             }
             lifecycleScope.launch {
                 val userSettings = getUserSettings()
+                autoDarkModePref.isChecked = userSettings.autoDarkMode
+                darkModePref.isEnabled = !autoDarkModePref.isChecked
+                darkModePref.value = if (userSettings.darkMode) "1" else "0"
                 logoutPref.summary = userSettings.username
                 setRefreshIntervalPrefSummary(userSettings.refreshInterval, userSettings.lastRefresh)
             }
-            autoDarkModePref.onPreferenceChangeListener = this
-            autoDarkModePref.isChecked = darkMode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM ||
-                    darkMode == AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY ||
-                    darkMode == AppCompatDelegate.MODE_NIGHT_UNSPECIFIED
-            darkModePref.onPreferenceChangeListener = this
-            darkModePref.setDividerEnabled(false)
-            darkModePref.setTouchEffectEnabled(false)
-            darkModePref.isEnabled = !autoDarkModePref.isChecked
-            darkModePref.value = if (SeslMisc.isLightTheme(settingsActivity)) "0" else "1"
-
-            confirmExitPref.onPreferenceChangeListener = this
-            notifyAboutChangePref.onPreferenceChangeListener = this
-            showGradeInNotificationPref.onPreferenceChangeListener = this
-            useMeteredNetworkPref.onPreferenceChangeListener = this
-            refreshIntervalPref.onPreferenceChangeListener = this
 
             findPreference<PreferenceScreen>("privacy_pref")!!.onPreferenceClickListener = OnPreferenceClickListener {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.privacy_website))))
@@ -215,7 +210,6 @@ class SettingsActivity : AppCompatActivity() {
             super.onStart()
             lifecycleScope.launch {
                 val userSettings = getUserSettings()
-                confirmExitPref.isChecked = userSettings.confirmExit
                 notifyAboutChangePref.isChecked =
                     userSettings.notificationsEnabled && areNotificationsEnabled(getString(R.string.exam_notification_channel_id))
                 showGradeInNotificationPref.isChecked = userSettings.showGradeInNotification
@@ -225,29 +219,38 @@ class SettingsActivity : AppCompatActivity() {
             setRelatedCardView()
         }
 
+        override fun onResume() {
+            super.onResume()
+            lifecycleScope.launch {
+                findPreference<PreferenceCategory>("dev_options")?.isVisible = getUserSettings().devModeEnabled
+            }
+        }
+
         @SuppressLint("WrongConstant", "RestrictedApi")
         @Suppress("UNCHECKED_CAST")
         override fun onPreferenceChange(preference: Preference, newValue: Any): Boolean {
             when (preference.key) {
                 "dark_mode_pref" -> {
+                    val darkMode = newValue as String == "1"
                     AppCompatDelegate.setDefaultNightMode(
-                        if (newValue == "0") AppCompatDelegate.MODE_NIGHT_NO else AppCompatDelegate.MODE_NIGHT_YES
+                        if (darkMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO
                     )
-                    return true
-                }
-                "dark_mode_auto_pref" -> {
-                    if (newValue as Boolean) {
-                        darkModePref.isEnabled = false
-                        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
-                    } else {
-                        darkModePref.isEnabled = true
-                        if (SeslMisc.isLightTheme(settingsActivity)) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                        else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                    lifecycleScope.launch {
+                        updateUserSettings { it.copy(darkMode = darkMode) }
                     }
                     return true
                 }
-                "confirm_exit_pref" -> {
-                    lifecycleScope.launch { updateUserSettings { it.copy(confirmExit = newValue as Boolean) } }
+                "dark_mode_auto_pref" -> {
+                    val autoDarkMode = newValue as Boolean
+                    darkModePref.isEnabled = !autoDarkMode
+                    lifecycleScope.launch {
+                        if (autoDarkMode) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                        else {
+                            if (getUserSettings().darkMode) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                            else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                        }
+                        updateUserSettings { it.copy(autoDarkMode = newValue) }
+                    }
                     return true
                 }
                 "notify_about_change_pref" -> {
