@@ -1,6 +1,7 @@
 package de.lemke.studiportal.ui
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
@@ -164,7 +165,8 @@ class LoginActivity : AppCompatActivity() {
 
     private suspend fun openNextActivity() {
         setWorkManager()
-        MainActivity.refreshView = true
+        startActivity(Intent(this, MainActivity::class.java))
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         finish()
     }
 }

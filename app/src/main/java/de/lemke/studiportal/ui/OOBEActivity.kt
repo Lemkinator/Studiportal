@@ -139,6 +139,7 @@ class OOBEActivity : AppCompatActivity() {
     private suspend fun openNextActivity() {
         updateUserSettings { it.copy(tosAccepted = true) }
         startActivity(Intent(this, NotificationIntroActivity::class.java))
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         finish()
     }
 }

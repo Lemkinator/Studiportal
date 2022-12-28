@@ -7,8 +7,6 @@
         <!--item name="android:windowSplashScreenIconBackgroundColor">@color/oui_background_color</item-->
         <item name="android:windowSplashScreenBrandingImage">@drawable/ic_branding</item>
         <item name="android:windowSplashScreenBehavior" tools:targetApi="tiramisu">icon_preferred</item>
-
-        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_splash</item>
         <item name="postSplashScreenTheme">@style/Theme.Studiportal</item>
     </style>
 </resources>

@@ -125,7 +125,6 @@ class SettingsActivity : AppCompatActivity() {
                         updateUserSettings { it.copy(username = "", password = "", allowMeteredConnection = true) }
                         deleteExams()
                         setWorkManager.cancelStudiportalWork()
-                        MainActivity.refreshView = true
                         startActivity(Intent(settingsActivity, LoginActivity::class.java))
                         settingsActivity.finish()
                     }

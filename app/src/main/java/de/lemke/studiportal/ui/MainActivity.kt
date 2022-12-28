@@ -1,7 +1,5 @@
 package de.lemke.studiportal.ui
 
-import android.animation.ObjectAnimator
-import android.animation.PropertyValuesHolder
 import android.annotation.SuppressLint
 import android.app.SearchManager
 import android.content.Intent
@@ -10,7 +8,6 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.*
-import android.view.animation.AccelerateDecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -21,7 +18,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
-import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +34,7 @@ import de.lemke.studiportal.domain.utils.ItemDecoration
 import dev.oneuiproject.oneui.layout.ToolbarLayout
 import dev.oneuiproject.oneui.utils.internal.ReflectUtils
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -47,9 +44,6 @@ import kotlin.math.abs
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
-    companion object {
-        var refreshView = false
-    }
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var onBackInvokedCallback: OnBackInvokedCallback
@@ -95,7 +89,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         You have to kill it and open the app from the launcher.
         */
         val splashScreen = installSplashScreen()
+        time = System.currentTimeMillis()
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         splashScreen.setKeepOnScreenCondition { !isUIReady }
+        /*
+        there is a bug in the new splash screen api, when using the onExitAnimationListener -> splash icon flickers
+        therefore setting a manual delay in openMain()
         splashScreen.setOnExitAnimationListener { splash ->
             val splashAnimator: ObjectAnimator = ObjectAnimator.ofPropertyValuesHolder(
                 splash.view,
@@ -114,22 +115,16 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             )
             contentAnimator.interpolator = AccelerateDecelerateInterpolator()
             contentAnimator.duration = 400L
-            contentAnimator.doOnEnd { splash.remove() }
-            splashAnimator.start()
-            contentAnimator.start()
 
+            val remainingDuration = splash.iconAnimationDurationMillis - (System.currentTimeMillis() - splash.iconAnimationStartMillis)
+                .coerceAtLeast(0L)
+            lifecycleScope.launch {
+                delay(remainingDuration)
+                splashAnimator.start()
+                contentAnimator.start()
+            }
+        }*/
 
-            /*
-            // Get the duration of the animated vector drawable.
-            val animationDuration = splash.iconAnimationDurationMillis
-            // Get the start time of the animation.
-            val animationStart = splash.iconAnimationStartMillis
-            // Calculate the remaining duration of the animation.
-            val remainingDuration = animationDuration - (System.currentTimeMillis() - animationStart).coerceAtLeast(0L)
-            */
-        }
-
-        super.onCreate(savedInstanceState)
         lifecycleScope.launch {
             when (checkAppStart()) {
                 AppStart.FIRST_TIME -> openOOBE()
@@ -139,33 +134,40 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
-    private fun openOOBE() {
+    private suspend fun openOOBE() {
+        //manually waiting for the animation to finish :/
+        delay(700 - (System.currentTimeMillis() - time).coerceAtLeast(0L))
         startActivity(Intent(applicationContext, OOBEActivity::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        openMain()
+        finish()
     }
 
-    private fun checkTOS(userSettings: UserSettings) {
+    private suspend fun checkTOS(userSettings: UserSettings) {
         if (!userSettings.tosAccepted) openOOBE()
         else checkLogin(userSettings)
     }
 
-    private fun checkLogin(userSettings: UserSettings) {
-        if (userSettings.username.isBlank()) startActivity(Intent(applicationContext, LoginActivity::class.java))
-        openMain()
+    private suspend fun checkLogin(userSettings: UserSettings) {
+        if (userSettings.username.isBlank()) {
+            //manually waiting for the animation to finish :/
+            delay(700 - (System.currentTimeMillis() - time).coerceAtLeast(0L))
+            startActivity(Intent(applicationContext, LoginActivity::class.java))
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            finish()
+        }
+        else openMain()
     }
 
     private fun openMain() {
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        isUIReady = true
-        time = System.currentTimeMillis()
         lifecycleScope.launch {
             initOnBackPressed()
             initDrawer()
             initList()
+            binding.swipeRefreshLayout.setOnRefreshListener { lifecycleScope.launch { refresh() } }
+            //manually waiting for the animation to finish :/
+            delay(700 - (System.currentTimeMillis() - time).coerceAtLeast(0L))
+            isUIReady = true
         }
-        binding.swipeRefreshLayout.setOnRefreshListener { lifecycleScope.launch { refresh() } }
     }
 
     private fun initOnBackPressed() {
@@ -195,14 +197,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             intent.getStringExtra(SearchManager.QUERY),
             true
         )
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (refreshView) {
-            refreshView = false
-            recreate()
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
