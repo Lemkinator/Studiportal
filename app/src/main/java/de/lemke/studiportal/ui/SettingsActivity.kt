@@ -64,7 +64,6 @@ class SettingsActivity : AppCompatActivity() {
         private lateinit var logoutPref: PreferenceScreen
         private lateinit var refreshIntervalPref: DropDownPreference
         private var relatedCard: PreferenceRelatedCard? = null
-        private var lastTimeVersionClicked: Long = 0
 
         @Inject
         lateinit var getUserSettings: GetUserSettingsUseCase
@@ -89,7 +88,6 @@ class SettingsActivity : AppCompatActivity() {
 
         override fun onCreate(bundle: Bundle?) {
             super.onCreate(bundle)
-            lastTimeVersionClicked = System.currentTimeMillis()
             initPreferences()
         }
 
