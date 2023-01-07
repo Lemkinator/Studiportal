@@ -15,9 +15,9 @@
 
     <style name="ButtonStyle.Colored" parent="OneUI.ButtonStyleColored">
         <item name="android:backgroundTint">@color/primary_color_themed</item>
-        <!--item name="android:textColor">@color/oui_round_and_bgcolor</item>
+        <item name="android:textColor">@color/oui_round_and_bgcolor</item>
         <item name="android:drawableTint">@color/oui_round_and_bgcolor</item>
-        <item name="tint">@color/oui_round_and_bgcolor</item-->
+        <item name="tint">@color/oui_round_and_bgcolor</item>
     </style>
 
     <style name="ButtonStyle.Transparent" parent="OneUI.ButtonStyleTransparent">
