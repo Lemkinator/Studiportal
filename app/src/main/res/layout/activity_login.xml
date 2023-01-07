@@ -50,7 +50,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/demo_username_label"
-                    android:textColor="@color/oui_secondary_text_color"
+                    android:textColor="@color/secondary_text_icon_color"
                     android:layout_margin="7dp"
                     android:textSize="11sp"
                     />

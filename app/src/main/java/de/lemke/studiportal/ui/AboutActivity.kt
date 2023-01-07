@@ -2,9 +2,10 @@ package de.lemke.studiportal.ui
 
 import android.content.Intent
 import android.content.IntentSender.SendIntentException
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -28,7 +29,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class AboutActivity : AppCompatActivity(), OnClickListener {
+class AboutActivity : AppCompatActivity() {
     private lateinit var binding: ActivityAboutBinding
     private lateinit var appUpdateManager: AppUpdateManager
     private lateinit var appUpdateInfo: AppUpdateInfo
@@ -48,13 +49,20 @@ class AboutActivity : AppCompatActivity(), OnClickListener {
         super.onCreate(savedInstanceState)
         binding = ActivityAboutBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         appUpdateManager = AppUpdateManagerFactory.create(this)
         binding.appInfoLayout.addOptionalText(getString(R.string.about_page_optional_text))
-        binding.appInfoLayout.isExpandable = true
         binding.appInfoLayout.status = LOADING
         //status: LOADING NO_UPDATE UPDATE_AVAILABLE NOT_UPDATEABLE NO_CONNECTION
-        binding.appInfoLayout.setMainButtonClickListener(this)
+        binding.appInfoLayout.setMainButtonClickListener(object : OnClickListener {
+            override fun onUpdateClicked(v: View?) {
+                startUpdateFlow()
+            }
+
+            override fun onRetryClicked(v: View?) {
+                binding.appInfoLayout.status = LOADING
+                checkUpdate()
+            }
+        })
         val version: TextView = binding.appInfoLayout.findViewById(dev.oneuiproject.oneui.design.R.id.app_info_version)
         lifecycleScope. launch { setVersionTextView(version, getUserSettings().devModeEnabled) }
         version.setOnClickListener {
@@ -73,12 +81,7 @@ class AboutActivity : AppCompatActivity(), OnClickListener {
             startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.oneui_github_link))))
         }
         binding.aboutBtnAboutMe.setOnClickListener {
-            startActivity(
-                Intent(
-                    this@AboutActivity,
-                    AboutMeActivity::class.java
-                )
-            )
+            startActivity(Intent(this@AboutActivity, AboutMeActivity::class.java))
         }
         checkUpdate()
     }
@@ -105,45 +108,31 @@ class AboutActivity : AppCompatActivity(), OnClickListener {
             }
     }
 
-    override fun onUpdateClicked(v: View?) {
-        startUpdateFlow()
-    }
-
-    override fun onRetryClicked(v: View?) {
-        binding.appInfoLayout.status = LOADING
-        checkUpdate()
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == UPDATEREQUESTCODE) {
-            if (resultCode != RESULT_OK) {
-                Log.e("Update: ", "Update flow failed! Result code: $resultCode")
-                Toast.makeText(this@AboutActivity, "Fehler beim Update-Prozess: $resultCode", Toast.LENGTH_LONG).show()
-                binding.appInfoLayout.status = NO_CONNECTION
-            }
-        }
-    }
-
     private fun checkUpdate() {
+        val connectivityManager = getSystemService(ConnectivityManager::class.java)
+        val caps = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (caps == null || !caps.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+            binding.appInfoLayout.status = NO_CONNECTION
+            return
+        }
+
         // Returns an intent object that you use to check for an update.
         appUpdateInfoTask = appUpdateManager.appUpdateInfo
         // Checks that the platform will allow the specified type of update.
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
-                //&& appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)) {
+        appUpdateInfoTask
+            .addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
                 this.appUpdateInfo = appUpdateInfo
-                binding.appInfoLayout.status = UPDATE_AVAILABLE
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                    binding.appInfoLayout.status = UPDATE_AVAILABLE
+                }
+                if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
+                    binding.appInfoLayout.status = NO_UPDATE
+                }
             }
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_NOT_AVAILABLE) {
-                this.appUpdateInfo = appUpdateInfo
-                binding.appInfoLayout.status = NO_UPDATE
+            .addOnFailureListener { appUpdateInfo: Exception ->
+                Toast.makeText(this@AboutActivity, appUpdateInfo.message, Toast.LENGTH_LONG).show()
+                binding.appInfoLayout.status = NOT_UPDATEABLE
             }
-        }
-        appUpdateInfoTask.addOnFailureListener { appUpdateInfo: Exception ->
-            Toast.makeText(this@AboutActivity, appUpdateInfo.message, Toast.LENGTH_LONG).show()
-            binding.appInfoLayout.status = NO_CONNECTION
-        }
     }
 
     private fun startUpdateFlow() {
