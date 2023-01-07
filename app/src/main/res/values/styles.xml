@@ -24,9 +24,9 @@
 
     <style name="ButtonStyle.Transparent" parent="OneUI.ButtonStyleTransparent">
         <item name="android:backgroundTint">@android:color/transparent</item>
-        <item name="android:textColor">@color/oui_primary_text_color</item>
-        <item name="android:drawableTint">@color/oui_primary_icon_color</item>
-        <item name="tint">@color/oui_primary_icon_color</item>
+        <item name="android:textColor">@color/primary_color</item>
+        <item name="android:drawableTint">@color/primary_color</item>
+        <item name="tint">@color/primary_color</item>
     </style>
 
     <style name="ButtonStyle.Filled" parent="Widget.AppCompat.Button">
