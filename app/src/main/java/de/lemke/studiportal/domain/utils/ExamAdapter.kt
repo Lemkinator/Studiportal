@@ -44,7 +44,7 @@ class ExamAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         if (holder.isItem) {
             val exam = exams[position].first!!
-            val color = MaterialColors.getColor(context, androidx.appcompat.R.attr.colorPrimary, context.getColor(R.color.primary_color))
+            val color = MaterialColors.getColor(context, androidx.appcompat.R.attr.colorPrimary, context.getColor(R.color.primary_color_themed))
             holder.listItemTitle.text = makeSectionOfTextBold(exam.name, search, color, -1)
             holder.listItemSubtitle1.text = makeSectionOfTextBold(exam.getSubtitle1(context), search, color, -1)
             val subtitle2 = exam.getSubtitle2(context)
