@@ -119,6 +119,8 @@ data class Exam(
     val isSeparator: Boolean
         get() = examNumber == "separator"
 
+    private fun getEcts(context: Context): String = if (ects == UNDEFINED) "" else context.getString(R.string.ects_value, ects)
+
     fun getSubtitle1(context: Context, showGrade: Boolean = true): String = when (val kind = kind.uppercase()) {
         "KO" -> {
             when {
@@ -130,18 +132,13 @@ data class Exam(
         "PL", "SL", "P", "G" -> {
             when {
                 isResignated -> context.getString(R.string.state_value, context.getString(R.string.resignated))
-                state == State.AN || kind == "SL" -> context.getString(
-                    R.string.state_value,
-                    state.getLocalString(context) + context.getString(R.string.ects_value, ects)
-                )
-                showGrade -> context.getString(R.string.grade_value, grade + context.getString(R.string.ects_value, ects))
-                else -> context.getString(
-                    R.string.state_value,
-                    state.getLocalString(context) + context.getString(R.string.ects_value, ects)
-                )
+                state == State.AN || kind == "SL" -> context.getString(R.string.state_value, state.getLocalString(context)) +
+                        getEcts(context)
+                showGrade -> context.getString(R.string.grade_value, grade) + getEcts(context)
+                else -> context.getString(R.string.state_value, state.getLocalString(context)) + getEcts(context)
             }
         }
-        else -> context.getString(R.string.state_value, state.getLocalString(context) + context.getString(R.string.ects_value, ects))
+        else -> context.getString(R.string.state_value, state.getLocalString(context)) + getEcts(context)
     }
 
     fun getSubtitle2(context: Context): String = when (val kind = kind.uppercase()) {
