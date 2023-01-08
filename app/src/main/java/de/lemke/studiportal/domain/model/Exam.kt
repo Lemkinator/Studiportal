@@ -144,8 +144,8 @@ data class Exam(
         else -> context.getString(R.string.state_value, state.getLocalString(context) + context.getString(R.string.ects_value, ects))
     }
 
-    fun getSubtitle2(context: Context): String? = when (val kind = kind.uppercase()) {
-        "KO" -> null
+    fun getSubtitle2(context: Context): String = when (val kind = kind.uppercase()) {
+        "KO" -> ""
         "PL", "SL", "P", "G" -> {
             when {
                 isResignated -> context.getString(R.string.note_value, note.getLocalString(context) + " (" + semester + ")")

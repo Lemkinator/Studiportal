@@ -48,7 +48,7 @@ class ExamAdapter(
             holder.listItemTitle.text = makeSectionOfTextBold(exam.name, search, color, -1)
             holder.listItemSubtitle1.text = makeSectionOfTextBold(exam.getSubtitle1(context), search, color, -1)
             val subtitle2 = exam.getSubtitle2(context)
-            if (subtitle2 != null) {
+            if (subtitle2.isNotBlank()) {
                 holder.listItemSubtitle2.text = makeSectionOfTextBold(subtitle2, search, color, -1)
                 holder.listItemSubtitle2.visibility = View.VISIBLE
             } else holder.listItemSubtitle2.visibility = View.GONE

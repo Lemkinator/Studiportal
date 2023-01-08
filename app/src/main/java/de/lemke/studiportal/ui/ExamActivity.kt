@@ -63,7 +63,7 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
                 shareIntent.putExtra(Intent.EXTRA_TEXT, exam.name + "\n" +
-                        exam.getSubtitle1(this) + "\n" + exam.getSubtitle2(this))
+                        exam.getSubtitle1(this) + "\n" + (exam.getSubtitle2(this)))
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
                 return true
             }

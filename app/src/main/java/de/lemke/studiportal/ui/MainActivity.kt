@@ -6,7 +6,6 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
@@ -423,14 +422,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun initRecycler(search: String?) {
         if (exams.isEmpty()) {
-            Log.d("MainActivityExamFragment", "initList: no exams")
             binding.examList.visibility = View.GONE
             binding.examListLottie.cancelAnimation()
             binding.examListLottie.progress = 0f
             binding.examNoEntryScrollView.visibility = View.VISIBLE
             binding.examListLottie.postDelayed({ binding.examListLottie.playAnimation() }, 400)
         } else {
-            Log.d("MainActivityExamFragment", "initList: ${exams.size} exams")
             binding.examNoEntryScrollView.visibility = View.GONE
             binding.examList.visibility = View.VISIBLE
         }
