@@ -123,7 +123,7 @@ class SettingsActivity : AppCompatActivity() {
                         updateUserSettings { it.copy(username = "", password = "", allowMeteredConnection = true) }
                         deleteExams()
                         setWorkManager.cancelStudiportalWork()
-                        settingsActivity.finishAndRemoveTask()
+                        settingsActivity.finishAffinity()
                         startActivity(Intent(settingsActivity, LoginActivity::class.java))
                     }
                 }

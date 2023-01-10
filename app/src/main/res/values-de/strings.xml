@@ -167,7 +167,7 @@
     <string name="password">Passwort</string>
     <string name="login">Einloggen</string>
     <string name="username_or_password_empty">Benutzername oder Passwort leer.</string>
-    <string name="wrong_username_or_password_message">Der Benutzer oder das Passwort scheint ungültig zu sein.\n\nWenn du sicher bist das alles stimmt probiere es in ein paar Minuten nochmal, leider spinnt das Studiportal gelegentlich…</string>
+    <string name="wrong_username_or_password_message">Der Benutzer oder das Passwort scheint ungültig zu sein.\n\nWenn du sicher bist das alles stimmt probiere es in ein paar Minuten nochmal…</string>
     <string name="error_login">Fehler beim Login: %1$s</string>
     <string name="studi_portal_login_failed_message">Anmeldung fehlgeschlagen</string>
     <string name="error_asi">Fehler beim Abrufen des ASI: %1$s</string>
