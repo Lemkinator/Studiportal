@@ -168,6 +168,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             isUIReady = true
         }
     }
+    override fun onPause() {
+        super.onPause()
+        binding.drawerLayoutMain.setDrawerOpen(false, true)
+    }
 
     private fun initOnBackPressed() {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
