@@ -45,6 +45,7 @@ import kotlin.math.abs
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var onBackInvokedCallback: OnBackInvokedCallback
     private lateinit var exams: MutableList<Pair<Exam?, String>>
     private var isSearchUserInputEnabled = false
@@ -153,8 +154,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             startActivity(Intent(applicationContext, LoginActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             finish()
-        }
-        else openMain()
+        } else openMain()
     }
 
     private fun openMain() {
@@ -168,18 +168,20 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             isUIReady = true
         }
     }
+
     override fun onPause() {
         super.onPause()
         binding.drawerLayoutMain.setDrawerOpen(false, true)
     }
 
     private fun initOnBackPressed() {
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+        //set custom callback to prevent app from exiting on back press when in search mode
+        onBackPressedCallback = object : OnBackPressedCallback(false) {
             override fun handleOnBackPressed() {
                 checkBackPressed()
             }
-        })
-        //set custom onBackInvoked callback to prevent app from exiting on back press when in search mode
+        }
+        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             onBackInvokedCallback = OnBackInvokedCallback { checkBackPressed() }
         }
@@ -189,8 +191,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         if (binding.drawerLayoutMain.isSearchMode) {
             isSearchUserInputEnabled = false
             binding.drawerLayoutMain.dismissSearchMode()
-        }
-        else finishAffinity()
+        } else finishAffinity()
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -248,6 +249,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         override fun onSearchModeToggle(searchView: SearchView, visible: Boolean) {
             lifecycleScope.launch {
                 if (visible) {
+                    onBackPressedCallback.isEnabled = true
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         onBackInvokedDispatcher.registerOnBackInvokedCallback(
                             OnBackInvokedDispatcher.PRIORITY_DEFAULT,
@@ -262,6 +264,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
                     setSearchList(search)
                 } else {
+                    onBackPressedCallback.isEnabled = false
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         onBackInvokedDispatcher.unregisterOnBackInvokedCallback(onBackInvokedCallback)
                     }
