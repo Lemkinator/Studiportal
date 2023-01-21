@@ -9,7 +9,7 @@
 [![](https://img.shields.io/tokei/lines/github/Lemkinator/Studiportal)](https://github.com/Lemkinator/Studiportal)
 
 
-<img loading="lazy" src="img/Studiportal_squircle.png" height="200"/>
+<img src="img/Studiportal_squircle.png" height="150"/>
 
 <a target="_blank" 
        href='https://play.google.com/store/apps/details?id=de.lemke.studiportal&pcampaignid=pcampaignidMKT-Other-global-all-co-prtnr-py-PartBadge-Mar2515-1'>
@@ -27,7 +27,7 @@ The new Studiportal app with OneUI-Design
   <img loading="lazy" src="img/mobile3.png" height="350"/>
   <img loading="lazy" src="img/mobile4.png" height="350"/>
 
-## More Information: <a target="_blank" href='https://www.leonard-lemke.com/apps/studiportal'> leonard-lemke.com </a>
+## More Information: <a target="_blank" href='https://www.leonard-lemke.com/apps/studiportal'>www.leonard-lemke.com </a>
 
   <br>  
 
