@@ -1,7 +1,7 @@
 <div align="center">
 
 [![](https://img.shields.io/website?down_color=red&down_message=offline&up_color=blue&up_message=online&url=https%3A%2F%2Fwww.leonard-lemke.com)](https://www.leonard-lemke.com/rr)
-[![](https://img.shields.io/github/last-commit/Lemkinator/Studiportal)](https://github.com/Lemkinator/Studiportal/commits/master)
+[![](https://img.shields.io/github/last-commit/Lemkinator/Studiportal)](https://github.com/Lemkinator/Studiportal/commits/)
 [![](https://img.shields.io/github/issues-raw/Lemkinator/Studiportal?color=%23ff4400)](https://github.com/Lemkinator/Studiportal/issues)
 [![](https://img.shields.io/github/issues-pr-raw/Lemkinator/Studiportal?color=%23bb00bb)](https://github.com/Lemkinator/Studiportal/pulls)
 [![](https://img.shields.io/github/contributors/Lemkinator/Studiportal)](https://github.com/Lemkinator/Studiportal/graphs/contributors)
