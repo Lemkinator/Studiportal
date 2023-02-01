@@ -3,11 +3,8 @@ package de.lemke.studiportal.domain
 import de.lemke.studiportal.domain.model.Exam
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Element
-import javax.inject.Inject
 
-class ParseStudiportalDataUseCase @Inject constructor(
-
-) {
+class ParseStudiportalDataUseCase {
     operator fun invoke(response: String): List<Exam> {
         val examList = mutableListOf<Exam>()
         val examStart: Int = response.indexOf("<table cellspacing=\"0\" cellpadding=\"5\" border=\"0\" align=\"center\" width=\"100%\">")
@@ -28,7 +25,6 @@ class ParseStudiportalDataUseCase @Inject constructor(
                 else -> examList.add(createExam(row, currentCategory))
             }
         }
-
         return examList
     }
 

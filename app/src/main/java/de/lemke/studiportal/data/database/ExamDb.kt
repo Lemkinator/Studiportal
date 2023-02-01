@@ -1,12 +1,12 @@
 package de.lemke.studiportal.data.database
 
 import androidx.room.Entity
-import androidx.room.PrimaryKey
 
-@Entity(tableName = "exam")
+@Entity(
+    tableName = "exam",
+    primaryKeys = ["examNumber", "semester"],
+)
 data class ExamDb(
-    @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
     val examNumber: String,
     val name: String,
     val bonus: String,

@@ -338,7 +338,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         binding.swipeRefreshLayout.isRefreshing = true
         val userSettings = getUserSettings()
         if (userSettings.username == demo.username) {
-            if (demo.updateExams(userSettings.notificationsEnabled)) initList()
+            if (demo.updateDemoExams(userSettings.notificationsEnabled)) initList()
             else Toast.makeText(this@MainActivity, getString(R.string.no_change), Toast.LENGTH_SHORT).show()
             binding.swipeRefreshLayout.isRefreshing = false
             setSubtitle(userSettings.lastRefresh)

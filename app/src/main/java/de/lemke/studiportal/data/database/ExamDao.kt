@@ -4,7 +4,12 @@ import androidx.room.*
 
 @Dao
 interface ExamDao {
-    suspend fun insert(exams: List<ExamDb>) { exams.forEach { insert(it) } }
+
+    @Transaction
+    suspend fun replaceAll(exams: List<ExamDb>) {
+        deleteAll()
+        exams.forEach { insert(it) }
+    }
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(exam: ExamDb)

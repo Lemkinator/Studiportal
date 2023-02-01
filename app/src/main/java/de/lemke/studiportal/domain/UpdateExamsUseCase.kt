@@ -13,13 +13,15 @@ class UpdateExamsUseCase @Inject constructor(
     private val getUserSettings: GetUserSettingsUseCase,
     private val updateUserSettings: UpdateUserSettingsUseCase,
 ) {
-    suspend operator fun invoke(exams: List<Exam>, notifyAboutChanges: Boolean): Boolean = withContext(Dispatchers.Default) {
+    suspend operator fun invoke(newExams: List<Exam>, notifyAboutChanges: Boolean): Boolean = withContext(Dispatchers.Default) {
         updateUserSettings { it.copy(lastRefresh = ZonedDateTime.now()) }
+        if (newExams.isEmpty()) return@withContext false
         val oldExams = examsRepository.getExams()
-        examsRepository.updateExams(exams)
-        val changedExams = exams.filter { exam -> oldExams.find { it == exam } == null }
+        val changedExams = newExams.filter { exam -> oldExams.none { it == exam } }
+        if (changedExams.isEmpty()) return@withContext false
+        examsRepository.updateExams(newExams)
         if (notifyAboutChanges && oldExams.isNotEmpty())
-            changedExams.forEach { sendNotification(it, getUserSettings().showGradeInNotification) }
+            changedExams.forEach { if (!it.isSeparator) sendNotification(it, getUserSettings().showGradeInNotification) }
         return@withContext changedExams.isNotEmpty()
     }
 }

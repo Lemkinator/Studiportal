@@ -11,8 +11,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import de.lemke.studiportal.data.database.AppDatabase
-import de.lemke.studiportal.data.database.ExamDao
+import de.lemke.studiportal.data.database.*
 import javax.inject.Singleton
 
 @Module
@@ -32,6 +31,7 @@ PersistenceModule : Application() {
     fun provideAppDatabase(
         @ApplicationContext context: Context,
     ): AppDatabase = Room.databaseBuilder(context, AppDatabase::class.java, "app")
+        .addMigrations(MIGRATION_1_2)
         //.createFromAsset("databases/app-v1.db")
         .build()
 

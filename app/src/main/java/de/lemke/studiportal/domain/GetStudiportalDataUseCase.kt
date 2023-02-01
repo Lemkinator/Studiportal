@@ -21,8 +21,8 @@ import javax.inject.Inject
 class GetStudiportalDataUseCase @Inject constructor(
     @ApplicationContext private val context: Context,
     private val getUserSettings: GetUserSettingsUseCase,
-    private val parseExamList: ParseStudiportalDataUseCase,
 ) {
+    private val parseExamList = ParseStudiportalDataUseCase()
     suspend operator fun invoke(
         successCallback: (exams: List<Exam>) -> Unit = { },
         errorCallback: (message: String) -> Unit = { },
@@ -117,7 +117,6 @@ class GetStudiportalDataUseCase @Inject constructor(
 
     private fun onSuccess(response: String, requestQueue: RequestQueue, successCallback: (exams: List<Exam>) -> Unit) {
         val exams = parseExamList(response)
-        Log.d("Success in GetStudiportalDataUseCase", exams.toString())
         successCallback(exams)
         logout(requestQueue)
     }

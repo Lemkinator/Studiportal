@@ -9,7 +9,6 @@ import javax.inject.Inject
 class ExamsRepository @Inject constructor(
     private val examDao: ExamDao
 ) {
-    suspend fun deleteAll() = examDao.deleteAll()
 
     suspend fun getExams(): List<Exam> = examDao.getAll().map { examFromDb(it) }
 
@@ -17,10 +16,5 @@ class ExamsRepository @Inject constructor(
 
     suspend fun getExam(examNumber: String?): Exam? = examDao.getByExamNumber(examNumber)?.let { examFromDb(it) }
 
-    private suspend fun insertExams(exams: List<Exam>) = examDao.insert(exams.map { examToDb(it) })
-
-    suspend fun updateExams(exams: List<Exam>) {
-        deleteAll()
-        insertExams(exams)
-    }
+    suspend fun updateExams(exams: List<Exam>) = examDao.replaceAll(exams.map { examToDb(it) })
 }

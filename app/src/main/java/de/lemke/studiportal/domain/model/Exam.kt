@@ -61,8 +61,8 @@ data class Exam(
 
         fun createSeparator(index: Int, category: String): Exam {
             return Exam(
-                examNumber = "separator",
-                name = "separator $index",
+                examNumber = "separator $index",
+                name = UNDEFINED,
                 bonus = UNDEFINED,
                 malus = UNDEFINED,
                 ects = UNDEFINED,
@@ -77,6 +77,16 @@ data class Exam(
                 note = Note.UNDEFINED,
                 category = category,
             )
+        }
+
+        fun getCategoryIconResource(context: Context, category: String): Int = when (category) {
+            context.getString(R.string.all) -> dev.oneuiproject.oneui.R.drawable.ic_oui_home_outline
+            "Leistungspunkte Konten" -> dev.oneuiproject.oneui.R.drawable.ic_oui_credit_card_outline
+            "Bestanden (Grundstudium)" -> dev.oneuiproject.oneui.R.drawable.ic_oui_text_check_on
+            "Bestanden (Hauptstudium)" -> dev.oneuiproject.oneui.R.drawable.ic_oui_text_check_on
+            "Pflichtfächer" -> dev.oneuiproject.oneui.R.drawable.ic_oui_apps
+            "Wahlpflichtfächer" -> dev.oneuiproject.oneui.R.drawable.ic_oui_shape
+            else -> dev.oneuiproject.oneui.R.drawable.ic_oui_list
         }
     }
 
@@ -117,7 +127,7 @@ data class Exam(
     }
 
     val isSeparator: Boolean
-        get() = examNumber == "separator"
+        get() = examNumber.startsWith("separator") && name == UNDEFINED
 
     private fun getEcts(context: Context): String = if (ects == UNDEFINED) "" else context.getString(R.string.ects_value, ects)
 

@@ -15,14 +15,13 @@ class SetWorkManagerUseCase @Inject constructor(
     @ActivityContext private val context: Context,
     private val getUserSettings: GetUserSettingsUseCase
 ) {
-    suspend operator fun invoke(replaceExisting: Boolean = true) = withContext(Dispatchers.Default) {
+    suspend operator fun invoke() = withContext(Dispatchers.Default) {
         val userSettings = getUserSettings()
         val workManager = WorkManager.getInstance(context)
         if (userSettings.username.isEmpty() || userSettings.refreshInterval == RefreshInterval.NEVER) cancelStudiportalWork()
         else workManager.enqueueUniquePeriodicWork(
             "checkStudiportalData",
-            if (replaceExisting) ExistingPeriodicWorkPolicy.REPLACE
-            else ExistingPeriodicWorkPolicy.KEEP,
+            ExistingPeriodicWorkPolicy.REPLACE,
             PeriodicWorkRequestBuilder<CheckStudiportalWork>(userSettings.refreshInterval.minutes.toLong(), TimeUnit.MINUTES)
                 .setConstraints(
                     with(Constraints.Builder()) {
@@ -59,7 +58,7 @@ class CheckStudiportalWork @AssistedInject constructor(
     @OptIn(DelicateCoroutinesApi::class)
     override suspend fun doWork(): Result = withContext(Dispatchers.Default) {
         val userSettings = getUserSettings()
-        if (userSettings.username == demo.username) demo.updateExams(userSettings.notificationsEnabled)
+        if (userSettings.username == demo.username) demo.updateDemoExams(userSettings.notificationsEnabled)
         else getStudiportalData(
             successCallback = { exams -> GlobalScope.launch { updateExams(exams, userSettings.notificationsEnabled) } }
         )
