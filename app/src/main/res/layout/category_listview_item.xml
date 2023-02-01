@@ -14,10 +14,10 @@
     android:paddingEnd="18dp">
 
     <ImageView
+        android:id="@+id/drawer_item_icon"
         tools:ignore="ContentDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_oui_list" />
+        android:layout_width="24dp"
+        android:layout_height="24dp" />
 
     <TextView
         android:id="@+id/drawer_item_text_view"

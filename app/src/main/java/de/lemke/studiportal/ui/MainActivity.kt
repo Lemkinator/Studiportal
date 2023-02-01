@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -166,6 +167,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             //manually waiting for the animation to finish :/
             delay(700 - (System.currentTimeMillis() - time).coerceAtLeast(0L))
             isUIReady = true
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        lifecycleScope.launch {
+            setSubtitle(getUserSettings().lastRefresh)
         }
     }
 
@@ -400,6 +408,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             holder.textView.text = categories[position]
+            holder.icon.setImageDrawable(getDrawable(Exam.getCategoryIconResource(this@MainActivity, categories[position])))
             holder.textView.setOnClickListener {
                 lifecycleScope.launch {
                     if (categories[position] != getUserSettings().categoryFilter) {
@@ -419,10 +428,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {
             var parentView: LinearLayout
             var textView: TextView
+            var icon: ImageView
 
             init {
                 parentView = itemView as LinearLayout
                 textView = parentView.findViewById(R.id.drawer_item_text_view)
+                icon = parentView.findViewById(R.id.drawer_item_icon)
             }
         }
     }
