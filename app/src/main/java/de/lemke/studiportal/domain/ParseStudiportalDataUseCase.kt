@@ -8,7 +8,9 @@ class ParseStudiportalDataUseCase {
     operator fun invoke(response: String): List<Exam> {
         val examList = mutableListOf<Exam>()
         val examStart: Int = response.indexOf("<table cellspacing=\"0\" cellpadding=\"5\" border=\"0\" align=\"center\" width=\"100%\">")
-        val table = Jsoup.parse(response.substring(examStart, response.indexOf("</table>", examStart)))
+        val examEnd: Int = response.indexOf("</table>", examStart)
+        if (examStart == -1 || examEnd == -1) return examList
+        val table = Jsoup.parse(response.substring(examStart, examEnd))
         val rows = table.getElementsByTag("tr")
         var currentCategory = "Unmatched"
         //Iterate over rows

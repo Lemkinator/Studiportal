@@ -227,7 +227,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 return true
             }
             R.id.menu_item_refresh_now -> {
-                lifecycleScope.launch { refresh() }
+                lifecycleScope.launch { if (!binding.swipeRefreshLayout.isRefreshing) refresh() }
                 return true
             }
 
