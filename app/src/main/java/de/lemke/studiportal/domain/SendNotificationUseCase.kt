@@ -49,7 +49,7 @@ class SendNotificationUseCase @Inject constructor(
             // Add the intent, which inflates the back stack
             addNextIntentWithParentStack(resultIntent)
             // Get the PendingIntent containing the entire back stack
-            getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
+            getPendingIntent(exam.examNumber.hashCode(), PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE)
         }
         notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.drawable.ic_notification)
