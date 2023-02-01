@@ -17,8 +17,8 @@ android {
         applicationId "de.lemke.studiportal"
         minSdk 26
         targetSdk 33
-        versionCode 8
-        versionName "1.1.5"
+        versionCode 9
+        versionName "1.1.6"
 
         kapt {
             arguments {
