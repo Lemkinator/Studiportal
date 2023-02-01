@@ -79,13 +79,12 @@ data class Exam(
             )
         }
 
-        fun getCategoryIconResource(context: Context, category: String): Int = when (category) {
-            context.getString(R.string.all) -> dev.oneuiproject.oneui.R.drawable.ic_oui_home_outline
-            "Leistungspunkte Konten" -> dev.oneuiproject.oneui.R.drawable.ic_oui_credit_card_outline
-            "Bestanden (Grundstudium)" -> dev.oneuiproject.oneui.R.drawable.ic_oui_text_check_on
-            "Bestanden (Hauptstudium)" -> dev.oneuiproject.oneui.R.drawable.ic_oui_text_check_on
-            "Pflichtfächer" -> dev.oneuiproject.oneui.R.drawable.ic_oui_apps
-            "Wahlpflichtfächer" -> dev.oneuiproject.oneui.R.drawable.ic_oui_shape
+        fun getCategoryIconResource(context: Context, category: String): Int = when{
+            category == context.getString(R.string.all) -> dev.oneuiproject.oneui.R.drawable.ic_oui_home_outline
+            category == "Leistungspunkte Konten" -> dev.oneuiproject.oneui.R.drawable.ic_oui_credit_card_outline
+            category == "Pflichtfächer" -> dev.oneuiproject.oneui.R.drawable.ic_oui_apps
+            category == "Wahlpflichtfächer" -> dev.oneuiproject.oneui.R.drawable.ic_oui_shape
+            category.contains("bestanden", ignoreCase = true) -> dev.oneuiproject.oneui.R.drawable.ic_oui_text_check_on
             else -> dev.oneuiproject.oneui.R.drawable.ic_oui_list
         }
     }
