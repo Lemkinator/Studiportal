@@ -23,6 +23,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.AppBarLayout
+import com.google.android.play.core.appupdate.AppUpdateInfo
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory
+import com.google.android.play.core.install.model.UpdateAvailability
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.data.UserSettings
@@ -31,6 +34,7 @@ import de.lemke.studiportal.domain.*
 import de.lemke.studiportal.domain.model.Exam
 import de.lemke.studiportal.domain.utils.ExamAdapter
 import de.lemke.studiportal.domain.utils.ItemDecoration
+import dev.oneuiproject.oneui.layout.DrawerLayout
 import dev.oneuiproject.oneui.layout.ToolbarLayout
 import dev.oneuiproject.oneui.utils.internal.ReflectUtils
 import kotlinx.coroutines.Job
@@ -322,6 +326,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         binding.drawerLayoutMain.searchView.setSearchableInfo(
             (getSystemService(SEARCH_SERVICE) as SearchManager).getSearchableInfo(componentName)
         )
+        AppUpdateManagerFactory.create(this).appUpdateInfo.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE)
+                binding.drawerLayoutMain.setButtonBadges(ToolbarLayout.N_BADGE, DrawerLayout.N_BADGE)
+        }
         binding.drawerLayoutMain.appBarLayout.addOnOffsetChangedListener { layout: AppBarLayout, verticalOffset: Int ->
             val totalScrollRange = layout.totalScrollRange
             val inputMethodWindowVisibleHeight = ReflectUtils.genericInvokeMethod(
@@ -338,14 +346,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         binding.swipeRefreshLayout.isRefreshing = true
         val userSettings = getUserSettings()
         if (userSettings.username == demo.username) {
-            if (demo.updateDemoExams(userSettings.notificationsEnabled)) initList()
+            if (demo.updateDemoExams()) initList()
             else Toast.makeText(this@MainActivity, getString(R.string.no_change), Toast.LENGTH_SHORT).show()
             binding.swipeRefreshLayout.isRefreshing = false
             setSubtitle(userSettings.lastRefresh)
         } else getStudiportalData(
             successCallback = { exams ->
                 lifecycleScope.launch {
-                    if (updateExams(exams, false)) initList(getExamsWithSeparator(exams))
+                    if (updateExams(exams)) initList(getExamsWithSeparator(exams))
                     else Toast.makeText(this@MainActivity, getString(R.string.no_change), Toast.LENGTH_SHORT).show()
                     binding.swipeRefreshLayout.isRefreshing = false
                     setSubtitle(userSettings.lastRefresh)

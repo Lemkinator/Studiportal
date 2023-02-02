@@ -12,7 +12,7 @@ class DemoUseCase @Inject constructor(
     private val random = Random()
     val username = "DEMO"
 
-    suspend fun updateDemoExams(notifyAboutChanges: Boolean): Boolean = updateExams(getDemoExams(), notifyAboutChanges)
+    suspend fun updateDemoExams(notifyAboutChanges: Boolean? = null): Boolean = updateExams(getDemoExams(), notifyAboutChanges)
     suspend fun initDemoExams() = updateExams(initialDemoExams, false)
     private fun getDemoExamName(name: String) = "Demo $name ${UUID.randomUUID()}"
     private suspend fun getDemoExams(addNewExam: Boolean = random.nextBoolean()): MutableList<Exam> {

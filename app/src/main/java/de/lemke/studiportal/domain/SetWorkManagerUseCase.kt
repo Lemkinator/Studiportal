@@ -57,11 +57,8 @@ class CheckStudiportalWork @AssistedInject constructor(
 ) : CoroutineWorker(appContext, workerParams) {
     @OptIn(DelicateCoroutinesApi::class)
     override suspend fun doWork(): Result = withContext(Dispatchers.Default) {
-        val userSettings = getUserSettings()
-        if (userSettings.username == demo.username) demo.updateDemoExams(userSettings.notificationsEnabled)
-        else getStudiportalData(
-            successCallback = { exams -> GlobalScope.launch { updateExams(exams, userSettings.notificationsEnabled) } }
-        )
+        if (getUserSettings().username == demo.username) demo.updateDemoExams()
+        else getStudiportalData(successCallback = { exams -> GlobalScope.launch { updateExams(exams) } })
         Result.success()
     }
 }
