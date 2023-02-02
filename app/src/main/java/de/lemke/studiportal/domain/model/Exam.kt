@@ -82,6 +82,7 @@ data class Exam(
         fun getCategoryIconResource(context: Context, category: String): Int = when{
             category == context.getString(R.string.all) -> dev.oneuiproject.oneui.R.drawable.ic_oui_home_outline
             category == "Leistungspunkte Konten" -> dev.oneuiproject.oneui.R.drawable.ic_oui_credit_card_outline
+            category == "Gesamtnote" -> dev.oneuiproject.oneui.R.drawable.ic_oui_confirm_before_next_action
             category == "Pflichtfächer" -> dev.oneuiproject.oneui.R.drawable.ic_oui_apps
             category == "Wahlpflichtfächer" -> dev.oneuiproject.oneui.R.drawable.ic_oui_shape
             category.contains("bestanden", ignoreCase = true) -> dev.oneuiproject.oneui.R.drawable.ic_oui_text_check_on
@@ -143,7 +144,7 @@ data class Exam(
                 isResignated -> context.getString(R.string.state_value, context.getString(R.string.resignated))
                 state == State.AN || kind == "SL" -> context.getString(R.string.state_value, state.getLocalString(context)) +
                         getEcts(context)
-                showGrade -> context.getString(R.string.grade_value, grade) + getEcts(context)
+                showGrade && grade != UNDEFINED -> context.getString(R.string.grade_value, grade) + getEcts(context)
                 else -> context.getString(R.string.state_value, state.getLocalString(context)) + getEcts(context)
             }
         }

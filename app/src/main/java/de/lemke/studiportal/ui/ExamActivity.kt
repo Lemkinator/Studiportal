@@ -14,10 +14,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.color.MaterialColors
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityExamBinding
 import de.lemke.studiportal.domain.GetExamUseCase
+import de.lemke.studiportal.domain.MakeSectionOfTextBoldUseCase
 import de.lemke.studiportal.domain.model.Exam
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +29,8 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var binding: ActivityExamBinding
     private lateinit var exam: Exam
     private lateinit var examInfoList: List<Pair<String, String>>
+    private lateinit var boldText: String
+    private val makeSectionOfTextBold: MakeSectionOfTextBoldUseCase = MakeSectionOfTextBoldUseCase()
 
     @Inject
     lateinit var getExam: GetExamUseCase
@@ -38,8 +42,15 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
         binding.toolbarLayout.setNavigationButtonTooltip(getString(R.string.sesl_navigate_up))
         binding.toolbarLayout.setNavigationButtonOnClickListener { finish() }
         val examNumber = intent.getStringExtra("examNumber")
+        val semester = intent.getStringExtra("semester")
+        boldText = intent.getStringExtra("boldText")?:""
+        if (examNumber == null || semester == null) {
+            Toast.makeText(this, getString(R.string.exam_not_found), Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
         lifecycleScope.launch {
-            val nullableExam = getExam(examNumber)
+            val nullableExam = getExam(examNumber, semester)
             if (nullableExam == null) {
                 Toast.makeText(this@ExamActivity, getString(R.string.exam_not_found), Toast.LENGTH_SHORT).show()
                 finish()
@@ -91,8 +102,9 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
             ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.exam_info_listview_item, parent, false))
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val color = MaterialColors.getColor(this@ExamActivity, androidx.appcompat.R.attr.colorPrimary, getColor(R.color.primary_color_themed))
             holder.textViewStart.text = examInfoList[position].first
-            holder.textViewEnd.text = examInfoList[position].second
+            holder.textViewEnd.text = makeSectionOfTextBold(examInfoList[position].second, boldText, color)
         }
 
         inner class ViewHolder internal constructor(itemView: View) : RecyclerView.ViewHolder(itemView) {

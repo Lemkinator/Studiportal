@@ -9,7 +9,7 @@ import javax.inject.Inject
 class GetExamUseCase @Inject constructor(
     private val examsRepository: ExamsRepository,
 ) {
-    suspend operator fun invoke(examNumber: String?): Exam? = withContext(Dispatchers.Default) {
-        examsRepository.getExam(examNumber)
+    suspend operator fun invoke(examNumber: String, semester: String): Exam? = withContext(Dispatchers.Default) {
+        examsRepository.getExam(examNumber, semester)
     }
 }

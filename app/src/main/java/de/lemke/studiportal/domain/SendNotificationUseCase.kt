@@ -44,6 +44,7 @@ class SendNotificationUseCase @Inject constructor(
         // Create an Intent for the activity you want to start
         val resultIntent = Intent(context, ExamActivity::class.java)
         resultIntent.putExtra("examNumber", exam.examNumber)
+        resultIntent.putExtra("semester", exam.semester)
         // Create the TaskStackBuilder
         val resultPendingIntent: PendingIntent? = TaskStackBuilder.create(context).run {
             // Add the intent, which inflates the back stack

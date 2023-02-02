@@ -45,11 +45,11 @@ class ExamAdapter(
         if (holder.isItem) {
             val exam = exams[position].first!!
             val color = MaterialColors.getColor(context, androidx.appcompat.R.attr.colorPrimary, context.getColor(R.color.primary_color_themed))
-            holder.listItemTitle.text = makeSectionOfTextBold(exam.name, search, color, -1)
-            holder.listItemSubtitle1.text = makeSectionOfTextBold(exam.getSubtitle1(context), search, color, -1)
+            holder.listItemTitle.text = makeSectionOfTextBold(exam.name, search, color)
+            holder.listItemSubtitle1.text = makeSectionOfTextBold(exam.getSubtitle1(context), search, color)
             val subtitle2 = exam.getSubtitle2(context)
             if (subtitle2.isNotBlank()) {
-                holder.listItemSubtitle2.text = makeSectionOfTextBold(subtitle2, search, color, -1)
+                holder.listItemSubtitle2.text = makeSectionOfTextBold(subtitle2, search, color)
                 holder.listItemSubtitle2.visibility = View.VISIBLE
             } else holder.listItemSubtitle2.visibility = View.GONE
             holder.listItemImg.setColorFilter(exam.getDrawableColor(context))
@@ -58,6 +58,7 @@ class ExamAdapter(
                 context.startActivity(
                     Intent(context, ExamActivity::class.java)
                         .putExtra("examNumber", exam.examNumber)
+                        .putExtra("semester", exam.semester)
                         .putExtra("boldText", search)
                 )
             }
