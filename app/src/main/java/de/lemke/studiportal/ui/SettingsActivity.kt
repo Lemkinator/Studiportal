@@ -107,6 +107,20 @@ class SettingsActivity : AppCompatActivity() {
             useMeteredNetworkPref.onPreferenceChangeListener = this
             refreshIntervalPref.onPreferenceChangeListener = this
 
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                findPreference<PreferenceCategory>("language_pref_cat")!!.isVisible = true
+                findPreference<PreferenceScreen>("language_pref")!!.onPreferenceClickListener = OnPreferenceClickListener {
+                    val intent = Intent(Settings.ACTION_APP_LOCALE_SETTINGS, Uri.parse("package:${settingsActivity.packageName}"))
+                    try {
+                        startActivity(intent)
+                    } catch (e: ActivityNotFoundException) {
+                        Toast.makeText(settingsActivity, getString(R.string.change_language_not_supportet_by_device), Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    true
+                }
+            }
+
             logoutPref.onPreferenceClickListener = OnPreferenceClickListener {
                 val dialog = AlertDialog.Builder(settingsActivity)
                     .setTitle(getString(R.string.logout))
