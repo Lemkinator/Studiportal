@@ -22,6 +22,10 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.airbnb.lottie.LottieProperty
+import com.airbnb.lottie.SimpleColorFilter
+import com.airbnb.lottie.model.KeyPath
+import com.airbnb.lottie.value.LottieValueCallback
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.play.core.appupdate.AppUpdateInfo
 import com.google.android.play.core.appupdate.AppUpdateManagerFactory
@@ -452,6 +456,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             binding.examListLottie.cancelAnimation()
             binding.examListLottie.progress = 0f
             binding.examNoEntryScrollView.visibility = View.VISIBLE
+            binding.examListLottie.addValueCallback(
+                KeyPath("**"),
+                LottieProperty.COLOR_FILTER,
+                LottieValueCallback(SimpleColorFilter(getColor(R.color.primary_color_themed)))
+            )
             binding.examListLottie.postDelayed({ binding.examListLottie.playAnimation() }, 400)
         } else {
             binding.examNoEntryScrollView.visibility = View.GONE
