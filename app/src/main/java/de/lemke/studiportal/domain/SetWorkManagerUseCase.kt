@@ -21,7 +21,7 @@ class SetWorkManagerUseCase @Inject constructor(
         if (userSettings.username.isEmpty() || userSettings.refreshInterval == RefreshInterval.NEVER) cancelStudiportalWork()
         else workManager.enqueueUniquePeriodicWork(
             "checkStudiportalData",
-            ExistingPeriodicWorkPolicy.REPLACE,
+            ExistingPeriodicWorkPolicy.UPDATE,
             PeriodicWorkRequestBuilder<CheckStudiportalWork>(userSettings.refreshInterval.minutes.toLong(), TimeUnit.MINUTES)
                 .setConstraints(
                     with(Constraints.Builder()) {
@@ -32,7 +32,7 @@ class SetWorkManagerUseCase @Inject constructor(
                 )
                 .setBackoffCriteria(
                     BackoffPolicy.LINEAR,
-                    PeriodicWorkRequest.MIN_BACKOFF_MILLIS,
+                    WorkRequest.MIN_BACKOFF_MILLIS,
                     TimeUnit.MILLISECONDS
                 )
                 .setInitialDelay(5, TimeUnit.MINUTES)
