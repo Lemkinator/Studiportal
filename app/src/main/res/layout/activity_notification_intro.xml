@@ -1,98 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<dev.oneuiproject.oneui.layout.ToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/oui_round_and_bgcolor"
-    android:orientation="vertical"
-    android:paddingTop="?attr/actionBarSize"
+    app:expanded="true"
+    app:title="@string/app_name"
     tools:context=".ui.NotificationIntroActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/notification_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0.0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        app:layout_location="main_content">
 
-        <FrameLayout
-            android:id="@+id/notification_intro_header"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0.0dp"
-            app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                style="@style/OOBE.TextView.Title"
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/notification_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/app_name" />
+                android:layout_marginVertical="6dp"
+                android:checked="true"
+                android:text="@string/notify_about_change_title"
+                android:textSize="17sp" />
 
-        </FrameLayout>
-
-        <ScrollView
-            android:id="@+id/notification_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="0.0dp"
-            android:paddingTop="24.0dp"
-            app:layout_constraintHeight_percent="0.8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/notification_intro_header">
-
-            <LinearLayout
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="30dp"
+                android:text="@string/notify_about_change_summary"
+                android:textColor="@color/secondary_text_icon_color"
+                android:textSize="14sp" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/notification_switch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="6dp"
-                    android:checked="true"
-                    android:text="@string/notify_about_change_title"
-                    android:textSize="17sp" />
+            <androidx.appcompat.widget.SwitchCompat
+                android:id="@+id/notification_show_grade_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="6dp"
+                android:checked="true"
+                android:text="@string/show_grade_title"
+                android:textSize="17sp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
-                    android:text="@string/notify_about_change_summary"
-                    android:textColor="@color/secondary_text_icon_color"
-                    android:textSize="14sp" />
+            <TextView
+                android:id="@+id/notification_show_grade_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/show_grade_summary"
+                android:textColor="@color/secondary_text_icon_color"
+                android:textSize="14sp" />
 
-                <androidx.appcompat.widget.SwitchCompat
-                    android:id="@+id/notification_show_grade_switch"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="6dp"
-                    android:checked="true"
-                    android:text="@string/show_grade_title"
-                    android:textSize="17sp" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/notification_show_grade_description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/show_grade_summary"
-                    android:textColor="@color/secondary_text_icon_color"
-                    android:textSize="14sp" />
-
-
-            </LinearLayout>
-
-        </ScrollView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/notification_footer_container"
         android:layout_width="match_parent"
         android:layout_height="44.0dp"
         android:layout_margin="24.0dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_location="footer">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/notification_footer_button"
@@ -112,4 +84,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</dev.oneuiproject.oneui.layout.ToolbarLayout>

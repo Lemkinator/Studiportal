@@ -20,14 +20,12 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityOobeBinding
 import de.lemke.studiportal.domain.GetUserSettingsUseCase
 import de.lemke.studiportal.domain.UpdateUserSettingsUseCase
 import de.lemke.studiportal.domain.utils.TipsItemView
-import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 
@@ -132,12 +130,11 @@ class OOBEActivity : AppCompatActivity() {
             binding.oobeIntroFooterTosText.isEnabled = false
             binding.oobeIntroFooterButton.visibility = View.GONE
             binding.oobeIntroFooterButtonProgress.visibility = View.VISIBLE
-            lifecycleScope.launch { openNextActivity() }
+            openNextActivity()
         }
     }
 
-    private suspend fun openNextActivity() {
-        updateUserSettings { it.copy(tosAccepted = true) }
+    private fun openNextActivity() {
         startActivity(Intent(this, NotificationIntroActivity::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         finish()

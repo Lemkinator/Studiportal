@@ -1,92 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<dev.oneuiproject.oneui.layout.ToolbarLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/oui_round_and_bgcolor"
-    android:orientation="vertical"
-    android:paddingTop="?attr/actionBarSize"
+    app:expanded="true"
+    app:title="@string/app_name"
     tools:context=".ui.LoginActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/login_scroll_view"
         android:layout_width="match_parent"
-        android:layout_height="0.0dp"
-        android:layout_weight="1">
+        android:layout_height="match_parent"
+        app:layout_location="main_content">
 
-        <FrameLayout
-            android:id="@+id/login_intro_header"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="0.0dp"
-            app:layout_constraintHeight_percent="0.2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatTextView
-                style="@style/OOBE.TextView.Title"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/app_name" />
+                android:layout_margin="7dp"
+                android:text="@string/demo_username_label"
+                android:textColor="@color/secondary_text_icon_color"
+                android:textSize="11sp" />
 
-        </FrameLayout>
-
-        <ScrollView
-            android:id="@+id/login_scroll_view"
-            android:layout_width="match_parent"
-            android:layout_height="0.0dp"
-            android:paddingTop="24.0dp"
-            app:layout_constraintHeight_percent="0.8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/login_intro_header">
-
-            <LinearLayout
+            <EditText
+                android:id="@+id/edit_text_username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="30dp"
-                android:orientation="vertical">
+                android:layout_marginBottom="30dp"
+                android:autofillHints="username"
+                android:focusable="true"
+                android:hint="@string/user_name"
+                android:inputType="text"
+                android:maxLines="1" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/demo_username_label"
-                    android:textColor="@color/secondary_text_icon_color"
-                    android:layout_margin="7dp"
-                    android:textSize="11sp"
-                    />
+            <EditText
+                android:id="@+id/edit_text_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autofillHints="password"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:maxLines="1" />
 
-                <EditText
-                    android:id="@+id/edit_text_username"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="30dp"
-                    android:autofillHints="username"
-                    android:focusable="true"
-                    android:hint="@string/user_name"
-                    android:inputType="text"
-                    android:maxLines="1" />
+        </LinearLayout>
 
-                <EditText
-                    android:id="@+id/edit_text_password"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:autofillHints="password"
-                    android:hint="@string/password"
-                    android:inputType="textPassword"
-                    android:maxLines="1" />
-
-            </LinearLayout>
-
-        </ScrollView>
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
         android:id="@+id/login_footer_container"
         android:layout_width="match_parent"
         android:layout_height="44.0dp"
         android:layout_margin="24.0dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_location="footer">
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/login_footer_button"
@@ -106,4 +78,4 @@
 
     </LinearLayout>
 
-</LinearLayout>
+</dev.oneuiproject.oneui.layout.ToolbarLayout>

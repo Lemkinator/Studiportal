@@ -114,6 +114,7 @@ class NotificationIntroActivity : AppCompatActivity() {
     }
 
     private suspend fun openNextActivity() {
+        updateUserSettings { it.copy(tosAccepted = true) }
         if (getUserSettings().username.isBlank()) startActivity(Intent(this, LoginActivity::class.java))
         else startActivity(Intent(this, MainActivity::class.java))
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

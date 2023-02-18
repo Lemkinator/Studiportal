@@ -108,7 +108,7 @@ class SettingsActivity : AppCompatActivity() {
             refreshIntervalPref.onPreferenceChangeListener = this
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                findPreference<PreferenceCategory>("language_pref_cat")!!.isVisible = true
+                findPreference<PreferenceCategory>("general_pref_cat")!!.isVisible = true
                 findPreference<PreferenceScreen>("language_pref")!!.onPreferenceClickListener = OnPreferenceClickListener {
                     val intent = Intent(Settings.ACTION_APP_LOCALE_SETTINGS, Uri.parse("package:${settingsActivity.packageName}"))
                     try {

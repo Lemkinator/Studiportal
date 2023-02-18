@@ -52,7 +52,6 @@ import kotlin.math.abs
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
-
     private lateinit var binding: ActivityMainBinding
     private lateinit var onBackPressedCallback: OnBackPressedCallback
     private lateinit var onBackInvokedCallback: OnBackInvokedCallback

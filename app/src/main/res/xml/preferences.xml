@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?><!--suppress ALL -->
+<?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -15,13 +15,14 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="language_pref_cat"
-        android:title="@string/language"
+        android:key="general_pref_cat"
+        android:title="@string/general"
         app:isPreferenceVisible="false">
 
         <PreferenceScreen
             android:key="language_pref"
-            android:title="@string/change_language" />
+            android:title="@string/language"
+            android:summary="@string/change_language"/>
 
     </PreferenceCategory>
 
