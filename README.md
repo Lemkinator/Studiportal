@@ -29,8 +29,6 @@ The new Studiportal app with OneUI-Design
 
 ## More Information: <a target="_blank" href='https://www.leonard-lemke.com/apps/studiportal'>www.leonard-lemke.com </a>
 
-<br>  
-
 <br><hr>
 
 [![Star History Chart](https://api.star-history.com/svg?repos=Lemkinator/Studiportal&type=Date)](https://star-history.com/#Lemkinator/Studiportal&Date)
