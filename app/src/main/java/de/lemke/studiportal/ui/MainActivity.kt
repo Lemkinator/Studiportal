@@ -320,9 +320,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
         binding.drawerLayoutMain.setDrawerButtonIcon(getDrawable(dev.oneuiproject.oneui.R.drawable.ic_oui_info_outline))
         binding.drawerLayoutMain.setDrawerButtonOnClickListener {
-            startActivity(
-                Intent().setClass(this@MainActivity, AboutActivity::class.java)
-            )
+            startActivity(Intent().setClass(this@MainActivity, AboutActivity::class.java))
         }
         binding.drawerLayoutMain.setDrawerButtonTooltip(getText(R.string.about_app))
         binding.drawerLayoutMain.setSearchModeListener(SearchModeListener())

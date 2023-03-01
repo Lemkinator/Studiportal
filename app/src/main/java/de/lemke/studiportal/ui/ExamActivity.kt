@@ -5,23 +5,29 @@ import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
+import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityExamBinding
 import de.lemke.studiportal.domain.GetExamUseCase
+import de.lemke.studiportal.domain.GetUserSettingsUseCase
 import de.lemke.studiportal.domain.MakeSectionOfTextBoldUseCase
+import de.lemke.studiportal.domain.UpdateUserSettingsUseCase
 import de.lemke.studiportal.domain.model.Exam
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -35,15 +41,21 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
     @Inject
     lateinit var getExam: GetExamUseCase
 
+    @Inject
+    lateinit var getUserSettings: GetUserSettingsUseCase
+
+    @Inject
+    lateinit var updateUserSettings: UpdateUserSettingsUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExamBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbarLayout.setNavigationButtonTooltip(getString(R.string.sesl_navigate_up))
-        binding.toolbarLayout.setNavigationButtonOnClickListener { finish() }
+        binding.toolbarLayout.setNavigationButtonOnClickListener { lifecycleScope.launch { opportunityToShowInAppReview() } }
         val examNumber = intent.getStringExtra("examNumber")
         val semester = intent.getStringExtra("semester")
-        boldText = intent.getStringExtra("boldText")?:""
+        boldText = intent.getStringExtra("boldText") ?: ""
         if (examNumber == null || semester == null) {
             Toast.makeText(this, getString(R.string.exam_not_found), Toast.LENGTH_SHORT).show()
             finish()
@@ -61,6 +73,40 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
             examInfoList = exam.getInfoPairList(this@ExamActivity, false)
             initList()
         }
+        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                lifecycleScope.launch {
+                    try {
+                        opportunityToShowInAppReview()
+                    } catch (e: Exception) {
+                        Log.e("InAppReview", "Error: ${e.message}")
+                    }
+                }
+            }
+        })
+    }
+
+    private suspend fun opportunityToShowInAppReview() {
+        val lastInAppReviewRequest = getUserSettings().lastInAppReviewRequest
+        val daysSinceLastRequest = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastInAppReviewRequest)
+        if (daysSinceLastRequest < 7) {
+            finish()
+            return
+        }
+        updateUserSettings { it.copy(lastInAppReviewRequest = System.currentTimeMillis()) }
+        val manager = ReviewManagerFactory.create(this)
+        //val manager = FakeReviewManager(context);
+        val request = manager.requestReviewFlow()
+        request.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val reviewInfo = task.result
+                val flow = manager.launchReviewFlow(this, reviewInfo)
+                flow.addOnCompleteListener {}
+            } else {
+                // There was some problem, log or handle the error code.
+                Log.e("InAppReview", "Review task failed: ${task.exception?.message}")
+            }
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -73,8 +119,10 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
             R.id.menu_item_share -> {
                 val shareIntent = Intent(Intent.ACTION_SEND)
                 shareIntent.type = "text/plain"
-                shareIntent.putExtra(Intent.EXTRA_TEXT, exam.name + "\n" +
-                        exam.getSubtitle1(this) + "\n" + (exam.getSubtitle2(this)))
+                shareIntent.putExtra(
+                    Intent.EXTRA_TEXT, exam.name + "\n" +
+                            exam.getSubtitle1(this) + "\n" + (exam.getSubtitle2(this))
+                )
                 startActivity(Intent.createChooser(shareIntent, getString(R.string.share)))
                 return true
             }
@@ -102,7 +150,8 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
             ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.exam_info_listview_item, parent, false))
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val color = MaterialColors.getColor(this@ExamActivity, androidx.appcompat.R.attr.colorPrimary, getColor(R.color.primary_color_themed))
+            val color =
+                MaterialColors.getColor(this@ExamActivity, androidx.appcompat.R.attr.colorPrimary, getColor(R.color.primary_color_themed))
             holder.textViewStart.text = examInfoList[position].first
             holder.textViewEnd.text = makeSectionOfTextBold(examInfoList[position].second, boldText, color)
         }

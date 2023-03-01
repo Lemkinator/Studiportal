@@ -24,7 +24,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityOobeBinding
 import de.lemke.studiportal.domain.GetUserSettingsUseCase
-import de.lemke.studiportal.domain.UpdateUserSettingsUseCase
 import de.lemke.studiportal.domain.utils.TipsItemView
 import java.util.*
 import javax.inject.Inject
@@ -37,9 +36,6 @@ class OOBEActivity : AppCompatActivity() {
 
     @Inject
     lateinit var getUserSettings: GetUserSettingsUseCase
-
-    @Inject
-    lateinit var updateUserSettings: UpdateUserSettingsUseCase
 
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {

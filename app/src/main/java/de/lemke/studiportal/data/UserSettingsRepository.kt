@@ -41,6 +41,7 @@ class UserSettingsRepository @Inject constructor(
             it[KEY_REFRESH_INTERVAL] = newSettings.refreshInterval.minutes
             it[KEY_LAST_REFRESH] = zonedDateTimeToDb(newSettings.lastRefresh)
             it[KEY_CATEGORY_FILTER] = newSettings.categoryFilter
+            it[KEY_LAST_IN_APP_REVIEW_REQUEST] = newSettings.lastInAppReviewRequest
         }
         return settingsFromPreferences(prefs)
     }
@@ -62,6 +63,7 @@ class UserSettingsRepository @Inject constructor(
         refreshInterval = RefreshInterval.fromMinutes(prefs[KEY_REFRESH_INTERVAL]),
         lastRefresh = zonedDateTimeFromDb(prefs[KEY_LAST_REFRESH]),
         categoryFilter = prefs[KEY_CATEGORY_FILTER] ?: "",
+        lastInAppReviewRequest = prefs[KEY_LAST_IN_APP_REVIEW_REQUEST] ?: System.currentTimeMillis(),
     )
 
     private companion object {
@@ -80,6 +82,7 @@ class UserSettingsRepository @Inject constructor(
         private val KEY_REFRESH_INTERVAL = intPreferencesKey("refreshInterval")
         private val KEY_LAST_REFRESH = stringPreferencesKey("lastRefresh")
         private val KEY_CATEGORY_FILTER = stringPreferencesKey("categoryFilter")
+        private val KEY_LAST_IN_APP_REVIEW_REQUEST = longPreferencesKey("lastInAppReviewRequest")
     }
 }
 
@@ -115,6 +118,8 @@ data class UserSettings(
     val lastRefresh: ZonedDateTime?,
     /** exam category filter */
     val categoryFilter: String,
+    /** last time in app review was requested */
+    val lastInAppReviewRequest: Long = 0,
 )
 
 enum class RefreshInterval(val minutes: Int) {

@@ -8,16 +8,13 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
-import android.util.Log
 import android.view.*
 import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.TooltipCompat
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.AppBarLayout.OnOffsetChangedListener
-import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityAboutMeBinding
@@ -121,7 +118,6 @@ class AboutMeActivity : AppCompatActivity(), View.OnClickListener {
         bottomContent.aboutBottomRelativeTiktok.setOnClickListener(this)
         bottomContent.aboutBottomRelativeWebsite.setOnClickListener(this)
         bottomContent.aboutBottomRelativePlayStore.setOnClickListener(this)
-        bottomContent.reviewCommentButton.setOnClickListener(this)
     }
 
     private fun setBottomContentEnabled(enabled: Boolean) {
@@ -169,38 +165,13 @@ class AboutMeActivity : AppCompatActivity(), View.OnClickListener {
                         Toast.makeText(this@AboutMeActivity, getString(R.string.no_email_app_installed), Toast.LENGTH_SHORT).show()
                     }
                 }
-                bottomContent.aboutBottomRateApp.id -> {
-                    val manager = ReviewManagerFactory.create(this@AboutMeActivity)
-                    //val manager = FakeReviewManager(context);
-                    val request = manager.requestReviewFlow()
-                    request.addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
-                            val reviewInfo = task.result
-                            val flow = manager.launchReviewFlow(this, reviewInfo)
-                            flow.addOnCompleteListener { task2 ->
-                                if (task2.isSuccessful) Log.d("AboutActivity", "Reviewtask was successful")
-                                else Toast.makeText(this@AboutMeActivity, getString(R.string.error) + ": " + task2.exception, Toast.LENGTH_SHORT).show()
-                            }
-                        } else {
-                            // There was some problem, log or handle the error code.
-                            Toast.makeText(this@AboutMeActivity, R.string.task_failed, Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
+                bottomContent.aboutBottomRateApp.id -> openApp(packageName, false)
                 bottomContent.aboutBottomShareApp.id -> {
                     val sendIntent = Intent(Intent.ACTION_SEND)
                     sendIntent.type = "text/plain"
                     sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_app_text) + packageName)
                     sendIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.share_app))
                     startActivity(Intent.createChooser(sendIntent, "Share Via"))
-                }
-                bottomContent.reviewCommentButton.id -> {
-                    AlertDialog.Builder(this@AboutMeActivity)
-                        .setTitle(getString(R.string.write_review))
-                        .setMessage(getString(R.string.review_comment))
-                        .setNeutralButton(R.string.ok, null)
-                        .setPositiveButton(R.string.to_play_store) { _, _ -> openApp(packageName, false) }
-                        .show()
                 }
             }
         }

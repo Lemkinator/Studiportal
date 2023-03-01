@@ -47,7 +47,6 @@
 
     <!--AboutMe-->
     <string name="about_me">About me</string>
-    <string name="to_play_store">To Play Store</string>
     <string name="write_email">Write an e-mail</string>
     <string name="tiktok" translatable="false">TikTok</string>
     <string name="website">Website</string>
@@ -55,7 +54,6 @@
     <string name="support_me">Support me</string>
     <string name="rate_app">Rate app in Play Store</string>
     <string name="write_review">Write a review</string>
-    <string name="review_comment">To ensure an optimal user experience, Google Play manages when and how often the integrated rating dialog can be displayed to a user. Therefore, this button may not perform any action in some cases.\nAlternatively, the rating can then be written in the Play Store.</string>
     <string name="share">Share</string>
     <string name="share_app">Share this app</string>
     <string name="share_app_text">Check this out, the new Studiportal app with OneUI-Design: https://play.google.com/store/apps/details?id=</string>
@@ -114,7 +112,6 @@
 
     <!--General-->
     <string name="ok" translatable="false" tools:ignore="ButtonCase,Typos">Ok</string>
-    <string name="task_failed">Oops, something went wrong…</string>
     <string name="no_email_app_installed">No e-mail app installed…</string>
     <string name="error">Error</string>
     <string name="no_entry">No entry</string>
