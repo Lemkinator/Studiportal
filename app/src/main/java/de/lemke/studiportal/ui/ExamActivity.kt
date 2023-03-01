@@ -52,7 +52,7 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
         binding = ActivityExamBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbarLayout.setNavigationButtonTooltip(getString(R.string.sesl_navigate_up))
-        binding.toolbarLayout.setNavigationButtonOnClickListener { lifecycleScope.launch { opportunityToShowInAppReview() } }
+        binding.toolbarLayout.setNavigationButtonOnClickListener { opportunityToShowInAppReview() }
         val examNumber = intent.getStringExtra("examNumber")
         val semester = intent.getStringExtra("semester")
         boldText = intent.getStringExtra("boldText") ?: ""
@@ -75,36 +75,37 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
         }
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                lifecycleScope.launch {
-                    try {
-                        opportunityToShowInAppReview()
-                    } catch (e: Exception) {
-                        Log.e("InAppReview", "Error: ${e.message}")
-                    }
-                }
+                opportunityToShowInAppReview()
             }
         })
     }
 
-    private suspend fun opportunityToShowInAppReview() {
-        val lastInAppReviewRequest = getUserSettings().lastInAppReviewRequest
-        val daysSinceLastRequest = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastInAppReviewRequest)
-        if (daysSinceLastRequest < 7) {
-            finish()
-            return
-        }
-        updateUserSettings { it.copy(lastInAppReviewRequest = System.currentTimeMillis()) }
-        val manager = ReviewManagerFactory.create(this)
-        //val manager = FakeReviewManager(context);
-        val request = manager.requestReviewFlow()
-        request.addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                val reviewInfo = task.result
-                val flow = manager.launchReviewFlow(this, reviewInfo)
-                flow.addOnCompleteListener {}
-            } else {
-                // There was some problem, log or handle the error code.
-                Log.e("InAppReview", "Review task failed: ${task.exception?.message}")
+    private fun opportunityToShowInAppReview() {
+        lifecycleScope.launch {
+            try {
+                val lastInAppReviewRequest = getUserSettings().lastInAppReviewRequest
+                val daysSinceLastRequest = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastInAppReviewRequest)
+                if (daysSinceLastRequest < 7) {
+                    finish()
+                    return@launch
+                }
+                updateUserSettings { it.copy(lastInAppReviewRequest = System.currentTimeMillis()) }
+                val manager = ReviewManagerFactory.create(this@ExamActivity)
+                //val manager = FakeReviewManager(context);
+                val request = manager.requestReviewFlow()
+                request.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val reviewInfo = task.result
+                        val flow = manager.launchReviewFlow(this@ExamActivity, reviewInfo)
+                        flow.addOnCompleteListener {}
+                    } else {
+                        // There was some problem, log or handle the error code.
+                        Log.e("InAppReview", "Review task failed: ${task.exception?.message}")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("InAppReview", "Error: ${e.message}")
+                finish()
             }
         }
     }
