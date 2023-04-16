@@ -189,7 +189,7 @@ data class Exam(
         else when (state) {
             State.AN -> dev.oneuiproject.oneui.R.drawable.ic_oui_timer
             State.BE -> dev.oneuiproject.oneui.R.drawable.ic_oui_checkbox_checked
-            State.NB -> dev.oneuiproject.oneui.R.drawable.ic_oui_disturb
+            State.NB -> dev.oneuiproject.oneui.R.drawable.ic_oui_do_not_disturb
             State.EN -> dev.oneuiproject.oneui.R.drawable.ic_oui_error_filled
             State.UNDEFINED -> dev.oneuiproject.oneui.R.drawable.ic_oui_info_outline
         }
