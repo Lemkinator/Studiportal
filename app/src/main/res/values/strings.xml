@@ -34,7 +34,7 @@
     <string name="show_grade_summary">New grades are displayed in the notification.</string>
 
     <!--Help-->
-    <string name="help">Hilfe</string>
+    <string name="help">Help</string>
     <string name="contact">Contact</string>
     <string name="contact_me">Contact me (e-mail)</string>
     <string name="help_text">This app is in no way affiliated with Furtwangen University and is only used to display the data from the Studiportal. \nThe logo is used with the kind permission of the Strategy and Communication Department of Furtwangen University.</string>
