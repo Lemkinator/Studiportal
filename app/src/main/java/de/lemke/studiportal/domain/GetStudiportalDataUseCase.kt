@@ -23,8 +23,9 @@ class GetStudiportalDataUseCase @Inject constructor(
     private val getUserSettings: GetUserSettingsUseCase,
 ) {
     private val parseExamList = ParseStudiportalDataUseCase()
+    private val parseStudentData = ParseStudentDataUseCase()
     suspend operator fun invoke(
-        successCallback: (exams: List<Exam>) -> Unit = { },
+        successCallback: (data: Pair<Pair<String, String>?, List<Exam>>) -> Unit = { },
         errorCallback: (message: String) -> Unit = { },
         loginSuccessCallback: () -> Unit = { },
         loginErrorCallback: (message: String) -> Unit = { },
@@ -35,7 +36,8 @@ class GetStudiportalDataUseCase @Inject constructor(
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
         if (capabilities == null || !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ||
-            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
+            !capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        ) {
             loginErrorCallback(context.getString(R.string.no_internet))
             errorCallback(context.getString(R.string.no_internet))
             return@withContext
@@ -102,29 +104,30 @@ class GetStudiportalDataUseCase @Inject constructor(
     private fun getObserveRequest(
         asi: String,
         requestQueue: RequestQueue,
-        onSuccessCallback: (exams: List<Exam>) -> Unit,
+        onSuccessCallback: (data: Pair<Pair<String, String>?, List<Exam>>) -> Unit,
         onErrorCallback: (message: String) -> Unit
     ) = StringRequest(
         Request.Method.POST, context.getString(R.string.url_observe, asi),
         { observeResponse -> onSuccess(observeResponse, requestQueue, onSuccessCallback) },
         { observeError -> onError(context.getString(R.string.error_observe, observeError.message), requestQueue, onErrorCallback) })
 
-    private fun onError(msg: String, requestQueue: RequestQueue, errorCallback: (message:String) -> Unit) {
+    private fun onError(msg: String, requestQueue: RequestQueue, errorCallback: (message: String) -> Unit) {
         Log.d("Error in GetStudiportalDataUseCase", msg)
         errorCallback(msg)
         logout(requestQueue)
     }
 
-    private fun onSuccess(response: String, requestQueue: RequestQueue, successCallback: (exams: List<Exam>) -> Unit) {
+    private fun onSuccess(response: String, requestQueue: RequestQueue, successCallback: (data: Pair<Pair<String, String>?, List<Exam>>) -> Unit) {
         val exams = parseExamList(response)
-        successCallback(exams)
+        val studentData = parseStudentData(response)
+        successCallback(Pair(studentData, exams))
         logout(requestQueue)
     }
 
     private fun logout(requestQueue: RequestQueue) {
         val logoutRequest = StringRequest(
             Request.Method.GET, context.getString(R.string.url_logout),
-            { Log.d("logout success", "Logout erfolgreich") },
+            { Log.d("GetStudiportalDataUseCase", "logout success") },
             { Log.d("GetStudiportalDataUseCase", "Fehler beim Logout: ${it.message}") })
         requestQueue.add(logoutRequest)
     }

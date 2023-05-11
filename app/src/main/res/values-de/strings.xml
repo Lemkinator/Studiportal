@@ -176,6 +176,8 @@
     <string name="error_observe">Fehler beim Abrufen der Prüfungen: %1$s</string>
     <string name="login_success_observe_error">Jedoch istadd beim Einlesen der Daten ein Fehler aufgetreten: %1$s</string>
     <string name="demo_username_label">Nutzername für die Demo-Ansicht: \"DEMO\"</string>
+    <string name="demo_student_name">Demo (123456)</string>
+    <string name="demo_student_info">11/AIN/SWE/6 rückgemeldet 112234P6</string>
     <string name="exam_not_found">Prüfung nicht gefunden…</string>
 
     <string name="no_internet">Keine Internetverbindung verfügbar…</string>

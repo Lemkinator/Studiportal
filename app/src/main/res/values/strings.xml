@@ -204,6 +204,8 @@
     <string name="error_observe">Error when retrieving the exams: %1$s</string>
     <string name="login_success_observe_error">However, an error occurred while reading in the data: %1$s</string>
     <string name="demo_username_label">Username for demo: \"DEMO\"</string>
+    <string name="demo_student_name">Demo (123456)</string>
+    <string name="demo_student_info">11/AIN/SWE/6 112234P6</string>
     <string name="exam_not_found">Exam not found</string>
 
     <string name="no_internet">No internet connection available…</string>

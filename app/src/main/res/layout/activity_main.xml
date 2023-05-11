@@ -77,4 +77,6 @@
 
     <include layout="@layout/content_drawer" />
 
+    <include layout="@layout/drawer_header" />
+
 </dev.oneuiproject.oneui.layout.DrawerLayout>

@@ -26,7 +26,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
-    private var successCallback: (exams: List<Exam>) -> Unit = {}
+    private var successCallback: (data: Pair<Pair<String, String>?, List<Exam>>) -> Unit = {}
     private var errorCallback: (message: String) -> Unit = {}
     private var loginSuccessCallback: () -> Unit = {}
     private var loginErrorCallback: (message: String) -> Unit = {}
@@ -75,9 +75,12 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun initCallbacks() {
-        successCallback = { exams ->
+        successCallback = { data ->
             lifecycleScope.launch {
-                updateExams(exams, false)
+                updateUserSettings {
+                    it.copy(studentName = data.first?.first ?: it.studentName, studentInfo = data.first?.second ?: it.studentInfo)
+                }
+                updateExams(data.second, false)
                 openNextActivity()
             }
         }
@@ -127,6 +130,7 @@ class LoginActivity : AppCompatActivity() {
                 lifecycleScope.launch {
                     updateUserSettings { it.copy(username = username, password = password) }
                     if (isDemo) {
+                        updateUserSettings { it.copy(studentName = getString(R.string.demo_student_name), studentInfo = getString(R.string.demo_student_info)) }
                         demo.initDemoExams()
                         openNextActivity()
                     } else getStudiportalData(

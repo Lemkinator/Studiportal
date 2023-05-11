@@ -17,6 +17,7 @@ import android.window.OnBackInvokedDispatcher
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.SearchView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.lifecycleScope
@@ -229,10 +230,12 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 binding.drawerLayoutMain.showSearchMode()
                 return true
             }
+
             R.id.menu_item_open_online -> {
                 startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.studiportal_url))))
                 return true
             }
+
             R.id.menu_item_refresh_now -> {
                 lifecycleScope.launch { if (!binding.swipeRefreshLayout.isRefreshing) refresh() }
                 return true
@@ -297,6 +300,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         setSubtitle(userSettings.lastRefresh)
         if (userSettings.username == demo.username) binding.drawerLayoutMain.setTitle(getString(R.string.app_name) + " (Demo)")
         else binding.drawerLayoutMain.setTitle(getString(R.string.app_name))
+        setDrawerHeader(userSettings.studentName, userSettings.studentInfo)
         val helpOption = findViewById<LinearLayout>(R.id.draweritem_help)
         val aboutAppOption = findViewById<LinearLayout>(R.id.draweritem_about_app)
         val aboutMeOption = findViewById<LinearLayout>(R.id.draweritem_about_me)
@@ -318,8 +322,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
             binding.drawerLayoutMain.setDrawerOpen(false, true)
         }
-        binding.drawerLayoutMain.setDrawerButtonIcon(getDrawable(dev.oneuiproject.oneui.R.drawable.ic_oui_info_outline))
-        binding.drawerLayoutMain.setDrawerButtonOnClickListener {
+        findViewById<AppCompatImageButton>(R.id.drawerlayout_header_button).setOnClickListener {
             startActivity(Intent().setClass(this@MainActivity, AboutActivity::class.java))
         }
         binding.drawerLayoutMain.setDrawerButtonTooltip(getText(R.string.about_app))
@@ -328,8 +331,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             (getSystemService(SEARCH_SERVICE) as SearchManager).getSearchableInfo(componentName)
         )
         AppUpdateManagerFactory.create(this).appUpdateInfo.addOnSuccessListener { appUpdateInfo: AppUpdateInfo ->
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE)
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
                 binding.drawerLayoutMain.setButtonBadges(ToolbarLayout.N_BADGE, DrawerLayout.N_BADGE)
+                findViewById<TextView>(R.id.drawerlayout_header_badge).visibility = View.VISIBLE
+            }
         }
         binding.drawerLayoutMain.appBarLayout.addOnOffsetChangedListener { layout: AppBarLayout, verticalOffset: Int ->
             val totalScrollRange = layout.totalScrollRange
@@ -343,6 +348,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
+    private fun setDrawerHeader(studentName: String, studentInfo: String) {
+        findViewById<TextView>(R.id.drawerlayout_header_primary_text).text = studentName
+        findViewById<TextView>(R.id.drawerlayout_header_secondary_text).text = studentInfo
+    }
+
     private suspend fun refresh() {
         binding.swipeRefreshLayout.isRefreshing = true
         val userSettings = getUserSettings()
@@ -352,9 +362,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             binding.swipeRefreshLayout.isRefreshing = false
             setSubtitle(userSettings.lastRefresh)
         } else getStudiportalData(
-            successCallback = { exams ->
+            successCallback = { data ->
                 lifecycleScope.launch {
-                    if (updateExams(exams)) initList(getExamsWithSeparator(exams))
+                    updateUserSettings {
+                        it.copy(studentName = data.first?.first ?: it.studentName, studentInfo = data.first?.second ?: it.studentInfo)
+                    }
+                    setDrawerHeader(data.first?.first ?: userSettings.studentName, data.first?.second ?: userSettings.studentInfo)
+                    if (updateExams(data.second)) initList(getExamsWithSeparator(data.second))
                     else Toast.makeText(this@MainActivity, getString(R.string.no_change), Toast.LENGTH_SHORT).show()
                     binding.swipeRefreshLayout.isRefreshing = false
                     setSubtitle(userSettings.lastRefresh)

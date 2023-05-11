@@ -53,12 +53,20 @@ class CheckStudiportalWork @AssistedInject constructor(
     private val getStudiportalData: GetStudiportalDataUseCase,
     private val updateExams: UpdateExamsUseCase,
     private val getUserSettings: GetUserSettingsUseCase,
+    private val updateUserSettings: UpdateUserSettingsUseCase,
     private val demo: DemoUseCase,
 ) : CoroutineWorker(appContext, workerParams) {
     @OptIn(DelicateCoroutinesApi::class)
     override suspend fun doWork(): Result = withContext(Dispatchers.Default) {
         if (getUserSettings().username == demo.username) demo.updateDemoExams()
-        else getStudiportalData(successCallback = { exams -> GlobalScope.launch { updateExams(exams) } })
+        else getStudiportalData(successCallback = { data ->
+            GlobalScope.launch {
+                updateUserSettings {
+                    it.copy(studentName = data.first?.first ?: it.studentName, studentInfo = data.first?.second ?: it.studentInfo)
+                }
+                updateExams(data.second)
+            }
+        })
         Result.success()
     }
 }

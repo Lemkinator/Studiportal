@@ -35,6 +35,8 @@ class UserSettingsRepository @Inject constructor(
             it[KEY_SEARCH] = newSettings.search
             it[KEY_USERNAME] = newSettings.username
             it[KEY_PASSWORD] = newSettings.password
+            it[KEY_STUDENT_NAME] = newSettings.studentName
+            it[KEY_STUDENT_INFO] = newSettings.studentInfo
             it[KEY_NOTIFICATIONS_ENABLED] = newSettings.notificationsEnabled
             it[KEY_SHOW_GRADE_IN_NOTIFICATION] = newSettings.showGradeInNotification
             it[KEY_ALLOW_METERED_CONNECTION] = newSettings.allowMeteredConnection
@@ -57,6 +59,8 @@ class UserSettingsRepository @Inject constructor(
         search = prefs[KEY_SEARCH] ?: "",
         username = prefs[KEY_USERNAME] ?: "",
         password = prefs[KEY_PASSWORD] ?: "",
+        studentName = prefs[KEY_STUDENT_NAME] ?: "",
+        studentInfo = prefs[KEY_STUDENT_INFO] ?: "",
         notificationsEnabled = prefs[KEY_NOTIFICATIONS_ENABLED] ?: false,
         showGradeInNotification = prefs[KEY_SHOW_GRADE_IN_NOTIFICATION] ?: true,
         allowMeteredConnection = prefs[KEY_ALLOW_METERED_CONNECTION] ?: true,
@@ -76,6 +80,8 @@ class UserSettingsRepository @Inject constructor(
         private val KEY_SEARCH = stringPreferencesKey("search")
         private val KEY_USERNAME = stringPreferencesKey("username")
         private val KEY_PASSWORD = stringPreferencesKey("password")
+        private val KEY_STUDENT_NAME = stringPreferencesKey("studentName")
+        private val KEY_STUDENT_INFO = stringPreferencesKey("studentInfo")
         private val KEY_NOTIFICATIONS_ENABLED = booleanPreferencesKey("notificationsEnabled")
         private val KEY_SHOW_GRADE_IN_NOTIFICATION = booleanPreferencesKey("showGradeInNotification")
         private val KEY_ALLOW_METERED_CONNECTION = booleanPreferencesKey("allowMeteredConnection")
@@ -106,6 +112,10 @@ data class UserSettings(
     val username: String,
     /** password */
     val password: String,
+    /** name and matrikelnr. of student */
+    val studentName: String,
+    /** student info */
+    val studentInfo: String,
     /** Notifications enabled */
     val notificationsEnabled: Boolean,
     /** Notifications enabled */

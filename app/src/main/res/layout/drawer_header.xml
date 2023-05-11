@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawerlayout_default_header"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:paddingHorizontal="8dp"
+    app:layout_location="drawer_header">
+
+    <LinearLayout
+        android:id="@+id/drawerlayout_header"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_margin="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/drawerlayout_header_primary_text"
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:textColor="@color/primary_text_icon_color" />
+
+        <TextView
+            android:id="@+id/drawerlayout_header_secondary_text"
+            android:layout_width="match_parent"
+            android:layout_height="18dp"
+            android:autoSizeTextType="uniform"
+            android:ellipsize="marquee"
+            android:maxLines="1"
+            android:textColor="@color/secondary_text_icon_color" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="0">
+
+        <androidx.appcompat.widget.AppCompatImageButton
+            android:id="@+id/drawerlayout_header_button"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginVertical="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/sesl_action_bar_item_background"
+            android:padding="12dp"
+            android:src="@drawable/ic_oui_info_outline"
+            android:tint="@color/oui_drawerlayout_header_icon_color" />
+
+        <TextView
+            android:id="@+id/drawerlayout_header_badge"
+            android:layout_width="@dimen/oui_n_badge_view_size"
+            android:layout_height="@dimen/oui_n_badge_view_size"
+            android:layout_alignTop="@id/drawerlayout_header_button"
+            android:layout_alignEnd="@id/drawerlayout_header_button"
+            android:layout_marginTop="6dp"
+            android:layout_marginEnd="7dp"
+            android:background="@drawable/sesl_noti_badge"
+            android:gravity="center"
+            android:maxLines="1"
+            android:text="@string/oui_new_badge_text"
+            android:textColor="@color/oui_n_badge_text_color"
+            android:textSize="@dimen/oui_n_badge_text_size"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+</LinearLayout>
