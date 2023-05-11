@@ -15,7 +15,7 @@ class MakeSectionOfTextBoldUseCase {
         color: Int,
         lengthBefore: Int,
     ): SpannableStringBuilder {
-        if (textToBold != null && textToBold.isNotEmpty()) {
+        if (!textToBold.isNullOrEmpty()) {
             if (textToBold.trim().startsWith("\"") && textToBold.trim().endsWith("\"")) {
                 if (textToBold.length > 2) {
                     val s = textToBold.substring(1, textToBold.length - 1)

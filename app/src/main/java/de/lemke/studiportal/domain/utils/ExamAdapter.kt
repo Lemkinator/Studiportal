@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.RelativeLayout
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.util.SeslRoundedCorner
 import androidx.appcompat.util.SeslSubheaderRoundedCorner
@@ -78,7 +78,7 @@ class ExamAdapter(
         var isItem: Boolean = viewType == 0
         var isSeparator: Boolean = viewType == 1
         var isCategorySeparator: Boolean = viewType == 2
-        lateinit var parentView: RelativeLayout
+        lateinit var parentView: LinearLayout
         lateinit var listItemImg: ImageView
         lateinit var listItemTitle: TextView
         lateinit var listItemSubtitle1: TextView
@@ -87,7 +87,7 @@ class ExamAdapter(
         init {
             when {
                 isItem -> {
-                    parentView = itemView as RelativeLayout
+                    parentView = itemView as LinearLayout
                     listItemImg = itemView.findViewById(R.id.listview_item_img)
                     listItemTitle = parentView.findViewById(R.id.list_item_title)
                     listItemSubtitle1 = parentView.findViewById(R.id.list_item_subtitle1)
