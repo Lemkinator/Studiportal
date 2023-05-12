@@ -32,7 +32,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/help_text"
-                    android:textColor="@color/oui_primary_text_color"
+                    android:textColor="@color/primary_text_icon_color_themed"
                     android:layout_margin="10dp"
                     android:textSize="17sp" />
 

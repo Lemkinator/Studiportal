@@ -24,7 +24,7 @@
             android:autoSizeTextType="uniform"
             android:ellipsize="marquee"
             android:maxLines="1"
-            android:textColor="@color/primary_text_icon_color" />
+            android:textColor="@color/primary_text_icon_color_themed" />
 
         <TextView
             android:id="@+id/drawerlayout_header_secondary_text"
@@ -33,7 +33,7 @@
             android:autoSizeTextType="uniform"
             android:ellipsize="marquee"
             android:maxLines="1"
-            android:textColor="@color/secondary_text_icon_color" />
+            android:textColor="@color/secondary_text_icon_color_themed" />
 
     </LinearLayout>
 

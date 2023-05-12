@@ -39,7 +39,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="@string/leo"
-                    android:textColor="@color/oui_primary_text_color"
+                    android:textColor="@color/primary_text_icon_color_themed"
                     android:textSize="30sp"
                     app:fontFamily="@font/samsungsharpsans_bold" />
 
@@ -49,7 +49,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="@string/leo_job"
-                    android:textColor="@color/secondary_text_icon_color"
+                    android:textColor="@color/secondary_text_icon_color_themed"
                     android:textSize="14sp" />
 
                 <LinearLayout
@@ -151,7 +151,7 @@
                     android:layout_height="wrap_content"
                     android:text="@string/leo"
                     android:textAppearance="?android:attr/textAppearanceListItem"
-                    android:textColor="@color/oui_primary_text_color"
+                    android:textColor="@color/primary_text_icon_color_themed"
                     android:textSize="18sp" />
 
                 <TextView
