@@ -20,6 +20,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
 import androidx.appcompat.widget.SearchView
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -187,7 +189,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     override fun onPause() {
         super.onPause()
-        binding.drawerLayoutMain.setDrawerOpen(false, true)
+        lifecycleScope.launch {
+            delay(500) //delay, so closing the drawer is not visible for the user
+            binding.drawerLayoutMain.setDrawerOpen(false, false)
+        }
     }
 
     private fun initOnBackPressed() {
@@ -203,11 +208,44 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }
     }
 
+    private fun setBackPressedEnabled(enabled: Boolean) {
+        if (!::onBackPressedCallback.isInitialized || !::onBackInvokedCallback.isInitialized) return
+        onBackPressedCallback.isEnabled = enabled
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (enabled) onBackInvokedDispatcher.registerOnBackInvokedCallback(
+                OnBackInvokedDispatcher.PRIORITY_DEFAULT,
+                onBackInvokedCallback
+            )
+            else onBackInvokedDispatcher.unregisterOnBackInvokedCallback(onBackInvokedCallback)
+        }
+    }
+
     private fun checkBackPressed() {
-        if (binding.drawerLayoutMain.isSearchMode) {
-            isSearchUserInputEnabled = false
-            binding.drawerLayoutMain.dismissSearchMode()
-        } else finishAffinity()
+        when {
+            binding.drawerLayoutMain.isSearchMode -> {
+                if (ViewCompat.getRootWindowInsets(binding.root)!!.isVisible(WindowInsetsCompat.Type.ime())) {
+                    (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+                        currentFocus!!.windowToken,
+                        InputMethodManager.HIDE_NOT_ALWAYS
+                    )
+                } else {
+                    isSearchUserInputEnabled = false
+                    binding.drawerLayoutMain.dismissSearchMode()
+                }
+            }
+
+            binding.drawerLayoutMain.findViewById<androidx.drawerlayout.widget.DrawerLayout>(dev.oneuiproject.oneui.design.R.id.drawerlayout_drawer)
+                .isDrawerOpen(
+                    binding.drawerLayoutMain.findViewById<LinearLayout>(dev.oneuiproject.oneui.design.R.id.drawerlayout_drawer_content)
+                ) -> {
+                binding.drawerLayoutMain.setDrawerOpen(false, true)
+            }
+
+            else -> {
+                //should not get here, callback should be disabled/unregistered
+                finishAffinity()
+            }
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -267,13 +305,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         override fun onSearchModeToggle(searchView: SearchView, visible: Boolean) {
             lifecycleScope.launch {
                 if (visible) {
-                    onBackPressedCallback.isEnabled = true
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        onBackInvokedDispatcher.registerOnBackInvokedCallback(
-                            OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-                            onBackInvokedCallback
-                        )
-                    }
+                    setBackPressedEnabled(true)
                     isSearchUserInputEnabled = true
                     val search = getUserSettings().search
                     searchView.setQuery(search, false)
@@ -282,10 +314,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
                     setSearchList(search)
                 } else {
-                    onBackPressedCallback.isEnabled = false
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        onBackInvokedDispatcher.unregisterOnBackInvokedCallback(onBackInvokedCallback)
-                    }
+                    setBackPressedEnabled(false)
                     isSearchUserInputEnabled = false
                     exams = getExamsWithSeparator(getExams())
                     initList()
@@ -308,19 +337,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         helpOption.setOnClickListener {
             startActivity(Intent(this@MainActivity, HelpActivity::class.java))
-            binding.drawerLayoutMain.setDrawerOpen(false, true)
         }
         aboutAppOption.setOnClickListener {
             startActivity(Intent(this@MainActivity, AboutActivity::class.java))
-            binding.drawerLayoutMain.setDrawerOpen(false, true)
         }
         aboutMeOption.setOnClickListener {
             startActivity(Intent(this@MainActivity, AboutMeActivity::class.java))
-            binding.drawerLayoutMain.setDrawerOpen(false, true)
         }
         settingsOption.setOnClickListener {
             startActivity(Intent(this@MainActivity, SettingsActivity::class.java))
-            binding.drawerLayoutMain.setDrawerOpen(false, true)
         }
         findViewById<AppCompatImageButton>(R.id.drawerlayout_header_button).setOnClickListener {
             startActivity(Intent().setClass(this@MainActivity, AboutActivity::class.java))
@@ -346,6 +371,18 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             if (totalScrollRange != 0) binding.examNoEntryView.translationY = (abs(verticalOffset) - totalScrollRange).toFloat() / 2.0f
             else binding.examNoEntryView.translationY = (abs(verticalOffset) - inputMethodWindowVisibleHeight).toFloat() / 2.0f
         }
+        binding.drawerLayoutMain.findViewById<androidx.drawerlayout.widget.DrawerLayout>(dev.oneuiproject.oneui.design.R.id.drawerlayout_drawer).addDrawerListener(
+            object : androidx.drawerlayout.widget.DrawerLayout.DrawerListener {
+                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+                override fun onDrawerOpened(drawerView: View) {
+                    setBackPressedEnabled(true)
+                }
+                override fun onDrawerClosed(drawerView: View) {
+                    setBackPressedEnabled(false)
+                }
+                override fun onDrawerStateChanged(newState: Int) {}
+            }
+        )
     }
 
     private fun setDrawerHeader(studentName: String, studentInfo: String) {
