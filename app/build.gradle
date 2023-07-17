@@ -86,7 +86,7 @@ configurations.all {
 }
 
 dependencies {
-    implementation 'io.github.oneuiproject:design:1.2.4'
+    implementation 'io.github.oneuiproject:design:1.2.5'
     implementation 'io.github.oneuiproject.sesl:appcompat:1.4.0'
     implementation 'io.github.oneuiproject.sesl:preference:1.1.0'
     implementation 'io.github.oneuiproject.sesl:recyclerview:1.4.0'
@@ -96,7 +96,7 @@ dependencies {
 
     implementation 'com.android.volley:volley:1.2.1'
     implementation 'org.jsoup:jsoup:1.16.1'
-    implementation 'com.airbnb.android:lottie:6.0.1'
+    implementation 'com.airbnb.android:lottie:6.1.0'
 
     implementation 'androidx.core:core-splashscreen:1.0.1'
     implementation 'androidx.core:core-animation:1.0.0-beta01'
@@ -106,7 +106,7 @@ dependencies {
     kapt 'androidx.hilt:hilt-compiler:1.0.0'
 
     implementation "androidx.datastore:datastore-preferences:1.0.0"
-    def room_version = "2.5.1"
+    def room_version = "2.5.2"
     implementation "androidx.room:room-runtime:$room_version"
     implementation "androidx.room:room-ktx:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
