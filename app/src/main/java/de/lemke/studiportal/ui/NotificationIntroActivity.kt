@@ -38,6 +38,9 @@ class NotificationIntroActivity : AppCompatActivity() {
     @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= 34) {
+            overrideActivityTransition(OVERRIDE_TRANSITION_OPEN, android.R.anim.fade_in, android.R.anim.fade_out)
+        }
         binding = ActivityNotificationIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
         initOnBackPressed()
@@ -117,7 +120,10 @@ class NotificationIntroActivity : AppCompatActivity() {
         updateUserSettings { it.copy(tosAccepted = true) }
         if (getUserSettings().username.isBlank()) startActivity(Intent(this, LoginActivity::class.java))
         else startActivity(Intent(this, MainActivity::class.java))
-        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        if (Build.VERSION.SDK_INT < 34) {
+            @Suppress("DEPRECATION")
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
         finish()
     }
 }
