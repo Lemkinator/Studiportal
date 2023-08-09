@@ -5,12 +5,9 @@ import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.Configuration
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
 import android.view.*
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.TooltipCompat
 import com.google.android.material.appbar.AppBarLayout
@@ -20,6 +17,7 @@ import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityAboutMeBinding
 import de.lemke.studiportal.databinding.ActivityAboutMeContentBinding
 import de.lemke.studiportal.domain.OpenAppUseCase
+import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import dev.oneuiproject.oneui.utils.ViewUtils
 import dev.oneuiproject.oneui.utils.internal.ToolbarLayoutUtils
 import dev.oneuiproject.oneui.widget.Toast
@@ -48,21 +46,10 @@ class AboutMeActivity : AppCompatActivity(), View.OnClickListener {
         binding.aboutToolbar.setNavigationOnClickListener { finish() }
         resetAppBar(resources.configuration)
         initContent()
-        initOnBackPressed()
-    }
-
-    private fun initOnBackPressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            onBackInvokedDispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT) {
-                if (enableBackToHeader && binding.aboutAppBar.seslIsCollapsed()) binding.aboutAppBar.setExpanded(true)
-                else finish()
-            }
-        else onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (enableBackToHeader && binding.aboutAppBar.seslIsCollapsed()) binding.aboutAppBar.setExpanded(true)
-                else finish()
-            }
-        })
+        setCustomOnBackPressedLogic {
+            if (enableBackToHeader && binding.aboutAppBar.seslIsCollapsed()) binding.aboutAppBar.setExpanded(true)
+            else finish()
+        }
     }
 
     override fun onConfigurationChanged(newConfig: Configuration) {

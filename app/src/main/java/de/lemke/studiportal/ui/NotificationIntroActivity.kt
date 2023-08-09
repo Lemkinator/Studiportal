@@ -9,8 +9,6 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -20,6 +18,7 @@ import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityNotificationIntroBinding
 import de.lemke.studiportal.domain.GetUserSettingsUseCase
 import de.lemke.studiportal.domain.UpdateUserSettingsUseCase
+import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -43,32 +42,18 @@ class NotificationIntroActivity : AppCompatActivity() {
         }
         binding = ActivityNotificationIntroBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initOnBackPressed()
+        setCustomOnBackPressedLogic {
+            if (System.currentTimeMillis() - time < 3000) finishAffinity()
+            else {
+                Toast.makeText(this@NotificationIntroActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
+                time = System.currentTimeMillis()
+            }
+        }
         initFooterButton()
         binding.notificationSwitch.setOnCheckedChangeListener { _, isChecked ->
             binding.notificationShowGradeSwitch.isEnabled = isChecked
             binding.notificationShowGradeDescription.visibility = if (isChecked) View.VISIBLE else View.GONE
         }
-    }
-
-    private fun initOnBackPressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            onBackInvokedDispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT) {
-                if (System.currentTimeMillis() - time < 3000) finishAffinity()
-                else {
-                    Toast.makeText(this@NotificationIntroActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
-                    time = System.currentTimeMillis()
-                }
-            }
-        else onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (System.currentTimeMillis() - time < 3000) finishAffinity()
-                else {
-                    Toast.makeText(this@NotificationIntroActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
-                    time = System.currentTimeMillis()
-                }
-            }
-        })
     }
 
     private fun initFooterButton() {

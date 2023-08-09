@@ -12,9 +12,6 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import android.window.OnBackInvokedCallback
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
@@ -46,6 +43,7 @@ import dev.oneuiproject.oneui.layout.ToolbarLayout
 import dev.oneuiproject.oneui.utils.internal.ReflectUtils
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -56,9 +54,8 @@ import kotlin.math.abs
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private lateinit var binding: ActivityMainBinding
-    private lateinit var onBackPressedCallback: OnBackPressedCallback
-    private lateinit var onBackInvokedCallback: OnBackInvokedCallback
     private lateinit var exams: MutableList<Pair<Exam?, String>>
+    private val backPressEnabled = MutableStateFlow(false)
     private var isSearchUserInputEnabled = false
     private var time: Long = 0
     private var initListJob: Job? = null
@@ -179,7 +176,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun openMain() {
         lifecycleScope.launch {
-            initOnBackPressed()
+            setCustomOnBackPressedLogic(triggerStateFlow = backPressEnabled, onBackPressedLogic = { checkBackPressed() })
             initDrawer()
             initList()
             binding.swipeRefreshLayout.setOnRefreshListener { lifecycleScope.launch { refresh() } }
@@ -201,31 +198,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         lifecycleScope.launch {
             delay(500) //delay, so closing the drawer is not visible for the user
             binding.drawerLayoutMain.setDrawerOpen(false, false)
-        }
-    }
-
-    private fun initOnBackPressed() {
-        //set custom callback to prevent app from exiting on back press when in search mode
-        onBackPressedCallback = object : OnBackPressedCallback(false) {
-            override fun handleOnBackPressed() {
-                checkBackPressed()
-            }
-        }
-        onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            onBackInvokedCallback = OnBackInvokedCallback { checkBackPressed() }
-        }
-    }
-
-    private fun setBackPressedEnabled(enabled: Boolean) {
-        if (!::onBackPressedCallback.isInitialized || !::onBackInvokedCallback.isInitialized) return
-        onBackPressedCallback.isEnabled = enabled
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            if (enabled) onBackInvokedDispatcher.registerOnBackInvokedCallback(
-                OnBackInvokedDispatcher.PRIORITY_DEFAULT,
-                onBackInvokedCallback
-            )
-            else onBackInvokedDispatcher.unregisterOnBackInvokedCallback(onBackInvokedCallback)
         }
     }
 
@@ -314,7 +286,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         override fun onSearchModeToggle(searchView: SearchView, visible: Boolean) {
             lifecycleScope.launch {
                 if (visible) {
-                    setBackPressedEnabled(true)
+                    backPressEnabled.value = true
                     isSearchUserInputEnabled = true
                     val search = getUserSettings().search
                     searchView.setQuery(search, false)
@@ -323,7 +295,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                     autoCompleteTextView.setSelection(autoCompleteTextView.text.length)
                     setSearchList(search)
                 } else {
-                    setBackPressedEnabled(false)
+                    backPressEnabled.value = false
                     isSearchUserInputEnabled = false
                     exams = getExamsWithSeparator(getExams())
                     initList()
@@ -384,10 +356,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             object : androidx.drawerlayout.widget.DrawerLayout.DrawerListener {
                 override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
                 override fun onDrawerOpened(drawerView: View) {
-                    setBackPressedEnabled(true)
+                    backPressEnabled.value = true
                 }
                 override fun onDrawerClosed(drawerView: View) {
-                    setBackPressedEnabled(false)
+                    backPressEnabled.value = false
                 }
                 override fun onDrawerStateChanged(newState: Int) {}
             }

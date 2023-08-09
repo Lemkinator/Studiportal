@@ -1,9 +1,9 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
     id("kotlin-kapt")
     //id("com.google.devtools.ksp")
-    id("dagger.hilt.android.plugin")
 }
 
 val releaseStoreFile: String? by rootProject
@@ -95,18 +95,18 @@ android {
 
 configurations.configureEach {
     exclude(group = "androidx.appcompat", module = "appcompat")
+    exclude(group = "androidx.fragment", module = "fragment")
     exclude(group = "androidx.core", module = "core")
     exclude(group = "androidx.drawerlayout", module = "drawerlayout")
     exclude(group = "androidx.viewpager", module = "viewpager")
     exclude(group = "androidx.recyclerview", module = "recyclerview")
-    exclude(group = "androidx.fragment", module = "fragment")
 }
 
 dependencies {
     implementation("io.github.oneuiproject:design:1.2.6")
     implementation("io.github.oneuiproject.sesl:appcompat:1.4.0")
     implementation("io.github.oneuiproject.sesl:preference:1.1.0")
-    implementation("io.github.oneuiproject.sesl:recyclerview:1.4.0")
+    implementation("io.github.oneuiproject.sesl:recyclerview:1.4.1")
     implementation("io.github.oneuiproject.sesl:swiperefreshlayout:1.0.0")
     implementation("io.github.oneuiproject.sesl:material:1.5.0")
     implementation("io.github.oneuiproject:icons:1.1.0")
@@ -116,7 +116,7 @@ dependencies {
     implementation("com.airbnb.android:lottie:6.1.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("androidx.core:core-animation:1.0.0-beta01")
+    implementation("androidx.core:core-animation:1.0.0-rc01")
     implementation("com.google.android.play:core-ktx:1.8.1")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("androidx.hilt:hilt-work:1.0.0")
@@ -129,11 +129,6 @@ dependencies {
     //noinspection KaptUsageInsteadOfKsp
     kapt("androidx.room:room-compiler:$roomVersion")
     androidTestImplementation("androidx.room:room-testing:$roomVersion")
-
-    //kotlin 1.8 vs 1.7, kotlin-stdlib-jdk8 vs kotlin-stdlib-jdk7
-    //https://github.com/facebook/react-native/issues/35979
-    //https://kotlinlang.org/docs/whatsnew18.html#usage-of-the-latest-kotlin-stdlib-version-in-transitive-dependencies
-    //https://stackoverflow.com/questions/67744002/hilt-unsupported-metadata-version-in-kotlin
 
     //noinspection GradleDependency
     implementation("androidx.core:core-ktx:1.9.0")

@@ -7,11 +7,14 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
-import android.view.*
+import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,6 +29,7 @@ import de.lemke.studiportal.domain.GetUserSettingsUseCase
 import de.lemke.studiportal.domain.MakeSectionOfTextBoldUseCase
 import de.lemke.studiportal.domain.UpdateUserSettingsUseCase
 import de.lemke.studiportal.domain.model.Exam
+import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -73,11 +77,7 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
             examInfoList = exam.getInfoPairList(this@ExamActivity, false)
             initList()
         }
-        onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                opportunityToShowInAppReview()
-            }
-        })
+        setCustomOnBackPressedLogic { opportunityToShowInAppReview() }
     }
 
     private fun opportunityToShowInAppReview() {
@@ -85,7 +85,7 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
             try {
                 val lastInAppReviewRequest = getUserSettings().lastInAppReviewRequest
                 val daysSinceLastRequest = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastInAppReviewRequest)
-                if (daysSinceLastRequest < 7) {
+                if (daysSinceLastRequest < 14) {
                     finish()
                     return@launch
                 }
@@ -97,10 +97,11 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
                     if (task.isSuccessful) {
                         val reviewInfo = task.result
                         val flow = manager.launchReviewFlow(this@ExamActivity, reviewInfo)
-                        flow.addOnCompleteListener {}
+                        flow.addOnCompleteListener { finish() }
                     } else {
                         // There was some problem, log or handle the error code.
                         Log.e("InAppReview", "Review task failed: ${task.exception?.message}")
+                        finish()
                     }
                 }
             } catch (e: Exception) {

@@ -16,14 +16,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.Toast
-import android.window.OnBackInvokedDispatcher
-import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityOobeBinding
 import de.lemke.studiportal.domain.GetUserSettingsUseCase
+import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import de.lemke.studiportal.domain.utils.TipsItemView
 import java.util.*
 import javax.inject.Inject
@@ -45,30 +44,16 @@ class OOBEActivity : AppCompatActivity() {
         }
         binding = ActivityOobeBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initOnBackPressed()
+        setCustomOnBackPressedLogic {
+            if (System.currentTimeMillis() - time < 3000) finishAffinity()
+            else {
+                Toast.makeText(this@OOBEActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
+                time = System.currentTimeMillis()
+            }
+        }
         initTipsItems()
         initToSView()
         initFooterButton()
-    }
-
-    private fun initOnBackPressed() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-            onBackInvokedDispatcher.registerOnBackInvokedCallback(OnBackInvokedDispatcher.PRIORITY_DEFAULT) {
-                if (System.currentTimeMillis() - time < 3000) finishAffinity()
-                else {
-                    Toast.makeText(this@OOBEActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
-                    time = System.currentTimeMillis()
-                }
-            }
-        else onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                if (System.currentTimeMillis() - time < 3000) finishAffinity()
-                else {
-                    Toast.makeText(this@OOBEActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
-                    time = System.currentTimeMillis()
-                }
-            }
-        })
     }
 
     private fun initTipsItems() {
