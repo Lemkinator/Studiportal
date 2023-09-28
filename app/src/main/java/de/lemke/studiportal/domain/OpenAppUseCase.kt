@@ -25,11 +25,11 @@ class OpenAppUseCase @Inject constructor(
 
     private fun openAppWithPackageNameOnStore(packageName: String) {
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = Uri.parse(context.getString(R.string.play_store_app_link) + packageName)
+        intent.data = Uri.parse(context.getString(R.string.playstore_app_link) + packageName)
         try {
             context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
         } catch (anfe: ActivityNotFoundException) {
-            intent.data = Uri.parse(context.getString(R.string.play_store_link) + packageName)
+            intent.data = Uri.parse(context.getString(R.string.playstore_link) + packageName)
             try {
                 context.startActivity(intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
             } catch (e: Exception) {

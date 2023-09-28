@@ -11,8 +11,8 @@
     <string name="privacy_website" translatable="false">https://www.leonard-lemke.com/apps/studiportal/privacy-policy</string>
     <string name="playstore" translatable="false">Play Store</string>
     <string name="playstore_developer_page_link" translatable="false">https://play.google.com/store/apps/dev?id=4759149701353957861</string>
-    <string name="play_store_app_link" translatable="false">market://details?id=</string>
-    <string name="play_store_link" translatable="false">https://play.google.com/store/apps/details?id=</string>
+    <string name="playstore_app_link" translatable="false">market://details?id=</string>
+    <string name="playstore_link" translatable="false">https://play.google.com/store/apps/details?id=</string>
     <string name="oneui_libary_github" translatable="false">OneUI-Project Github</string>
     <string name="oneui_github_link" translatable="false">https://github.com/OneUIProject</string>
     <string name="rick_roll_troll_link" translatable="false">https://www.leonard-lemke.com/rr</string>

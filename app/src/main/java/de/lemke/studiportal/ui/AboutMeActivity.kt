@@ -156,7 +156,7 @@ class AboutMeActivity : AppCompatActivity(), View.OnClickListener {
                 bottomContent.aboutBottomShareApp.id -> {
                     val sendIntent = Intent(Intent.ACTION_SEND)
                     sendIntent.type = "text/plain"
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.play_store_link) + packageName)
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.playstore_link) + packageName)
                     sendIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.app_name))
                     startActivity(Intent.createChooser(sendIntent, "Share Via"))
                 }
