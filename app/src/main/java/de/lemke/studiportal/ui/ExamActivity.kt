@@ -5,7 +5,6 @@ import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.drawable.Drawable
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.Menu
@@ -20,18 +19,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
-import com.google.android.play.core.review.ReviewManagerFactory
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityExamBinding
 import de.lemke.studiportal.domain.GetExamUseCase
 import de.lemke.studiportal.domain.GetUserSettingsUseCase
 import de.lemke.studiportal.domain.MakeSectionOfTextBoldUseCase
+import de.lemke.studiportal.domain.ShowInAppReviewOrFinishUseCase
 import de.lemke.studiportal.domain.UpdateUserSettingsUseCase
 import de.lemke.studiportal.domain.model.Exam
 import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -51,12 +49,15 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
     @Inject
     lateinit var updateUserSettings: UpdateUserSettingsUseCase
 
+    @Inject
+    lateinit var showInAppReviewOrFinish: ShowInAppReviewOrFinishUseCase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityExamBinding.inflate(layoutInflater)
         setContentView(binding.root)
         binding.toolbarLayout.setNavigationButtonTooltip(getString(R.string.sesl_navigate_up))
-        binding.toolbarLayout.setNavigationButtonOnClickListener { opportunityToShowInAppReview() }
+        binding.toolbarLayout.setNavigationButtonOnClickListener { lifecycleScope.launch { showInAppReviewOrFinish(this@ExamActivity) } }
         val examNumber = intent.getStringExtra("examNumber")
         val semester = intent.getStringExtra("semester")
         boldText = intent.getStringExtra("boldText") ?: ""
@@ -77,38 +78,7 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
             examInfoList = exam.getInfoPairList(this@ExamActivity, false)
             initList()
         }
-        setCustomOnBackPressedLogic { opportunityToShowInAppReview() }
-    }
-
-    private fun opportunityToShowInAppReview() {
-        lifecycleScope.launch {
-            try {
-                val lastInAppReviewRequest = getUserSettings().lastInAppReviewRequest
-                val daysSinceLastRequest = TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - lastInAppReviewRequest)
-                if (daysSinceLastRequest < 14) {
-                    finish()
-                    return@launch
-                }
-                updateUserSettings { it.copy(lastInAppReviewRequest = System.currentTimeMillis()) }
-                val manager = ReviewManagerFactory.create(this@ExamActivity)
-                //val manager = FakeReviewManager(context);
-                val request = manager.requestReviewFlow()
-                request.addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val reviewInfo = task.result
-                        val flow = manager.launchReviewFlow(this@ExamActivity, reviewInfo)
-                        flow.addOnCompleteListener { finish() }
-                    } else {
-                        // There was some problem, log or handle the error code.
-                        Log.e("InAppReview", "Review task failed: ${task.exception?.message}")
-                        finish()
-                    }
-                }
-            } catch (e: Exception) {
-                Log.e("InAppReview", "Error: ${e.message}")
-                finish()
-            }
-        }
+        setCustomOnBackPressedLogic { lifecycleScope.launch { showInAppReviewOrFinish(this@ExamActivity) } }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

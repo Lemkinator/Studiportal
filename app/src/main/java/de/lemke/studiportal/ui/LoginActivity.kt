@@ -1,6 +1,5 @@
 package de.lemke.studiportal.ui
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -51,7 +50,6 @@ class LoginActivity : AppCompatActivity() {
     @Inject
     lateinit var setWorkManager: SetWorkManagerUseCase
 
-    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= 34) {

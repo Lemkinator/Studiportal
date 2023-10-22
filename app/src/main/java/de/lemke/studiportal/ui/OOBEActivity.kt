@@ -1,6 +1,5 @@
 package de.lemke.studiportal.ui
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -21,11 +20,9 @@ import androidx.appcompat.app.AppCompatActivity
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityOobeBinding
-import de.lemke.studiportal.domain.GetUserSettingsUseCase
 import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import de.lemke.studiportal.domain.utils.TipsItemView
 import java.util.*
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class OOBEActivity : AppCompatActivity() {
@@ -33,10 +30,6 @@ class OOBEActivity : AppCompatActivity() {
     private lateinit var toSDialog: AlertDialog
     private var time: Long = 0
 
-    @Inject
-    lateinit var getUserSettings: GetUserSettingsUseCase
-
-    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= 34) {

@@ -9,12 +9,12 @@ import javax.inject.Inject
 
 class GetSearchListUseCase @Inject constructor(
     @ActivityContext private val context: Context,
-    private val getExamsUseCase: GetExamsUseCase,
+    private val getExams: GetExamsUseCase,
 ) {
     suspend operator fun invoke(search: String?): List<Exam> = withContext(Dispatchers.Default) {
         when {
             search.isNullOrBlank() -> return@withContext emptyList()
-            else -> return@withContext getExamsUseCase().filter {
+            else -> return@withContext getExams().filter {
                 it.containsKeywords(
                     context,
                     if (search.startsWith("\"") && search.endsWith("\"") && search.length > 2) {

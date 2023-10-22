@@ -1,7 +1,6 @@
 package de.lemke.studiportal.ui
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
@@ -34,7 +33,6 @@ class NotificationIntroActivity : AppCompatActivity() {
     @Inject
     lateinit var updateUserSettings: UpdateUserSettingsUseCase
 
-    @SuppressLint("SourceLockedOrientationActivity")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         if (Build.VERSION.SDK_INT >= 34) {

@@ -13,7 +13,7 @@
     <string name="playstore_developer_page_link" translatable="false">https://play.google.com/store/apps/dev?id=4759149701353957861</string>
     <string name="playstore_app_link" translatable="false">market://details?id=</string>
     <string name="playstore_link" translatable="false">https://play.google.com/store/apps/details?id=</string>
-    <string name="oneui_libary_github" translatable="false">OneUI-Project Github</string>
+    <string name="oneui_library_github" translatable="false">OneUI-Project Github</string>
     <string name="oneui_github_link" translatable="false">https://github.com/OneUIProject</string>
     <string name="rick_roll_troll_link" translatable="false">https://www.leonard-lemke.com/rr</string>
 
@@ -64,7 +64,7 @@
     <string name="general">General</string>
     <string name="language">Language</string>
     <string name="change_language">Change app language</string>
-    <string name="change_language_not_supportet_by_device">Change language is not supported by your device.</string>
+    <string name="change_language_not_supported_by_device">Change language is not supported by your device.</string>
     <string name="press_again_to_exit">Press again to exit.</string>
     <string name="delete_appdata_and_exit">Delete App-Data and exit</string>
     <string name="delete_appdata_and_exit_warning">Attention: This will delete all personal data. Continue? </string>
