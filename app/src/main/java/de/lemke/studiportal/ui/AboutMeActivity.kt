@@ -20,7 +20,7 @@ import de.lemke.studiportal.domain.OpenAppUseCase
 import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import dev.oneuiproject.oneui.utils.ViewUtils
 import dev.oneuiproject.oneui.utils.internal.ToolbarLayoutUtils
-import dev.oneuiproject.oneui.widget.Toast
+import android.widget.Toast
 import javax.inject.Inject
 import kotlin.math.abs
 

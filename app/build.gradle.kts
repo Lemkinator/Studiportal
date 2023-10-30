@@ -112,11 +112,12 @@ dependencies {
     implementation("io.github.oneuiproject:icons:1.1.0")
 
     implementation("com.android.volley:volley:1.2.1")
-    implementation("org.jsoup:jsoup:1.16.1")
+    implementation("org.jsoup:jsoup:1.16.2")
     implementation("com.airbnb.android:lottie:6.1.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-animation:1.0.0-rc01")
+    implementation("com.google.android.play:core:1.10.3")
     implementation("com.google.android.play:core-ktx:1.8.1")
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     implementation("androidx.hilt:hilt-work:1.0.0")
