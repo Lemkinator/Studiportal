@@ -121,25 +121,28 @@ class AboutMeActivity : AppCompatActivity(), View.OnClickListener {
         bottomContent.aboutBottomRelativePlayStore.isEnabled = enabled
     }
 
+    private fun openLink(link: String) = try {
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(link)))
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(this@AboutMeActivity, getString(R.string.no_browser_app_installed), Toast.LENGTH_SHORT).show()
+    }
+
     override fun onClick(v: View) {
         val uptimeMillis = SystemClock.uptimeMillis()
         if (uptimeMillis - lastClickTime > 600L) {
             when (v.id) {
-                binding.aboutHeaderWebsite.id, bottomContent.aboutBottomRelativeWebsite.id -> {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.my_website))))
-                }
-                binding.aboutHeaderGithub.id -> {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.my_github))))
-                }
-                binding.aboutHeaderPlayStore.id, bottomContent.aboutBottomRelativePlayStore.id -> {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.playstore_developer_page_link))))
-                }
-                binding.aboutHeaderTiktok.id, bottomContent.aboutBottomRelativeTiktok.id -> {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.rick_roll_troll_link))))
-                }
-                binding.aboutHeaderInsta.id -> {
-                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.my_insta))))
-                }
+                binding.aboutHeaderWebsite.id, bottomContent.aboutBottomRelativeWebsite.id -> openLink(getString(R.string.my_website))
+                binding.aboutHeaderGithub.id -> openLink(getString(R.string.my_github))
+                binding.aboutHeaderPlayStore.id, bottomContent.aboutBottomRelativePlayStore.id -> openLink(getString(R.string.playstore_developer_page_link))
+                binding.aboutHeaderTiktok.id, bottomContent.aboutBottomRelativeTiktok.id -> openLink(getString(R.string.rick_roll_troll_link))
+                binding.aboutHeaderInsta.id -> openLink(getString(R.string.my_insta))
+                bottomContent.aboutBottomRateApp.id -> openApp(packageName, false)
+                bottomContent.aboutBottomShareApp.id -> startActivity(Intent.createChooser(Intent().apply {
+                    action = Intent.ACTION_SEND
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, getString(R.string.playstore_link) + packageName)
+                }, null))
+
                 bottomContent.aboutBottomWriteEmail.id -> {
                     val intent = Intent(Intent.ACTION_SENDTO)
                     intent.data = Uri.parse("mailto:") // only email apps should handle this
@@ -151,14 +154,6 @@ class AboutMeActivity : AppCompatActivity(), View.OnClickListener {
                     } catch (ex: ActivityNotFoundException) {
                         Toast.makeText(this@AboutMeActivity, getString(R.string.no_email_app_installed), Toast.LENGTH_SHORT).show()
                     }
-                }
-                bottomContent.aboutBottomRateApp.id -> openApp(packageName, false)
-                bottomContent.aboutBottomShareApp.id -> {
-                    val sendIntent = Intent(Intent.ACTION_SEND)
-                    sendIntent.type = "text/plain"
-                    sendIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.playstore_link) + packageName)
-                    sendIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.app_name))
-                    startActivity(Intent.createChooser(sendIntent, "Share Via"))
                 }
             }
         }
