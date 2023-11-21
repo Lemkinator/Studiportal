@@ -176,10 +176,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private fun openMain() {
         lifecycleScope.launch {
-            setCustomOnBackPressedLogic(triggerStateFlow = backPressEnabled, onBackPressedLogic = { checkBackPressed() })
             initDrawer()
             initList()
             binding.swipeRefreshLayout.setOnRefreshListener { lifecycleScope.launch { refresh() } }
+            setCustomOnBackPressedLogic(backPressEnabled) { checkBackPressed() }
             //manually waiting for the animation to finish :/
             delay(700 - (System.currentTimeMillis() - time).coerceAtLeast(0L))
             isUIReady = true

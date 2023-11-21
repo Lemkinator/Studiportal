@@ -77,8 +77,10 @@ class ExamActivity : AppCompatActivity(R.layout.activity_main) {
             binding.toolbarLayout.setTitle(exam.name)
             examInfoList = exam.getInfoPairList(this@ExamActivity, false)
             initList()
+            if (showInAppReviewOrFinish.canShowInAppReview()) {
+                setCustomOnBackPressedLogic { lifecycleScope.launch { showInAppReviewOrFinish(this@ExamActivity) } }
+            }
         }
-        setCustomOnBackPressedLogic { lifecycleScope.launch { showInAppReviewOrFinish(this@ExamActivity) } }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

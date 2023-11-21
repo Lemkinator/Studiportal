@@ -113,7 +113,7 @@ dependencies {
 
     implementation("com.android.volley:volley:1.2.1")
     implementation("org.jsoup:jsoup:1.16.2")
-    implementation("com.airbnb.android:lottie:6.1.0")
+    implementation("com.airbnb.android:lottie:6.2.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-animation:1.0.0-rc01")
