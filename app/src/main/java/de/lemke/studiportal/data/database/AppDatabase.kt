@@ -21,10 +21,10 @@ abstract class AppDatabase : RoomDatabase() {
 }
 
 val MIGRATION_1_2 = object : Migration(1, 2) {
-    override fun migrate(database: SupportSQLiteDatabase) {
+    override fun migrate(db: SupportSQLiteDatabase) {
         //delete column id and set new primary key to examNumber + semester
         //Drop column isn't supported by SQLite, so the data must manually be moved
-        with(database) {
+        with(db) {
             execSQL("""CREATE TABLE exam_backup (
                 |examNumber TEXT NOT NULL, 
                 |name TEXT NOT NULL, 
