@@ -112,8 +112,8 @@ dependencies {
     implementation("io.github.oneuiproject:icons:1.1.0")
 
     implementation("com.android.volley:volley:1.2.1")
-    implementation("org.jsoup:jsoup:1.17.1")
-    implementation("com.airbnb.android:lottie:6.2.0")
+    implementation("org.jsoup:jsoup:1.17.2")
+    implementation("com.airbnb.android:lottie:6.3.0")
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.core:core-animation:1.0.0-rc01")
