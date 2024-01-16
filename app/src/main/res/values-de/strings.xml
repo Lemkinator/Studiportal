@@ -171,6 +171,7 @@
     <string name="wrong_username_or_password_message">Der Benutzer oder das Passwort scheint ungültig zu sein.\n\nWenn du sicher bist das alles stimmt probiere es in ein paar Minuten nochmal…</string>
     <string name="error_login">Fehler beim Login: %1$s</string>
     <string name="studi_portal_login_failed_message">Anmeldung fehlgeschlagen</string>
+    <string name="error_timeout">Fehler: Studiportal nicht erreichbar</string>
     <string name="error_asi">Fehler beim Abrufen des ASI: %1$s</string>
     <string name="error_could_not_get_asi">ASI konnte nicht ermittelt werden.</string>
     <string name="error_observe">Fehler beim Abrufen der Prüfungen: %1$s</string>

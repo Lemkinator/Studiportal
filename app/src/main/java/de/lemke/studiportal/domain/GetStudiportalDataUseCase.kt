@@ -6,6 +6,7 @@ import android.net.NetworkCapabilities
 import android.util.Log
 import com.android.volley.Request
 import com.android.volley.RequestQueue
+import com.android.volley.TimeoutError
 import com.android.volley.toolbox.*
 import dagger.hilt.android.qualifiers.ApplicationContext
 import de.lemke.studiportal.R
@@ -29,6 +30,7 @@ class GetStudiportalDataUseCase @Inject constructor(
         errorCallback: (message: String) -> Unit = { },
         loginSuccessCallback: () -> Unit = { },
         loginErrorCallback: (message: String) -> Unit = { },
+        timeoutErrorCallback: () -> Unit = { },
     ): Unit = withContext(Dispatchers.Default) {
         val userSettings = getUserSettings()
         val username = userSettings.username
@@ -84,8 +86,13 @@ class GetStudiportalDataUseCase @Inject constructor(
                 }
             },
             {
-                loginErrorCallback(context.getString(R.string.error_login, it.message))
-                onError(context.getString(R.string.error_login, it.message), requestQueue, errorCallback)
+                it.printStackTrace()
+                if (it is TimeoutError) {
+                    timeoutErrorCallback()
+                } else {
+                    loginErrorCallback(context.getString(R.string.error_login, it.message))
+                    onError(context.getString(R.string.error_login, it.message), requestQueue, errorCallback)
+                }
             }) {
             override fun getBodyContentType(): String = "application/x-www-form-urlencoded; charset=UTF-8"
 
@@ -117,7 +124,11 @@ class GetStudiportalDataUseCase @Inject constructor(
         logout(requestQueue)
     }
 
-    private fun onSuccess(response: String, requestQueue: RequestQueue, successCallback: (data: Pair<Pair<String, String>?, List<Exam>>) -> Unit) {
+    private fun onSuccess(
+        response: String,
+        requestQueue: RequestQueue,
+        successCallback: (data: Pair<Pair<String, String>?, List<Exam>>) -> Unit
+    ) {
         val exams = parseExamList(response)
         val studentData = parseStudentData(response)
         successCallback(Pair(studentData, exams))

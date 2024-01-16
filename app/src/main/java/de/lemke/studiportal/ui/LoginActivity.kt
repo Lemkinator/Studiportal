@@ -3,10 +3,13 @@ package de.lemke.studiportal.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.Toast
+import android.widget.VideoView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
@@ -14,10 +17,15 @@ import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import de.lemke.studiportal.R
 import de.lemke.studiportal.databinding.ActivityLoginBinding
-import de.lemke.studiportal.domain.*
+import de.lemke.studiportal.domain.DemoUseCase
+import de.lemke.studiportal.domain.GetStudiportalDataUseCase
+import de.lemke.studiportal.domain.GetUserSettingsUseCase
+import de.lemke.studiportal.domain.SetWorkManagerUseCase
+import de.lemke.studiportal.domain.UpdateExamsUseCase
+import de.lemke.studiportal.domain.UpdateUserSettingsUseCase
 import de.lemke.studiportal.domain.model.Exam
+import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -27,6 +35,7 @@ class LoginActivity : AppCompatActivity() {
     private var errorCallback: (message: String) -> Unit = {}
     private var loginSuccessCallback: () -> Unit = {}
     private var loginErrorCallback: (message: String) -> Unit = {}
+    private var timeoutErrorCallback: () -> Unit = {}
     private var username: String = ""
     private var password: String = ""
     private var time: Long = 0
@@ -57,7 +66,8 @@ class LoginActivity : AppCompatActivity() {
         }
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        initEditTexts()
+        binding.editTextUsername.doAfterTextChanged { username = it.toString() }
+        binding.editTextPassword.doAfterTextChanged { password = it.toString() }
         initCallbacks()
         initFooterButton()
         setCustomOnBackPressedLogic {
@@ -66,16 +76,6 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, resources.getString(R.string.press_again_to_exit), Toast.LENGTH_SHORT).show()
                 time = System.currentTimeMillis()
             }
-        }
-    }
-
-    private fun initEditTexts() {
-        lifecycleScope.launch {
-            val userSettings = getUserSettings()
-            binding.editTextUsername.setText(userSettings.username)
-            binding.editTextPassword.setText(userSettings.password)
-            binding.editTextUsername.doAfterTextChanged { username = it.toString() }
-            binding.editTextPassword.doAfterTextChanged { password = it.toString() }
         }
     }
 
@@ -101,11 +101,11 @@ class LoginActivity : AppCompatActivity() {
         }
         loginSuccessCallback = {
             loginSuccess = true
+            lifecycleScope.launch { updateUserSettings { it.copy(username = username, password = password) } }
         }
         loginErrorCallback = { message ->
             loginSuccess = false
             lifecycleScope.launch {
-                updateUserSettings { it.copy(username = "", password = "") }
                 AlertDialog.Builder(this@LoginActivity)
                     .setTitle(getString(R.string.error))
                     .setMessage(message)
@@ -116,6 +116,35 @@ class LoginActivity : AppCompatActivity() {
                 binding.loginFooterButton.visibility = View.VISIBLE
             }
         }
+        timeoutErrorCallback = {
+            loginSuccess = false
+                val videoView = FrameLayout(this@LoginActivity).apply {
+                    addView(
+                        VideoView(this@LoginActivity).apply {
+                            setVideoPath(
+                                "android.resource://$packageName/" + listOf(R.raw.hfu_meme_1, R.raw.hfu_meme_2, R.raw.hfu_meme_3).random()
+                            )
+                            setOnPreparedListener { mediaPlayer ->
+                                mediaPlayer.isLooping = true
+                                start()
+                            }
+                        },
+                        FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                            val pxValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20F, resources.displayMetrics).toInt()
+                            setMargins(pxValue, pxValue, pxValue, pxValue)
+                        })
+                }
+                AlertDialog.Builder(this@LoginActivity)
+                    .setTitle(getString(R.string.error_timeout))
+                    .setView(videoView)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.ok, null)
+                    .create()
+                    .show()
+                binding.loginFooterButtonProgress.visibility = View.GONE
+                binding.loginFooterButton.visibility = View.VISIBLE
+        }
+
     }
 
     private fun initFooterButton() {
@@ -133,9 +162,15 @@ class LoginActivity : AppCompatActivity() {
                 binding.loginFooterButton.visibility = View.GONE
                 binding.loginFooterButtonProgress.visibility = View.VISIBLE
                 lifecycleScope.launch {
-                    updateUserSettings { it.copy(username = username, password = password) }
                     if (isDemo) {
-                        updateUserSettings { it.copy(studentName = getString(R.string.demo_student_name), studentInfo = getString(R.string.demo_student_info)) }
+                        updateUserSettings {
+                            it.copy(
+                                username = demo.username,
+                                password = "",
+                                studentName = getString(R.string.demo_student_name),
+                                studentInfo = getString(R.string.demo_student_info)
+                            )
+                        }
                         demo.initDemoExams()
                         openNextActivity()
                     } else getStudiportalData(
@@ -143,6 +178,7 @@ class LoginActivity : AppCompatActivity() {
                         errorCallback = errorCallback,
                         loginSuccessCallback = loginSuccessCallback,
                         loginErrorCallback = loginErrorCallback,
+                        timeoutErrorCallback = timeoutErrorCallback
                     )
                 }
             } else {

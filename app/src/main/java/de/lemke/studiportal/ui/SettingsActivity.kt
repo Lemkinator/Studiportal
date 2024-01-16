@@ -74,6 +74,9 @@ class SettingsActivity : AppCompatActivity() {
         @Inject
         lateinit var setWorkManager: SetWorkManagerUseCase
 
+        @Inject
+        lateinit var deleteAllExams: DeleteAllExamsUseCase
+
         override fun onAttach(context: Context) {
             super.onAttach(context)
             if (activity is SettingsActivity) settingsActivity = activity as SettingsActivity
@@ -131,8 +134,10 @@ class SettingsActivity : AppCompatActivity() {
                 dialog.show()
                 DialogUtils.setDialogProgressForButton(dialog, DialogInterface.BUTTON_POSITIVE) {
                     lifecycleScope.launch {
-                        updateUserSettings { it.copy(username = "", password = "", allowMeteredConnection = true) }
+                        updateUserSettings { it.copy(username = "", password = "", studentName = "", studentInfo = "", allowMeteredConnection = true) }
+                        deleteAllExams()
                         setWorkManager.cancelStudiportalWork()
+                        dialog.dismiss()
                         settingsActivity.finishAffinity()
                         startActivity(Intent(settingsActivity, LoginActivity::class.java))
                     }

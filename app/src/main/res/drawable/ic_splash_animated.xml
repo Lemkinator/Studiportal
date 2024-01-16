@@ -91,10 +91,22 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:duration="600"
-                android:startOffset="200"
                 android:propertyName="rotation"
+                android:startOffset="150"
                 android:valueFrom="0"
                 android:valueTo="360" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="15000"
+                android:interpolator="@android:interpolator/linear"
+                android:propertyName="rotation"
+                android:startOffset="750"
+                android:valueFrom="360"
+                android:valueTo="720" />
         </aapt:attr>
     </target>
 
@@ -102,33 +114,89 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:duration="600"
-                android:startOffset="200"
                 android:propertyName="rotation"
+                android:startOffset="150"
                 android:valueFrom="360"
                 android:valueTo="0" />
         </aapt:attr>
     </target>
 
+    <target android:name="main3">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="15000"
+                android:interpolator="@android:interpolator/linear"
+                android:propertyName="rotation"
+                android:startOffset="750"
+                android:valueFrom="0"
+                android:valueTo="-360" />
+        </aapt:attr>
+    </target>
+
     <target android:name="main4">
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:duration="600"
-                android:startOffset="200"
                 android:propertyName="rotation"
+                android:startOffset="150"
                 android:valueFrom="0"
                 android:valueTo="360" />
         </aapt:attr>
     </target>
 
+    <target android:name="main4">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="15000"
+                android:interpolator="@android:interpolator/linear"
+                android:propertyName="rotation"
+                android:startOffset="750"
+                android:valueFrom="360"
+                android:valueTo="720" />
+        </aapt:attr>
+    </target>
 
+
+    <target android:name="main1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:propertyName="scaleX"
+                android:startOffset="0"
+                android:valueFrom="0.3"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main1">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:propertyName="scaleY"
+                android:startOffset="0"
+                android:valueFrom="0.3"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
 
     <target android:name="main2">
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:duration="700"
-                android:startOffset="0"
                 android:propertyName="scaleX"
-                android:valueFrom="2"
+                android:startOffset="0"
+                android:valueFrom="0.3"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main2">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
+                android:propertyName="scaleY"
+                android:startOffset="0"
+                android:valueFrom="0.3"
                 android:valueTo="1" />
         </aapt:attr>
     </target>
@@ -137,31 +205,9 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:duration="700"
-                android:startOffset="0"
                 android:propertyName="scaleX"
-                android:valueFrom="2"
-                android:valueTo="1" />
-        </aapt:attr>
-    </target>
-
-    <target android:name="main4">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:duration="700"
                 android:startOffset="0"
-                android:propertyName="scaleX"
-                android:valueFrom="2"
-                android:valueTo="1" />
-        </aapt:attr>
-    </target>
-
-    <target android:name="main2">
-        <aapt:attr name="android:animation">
-            <objectAnimator
-                android:duration="700"
-                android:startOffset="0"
-                android:propertyName="scaleY"
-                android:valueFrom="2"
+                android:valueFrom="0.3"
                 android:valueTo="1" />
         </aapt:attr>
     </target>
@@ -170,9 +216,9 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:duration="700"
-                android:startOffset="0"
                 android:propertyName="scaleY"
-                android:valueFrom="2"
+                android:startOffset="0"
+                android:valueFrom="0.3"
                 android:valueTo="1" />
         </aapt:attr>
     </target>
@@ -181,9 +227,20 @@
         <aapt:attr name="android:animation">
             <objectAnimator
                 android:duration="700"
+                android:propertyName="scaleX"
                 android:startOffset="0"
+                android:valueFrom="0.3"
+                android:valueTo="1" />
+        </aapt:attr>
+    </target>
+
+    <target android:name="main4">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="700"
                 android:propertyName="scaleY"
-                android:valueFrom="2"
+                android:startOffset="0"
+                android:valueFrom="0.3"
                 android:valueTo="1" />
         </aapt:attr>
     </target>

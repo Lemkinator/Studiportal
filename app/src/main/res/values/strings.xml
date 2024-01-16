@@ -199,6 +199,7 @@
     <string name="wrong_username_or_password_message">The username or password seems to be invalid.\n\nIf you are sure that everything is correct try again in a few minutes…</string>
     <string name="error_login">Login error: %1$s</string>
     <string name="studi_portal_login_failed_message">Login failed</string>
+    <string name="error_timeout">Error: Studiportal not available</string>
     <string name="error_asi">Error when retrieving the ASI: %1$s</string>
     <string name="error_could_not_get_asi">ASI could not be determined.</string>
     <string name="error_observe">Error when retrieving the exams: %1$s</string>

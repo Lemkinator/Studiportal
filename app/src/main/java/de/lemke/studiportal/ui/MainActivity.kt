@@ -6,12 +6,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.*
 import android.view.inputmethod.InputMethodManager
+import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import android.widget.VideoView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatImageButton
@@ -348,18 +351,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             if (totalScrollRange != 0) binding.examNoEntryView.translationY = (abs(verticalOffset) - totalScrollRange).toFloat() / 2.0f
             else binding.examNoEntryView.translationY = (abs(verticalOffset) - inputMethodWindowVisibleHeight).toFloat() / 2.0f
         }
-        binding.drawerLayoutMain.findViewById<androidx.drawerlayout.widget.DrawerLayout>(dev.oneuiproject.oneui.design.R.id.drawerlayout_drawer).addDrawerListener(
-            object : androidx.drawerlayout.widget.DrawerLayout.DrawerListener {
-                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
-                override fun onDrawerOpened(drawerView: View) {
-                    backPressEnabled.value = true
+        binding.drawerLayoutMain.findViewById<androidx.drawerlayout.widget.DrawerLayout>(dev.oneuiproject.oneui.design.R.id.drawerlayout_drawer)
+            .addDrawerListener(
+                object : androidx.drawerlayout.widget.DrawerLayout.DrawerListener {
+                    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+                    override fun onDrawerOpened(drawerView: View) {
+                        backPressEnabled.value = true
+                    }
+
+                    override fun onDrawerClosed(drawerView: View) {
+                        backPressEnabled.value = false
+                    }
+
+                    override fun onDrawerStateChanged(newState: Int) {}
                 }
-                override fun onDrawerClosed(drawerView: View) {
-                    backPressEnabled.value = false
-                }
-                override fun onDrawerStateChanged(newState: Int) {}
-            }
-        )
+            )
     }
 
     private fun setDrawerHeader(studentName: String, studentInfo: String) {
@@ -400,6 +406,32 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                         .create()
                         .show()
                 }
+            },
+            timeoutErrorCallback = {
+                binding.swipeRefreshLayout.isRefreshing = false
+                val videoView = FrameLayout(this).apply {
+                    addView(
+                        VideoView(this@MainActivity).apply {
+                            setVideoPath(
+                                "android.resource://$packageName/" + listOf(R.raw.hfu_meme_1, R.raw.hfu_meme_2, R.raw.hfu_meme_3).random()
+                            )
+                            setOnPreparedListener { mediaPlayer ->
+                                mediaPlayer.isLooping = true
+                                start()
+                            }
+                        },
+                        FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                            val pxValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20F, resources.displayMetrics).toInt()
+                            setMargins(pxValue, pxValue, pxValue, pxValue)
+                        })
+                }
+                AlertDialog.Builder(this)
+                    .setTitle(getString(R.string.error_timeout))
+                    .setView(videoView)
+                    .setCancelable(false)
+                    .setPositiveButton(R.string.ok, null)
+                    .create()
+                    .show()
             }
         )
     }
