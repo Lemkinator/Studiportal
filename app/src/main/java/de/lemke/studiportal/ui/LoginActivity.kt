@@ -118,33 +118,32 @@ class LoginActivity : AppCompatActivity() {
         }
         timeoutErrorCallback = {
             loginSuccess = false
-                val videoView = FrameLayout(this@LoginActivity).apply {
-                    addView(
-                        VideoView(this@LoginActivity).apply {
-                            setVideoPath(
-                                "android.resource://$packageName/" + listOf(R.raw.hfu_meme_1, R.raw.hfu_meme_2, R.raw.hfu_meme_3).random()
-                            )
-                            setOnPreparedListener { mediaPlayer ->
-                                mediaPlayer.isLooping = true
-                                start()
-                            }
-                        },
-                        FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
-                            val pxValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20F, resources.displayMetrics).toInt()
-                            setMargins(pxValue, pxValue, pxValue, pxValue)
-                        })
-                }
-                AlertDialog.Builder(this@LoginActivity)
-                    .setTitle(getString(R.string.error_timeout))
-                    .setView(videoView)
-                    .setCancelable(false)
-                    .setPositiveButton(R.string.ok, null)
-                    .create()
-                    .show()
-                binding.loginFooterButtonProgress.visibility = View.GONE
-                binding.loginFooterButton.visibility = View.VISIBLE
+            val videoView = FrameLayout(this@LoginActivity).apply {
+                addView(
+                    VideoView(this@LoginActivity).apply {
+                        setVideoPath(
+                            "android.resource://$packageName/" + listOf(R.raw.hfu_meme_1, R.raw.hfu_meme_2, R.raw.hfu_meme_3).random()
+                        )
+                        setOnPreparedListener { mediaPlayer ->
+                            mediaPlayer.isLooping = true
+                            start()
+                        }
+                    },
+                    FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT).apply {
+                        val pxValue = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20F, resources.displayMetrics).toInt()
+                        setMargins(pxValue, pxValue, pxValue, pxValue)
+                    })
+            }
+            AlertDialog.Builder(this@LoginActivity)
+                .setTitle(getString(R.string.error_timeout))
+                .setView(videoView)
+                .setCancelable(false)
+                .setPositiveButton(R.string.ok, null)
+                .create()
+                .show()
+            binding.loginFooterButtonProgress.visibility = View.GONE
+            binding.loginFooterButton.visibility = View.VISIBLE
         }
-
     }
 
     private fun initFooterButton() {
