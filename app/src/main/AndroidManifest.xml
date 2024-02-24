@@ -63,6 +63,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.HelpActivity" />
+        <activity android:name=".ui.InfoActivity" />
         <activity android:name=".ui.AboutMeActivity" />
         <activity android:name=".ui.AboutActivity" />
         <activity android:name=".ui.NotificationIntroActivity" />

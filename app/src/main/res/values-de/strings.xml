@@ -14,6 +14,17 @@
     <string name="contact_me">Kontaktier mich (E-Mail)</string>
     <string name="help_text">Diese App steht in keiner Verbindung zur Hochschule Furtwangen und dient lediglich dazu, die Daten aus dem Studiportal anzuzeigen. \nDie Nutzung des Logos erfolgt mit freundlicher Genehmigung der Strategie und Kommunikationsabteilung der Hochschule Furtwangen.</string>
 
+    <string name="studiportal_rip">RIP Studiportal App?</string>
+    <string name="studiportal_rip_text">Die Studiportal App steht für unbestimmte Zeit nicht zur Verfügung.</string>
+    <string name="what_happened">Was ist passiert?</string>
+    <string name="studiportal_offline_date">September 2023</string>
+    <string name="studiportal_offline">Studiportal wird offline genommen…</string>
+    <string name="studiportal_online_date">Februar 2024</string>
+    <string name="studiportal_online">Studiportal ist wieder Online!</string>
+    <string name="studiportal_sso">Studiportal nutzt Single Sign-on für den Login</string>
+    <string name="studiportal_sso_text">Durch den Single Sign-on wird der Anmeldeprozess der App deutlich erschwert. Eine API (Schnittstelle) für das Abrufen der Daten aus dem Studiportal bietet das HFU Informations- und Medienzentrum (HFU IMZ) leider noch immer nicht an. Solange es dabei bleibt und keine Lösung für den neu dazugekommenen Single Sign-on gefunden werden kann, steht die Studiportal App nicht zur Verfügung.</string>
+    <string name="contribute_on_github">Auf GitHub helfen</string>
+
     <!--About-->
     <string name="about_page_optional_text">Die neue Studiportal-App mit OneUI-Design</string>
     <string name="about_app">Über Studiportal</string>

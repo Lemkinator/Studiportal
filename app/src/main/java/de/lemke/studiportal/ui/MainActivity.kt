@@ -2,6 +2,7 @@ package de.lemke.studiportal.ui
 
 import android.annotation.SuppressLint
 import android.app.SearchManager
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
@@ -136,18 +137,27 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         }*/
 
         lifecycleScope.launch {
-            when (checkAppStart()) {
+            checkAppStart()
+            //manually waiting for the animation to finish :/
+            delay(700 - (System.currentTimeMillis() - time).coerceAtLeast(0L))
+            startActivity(Intent(this@MainActivity, InfoActivity::class.java))
+            if (Build.VERSION.SDK_INT < 34) {
+                @Suppress("DEPRECATION")
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            finish()
+            /*when (checkAppStart()) {
                 AppStart.FIRST_TIME -> openOOBE()
                 AppStart.NORMAL -> checkTOS(getUserSettings())
                 AppStart.FIRST_TIME_VERSION -> checkTOS(getUserSettings())
-            }
+            }*/
         }
     }
 
     private suspend fun openOOBE() {
         //manually waiting for the animation to finish :/
         delay(700 - (System.currentTimeMillis() - time).coerceAtLeast(0L))
-        startActivity(Intent(applicationContext, OOBEActivity::class.java))
+        startActivity(Intent(this@MainActivity, OOBEActivity::class.java))
         if (Build.VERSION.SDK_INT < 34) {
             @Suppress("DEPRECATION")
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -164,7 +174,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         if (userSettings.username.isBlank()) {
             //manually waiting for the animation to finish :/
             delay(700 - (System.currentTimeMillis() - time).coerceAtLeast(0L))
-            startActivity(Intent(applicationContext, LoginActivity::class.java))
+            startActivity(Intent(this@MainActivity, LoginActivity::class.java))
             if (Build.VERSION.SDK_INT < 34) {
                 @Suppress("DEPRECATION")
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -250,7 +260,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
 
             R.id.menu_item_open_online -> {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.studiportal_url))))
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.studiportal_url))))
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(this, getString(R.string.no_browser_app_installed), Toast.LENGTH_SHORT).show()
+                }
                 return true
             }
 
@@ -412,9 +426,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 val videoView = FrameLayout(this).apply {
                     addView(
                         VideoView(this@MainActivity).apply {
-                            setVideoPath(
-                                "android.resource://$packageName/" + listOf(R.raw.hfu_meme_1, R.raw.hfu_meme_2, R.raw.hfu_meme_3).random()
-                            )
+                            setVideoPath("android.resource://$packageName/" + R.raw.where)
                             setOnPreparedListener { mediaPlayer ->
                                 mediaPlayer.isLooping = true
                                 start()

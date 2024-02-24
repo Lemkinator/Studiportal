@@ -19,7 +19,6 @@ import de.lemke.studiportal.domain.GetUserSettingsUseCase
 import de.lemke.studiportal.domain.UpdateUserSettingsUseCase
 import de.lemke.studiportal.domain.setCustomOnBackPressedLogic
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 
 @AndroidEntryPoint

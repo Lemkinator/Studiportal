@@ -7,6 +7,7 @@
     <string name="my_website" translatable="false">https://www.leonard-lemke.com</string>
     <string name="my_insta" translatable="false">https://www.instagram.com/lemkinator5/</string>
     <string name="my_github" translatable="false">https://github.com/Lemkinator</string>
+    <string name="studiportal_github" translatable="false">https://github.com/Lemkinator/Studiportal</string>
     <string name="github" translatable="false">Github</string>
     <string name="privacy_website" translatable="false">https://www.leonard-lemke.com/apps/studiportal/privacy-policy</string>
     <string name="playstore" translatable="false">Play Store</string>
@@ -16,6 +17,7 @@
     <string name="oneui_library_github" translatable="false">OneUI-Project Github</string>
     <string name="oneui_github_link" translatable="false">https://github.com/OneUIProject</string>
     <string name="rick_roll_troll_link" translatable="false">https://www.leonard-lemke.com/rr</string>
+    <string name="hfu_imz_url" translatable="false">https://www.hs-furtwangen.de/einrichtungen/informations-und-medienzentrum</string>
 
     <string name="url_login" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=user&amp;type=1&amp;category=auth.login&amp;startpage=portal.vm&amp;breadCrumbSource=portal</string>
     <string name="url_logout" translatable="false">https://studi-portal.hs-furtwangen.de/qisserver/rds?state=user&amp;type=4&amp;re=last&amp;category=auth.logout&amp;breadCrumbSource=portal</string>
@@ -39,6 +41,17 @@
     <string name="contact_me">Contact me (e-mail)</string>
     <string name="help_text">This app is in no way affiliated with Furtwangen University and is only used to display the data from the Studiportal. \nThe logo is used with the kind permission of the Strategy and Communication Department of Furtwangen University.</string>
 
+    <string name="studiportal_rip">RIP Studiportal App?</string>
+    <string name="studiportal_rip_text">The Studiportal app is not available for an indefinite period of time.</string>
+    <string name="what_happened">What happened?</string>
+    <string name="studiportal_offline_date">September 2023</string>
+    <string name="studiportal_offline">Studiportal is taken offline…</string>
+    <string name="studiportal_online_date">February 2024</string>
+    <string name="studiportal_online">Studiportal is online again!</string>
+    <string name="studiportal_sso">Studiportal uses Single Sign-on for login</string>
+    <string name="studiportal_sso_text">Due to the Single Sign-on, the login process of the app is significantly more difficult. Unfortunately, the HFU Informations- und Medienzentrum (HFU IMZ) still does not offer an API (interface) for retrieving the data from the Studiportal. As long as this remains the case and no solution can be found for the newly added Single Sign-on, the Studiportal app is not available.</string>
+    <string name="hfu_imz" translatable="false">Informations- und Medienzentrum</string>
+    <string name="contribute_on_github">Contribute on Github</string>
 
     <!--About-->
     <string name="about_page_optional_text">The new Studiportal app with OneUI-Design</string>

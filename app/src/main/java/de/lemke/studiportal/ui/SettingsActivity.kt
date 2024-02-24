@@ -134,7 +134,15 @@ class SettingsActivity : AppCompatActivity() {
                 dialog.show()
                 DialogUtils.setDialogProgressForButton(dialog, DialogInterface.BUTTON_POSITIVE) {
                     lifecycleScope.launch {
-                        updateUserSettings { it.copy(username = "", password = "", studentName = "", studentInfo = "", allowMeteredConnection = true) }
+                        updateUserSettings {
+                            it.copy(
+                                username = "",
+                                password = "",
+                                studentName = "",
+                                studentInfo = "",
+                                allowMeteredConnection = true
+                            )
+                        }
                         deleteAllExams()
                         setWorkManager.cancelStudiportalWork()
                         dialog.dismiss()
@@ -154,7 +162,11 @@ class SettingsActivity : AppCompatActivity() {
             }
 
             findPreference<PreferenceScreen>("privacy_pref")!!.onPreferenceClickListener = OnPreferenceClickListener {
-                startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.privacy_website))))
+                try {
+                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(getString(R.string.privacy_website))))
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(settingsActivity, getString(R.string.no_browser_app_installed), Toast.LENGTH_SHORT).show()
+                }
                 true
             }
 
@@ -241,6 +253,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                     return true
                 }
+
                 "dark_mode_auto_pref" -> {
                     val autoDarkMode = newValue as Boolean
                     darkModePref.isEnabled = !autoDarkMode
@@ -254,6 +267,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                     return true
                 }
+
                 "notify_about_change_pref" -> {
                     if (newValue as Boolean) {
                         when {
@@ -264,6 +278,7 @@ class SettingsActivity : AppCompatActivity() {
                                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                                 notifyAboutChangePref.isChecked = false
                             }
+
                             !areNotificationsEnabled(getString(R.string.exam_notification_channel_id)) -> {
                                 val settingsIntent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                                     .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -272,6 +287,7 @@ class SettingsActivity : AppCompatActivity() {
                                 startActivity(settingsIntent)
                                 notifyAboutChangePref.isChecked = false
                             }
+
                             else -> {
                                 setNotificationEnabled(true)
                             }
@@ -281,10 +297,12 @@ class SettingsActivity : AppCompatActivity() {
                     }
                     return true
                 }
+
                 "show_grade_in_notification_pref" -> {
                     lifecycleScope.launch { updateUserSettings { it.copy(showGradeInNotification = newValue as Boolean) } }
                     return true
                 }
+
                 "use_metered_network_pref" -> {
                     lifecycleScope.launch {
                         updateUserSettings { it.copy(allowMeteredConnection = newValue as Boolean) }
@@ -292,6 +310,7 @@ class SettingsActivity : AppCompatActivity() {
                     }
                     return true
                 }
+
                 "refresh_interval_pref" -> {
                     lifecycleScope.launch {
                         val refreshInterval = RefreshInterval.fromMinutes(Integer.parseInt(newValue as String))

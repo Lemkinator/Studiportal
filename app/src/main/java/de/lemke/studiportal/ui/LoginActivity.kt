@@ -121,9 +121,7 @@ class LoginActivity : AppCompatActivity() {
             val videoView = FrameLayout(this@LoginActivity).apply {
                 addView(
                     VideoView(this@LoginActivity).apply {
-                        setVideoPath(
-                            "android.resource://$packageName/" + listOf(R.raw.hfu_meme_1, R.raw.hfu_meme_2, R.raw.hfu_meme_3).random()
-                        )
+                        setVideoPath("android.resource://$packageName/" + R.raw.where)
                         setOnPreparedListener { mediaPlayer ->
                             mediaPlayer.isLooping = true
                             start()
