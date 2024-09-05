@@ -113,11 +113,13 @@ dependencies {
 
     implementation("com.android.volley:volley:1.2.1")
     implementation("org.jsoup:jsoup:1.17.2")
-    implementation("com.airbnb.android:lottie:6.3.0")
+    implementation("com.airbnb.android:lottie:6.4.1")
 
-    implementation("androidx.core:core-splashscreen:1.0.1")
-    implementation("com.google.android.play:core:1.10.3")
-    implementation("com.google.android.play:core-ktx:1.8.1")
+    implementation("androidx.core:core-splashscreen:1.2.0-alpha01")
+    implementation("com.google.android.play:review:2.0.1")
+    implementation("com.google.android.play:review-ktx:2.0.1")
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
     //noinspection GradleDependency
     implementation("androidx.work:work-runtime-ktx:2.8.1")
     //noinspection GradleDependency
@@ -125,6 +127,7 @@ dependencies {
     //noinspection GradleDependency
     kapt("androidx.hilt:hilt-compiler:1.0.0")
 
+    //noinspection GradleDependency
     implementation("androidx.datastore:datastore-preferences:1.0.0")
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
